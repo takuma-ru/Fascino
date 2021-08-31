@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "fascino-sns",
     "public": "dist",
     "ignore": [
       "firebase.json",
