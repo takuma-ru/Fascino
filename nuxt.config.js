@@ -46,7 +46,19 @@ export default {
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     manifest: {
-      lang: 'en'
+      name: 'Fascino(地域創生ゲームSNSアプリ)',
+      short_name: 'Fasino',
+      lang: 'ja',
+      background_color: '#001024',
+      theme_color: '#001024',
+      description: '地域創生を目的としたゲーム型SNSアプリです。あなたの地域の魅力を発信しましょう！',
+      screenshots: [
+        {
+         "src": "./static/screenshots/screenshot_01.png",
+          "sizes": "375x811",
+          "type": "image/gif"
+        },
+      ],
     }
   },
 
@@ -54,7 +66,7 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
+      dark: false,
       themes: {
         dark: {
           primary: colors.blue.darken2,

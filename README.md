@@ -1,12 +1,20 @@
 # ファシノ
 
-<!-->![new_logo_192](https://user-images.githubusercontent.com/49429291/124390286-d1e66d80-dd25-11eb-9bc9-bfaf86b46637.png)<---->
+<!-- ![new_logo_192](https://user-images.githubusercontent.com/49429291/124390286-d1e66d80-dd25-11eb-9bc9-bfaf86b46637.png)-->
 
 ## Description
 **現在開発中**<br>
+地域創生を目的としたゲーム型SNSアプリ
 
 ## Member
-@Ayuu0721
+| name | director |
+| ------------- | ------------- |
+| takuma-ru | Catalyst・PM・Supporter |
+| Ayuu_kuma | Front-end |
+| CLEPIL | Front-end |
+| teru4950 | Front-end |
+| Leggie1145 | Back-end |
+| citron192 | Back-end |
 
 
 ## Requirement
@@ -20,11 +28,7 @@
 | @nuxtjs/pwa | 3.3.5 |
 
 ## Getting Started
-1. `npm run serve`<br>
-
-or
-1. `vue ui`
-2. task > serve > run task
+1. `npm run dev`<br>
 
 ## Deploy
 https://fascino-sns.web.app<br>
