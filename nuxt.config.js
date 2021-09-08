@@ -54,12 +54,12 @@ export default {
       description: '地域創生を目的としたゲーム型SNSアプリです。あなたの地域の魅力を発信しましょう！',
       screenshots: [
         {
-          src: '~/static/screenshots/screenshot_01.png',
+          src: '/screenshots/screenshot_01.png',
           sizes: '375x811',
           type: 'image/gif'
         },
         {
-          src: '~/static/screenshots/screenshot_02.png',
+          src: '/screenshots/screenshot_02.png',
           sizes: '1920x1080',
           type: 'image/gif'
         }
