@@ -1,5 +1,3 @@
-import colors from 'vuetify/es5/util/colors'
-
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
@@ -13,11 +11,11 @@ export default {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: '' },
-      { name: 'format-detection', content: 'telephone=no' }
+      { name: 'format-detection', content: 'telephone=no' },
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -35,6 +33,7 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
+    '@nuxtjs/eslint-module',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -56,37 +55,60 @@ export default {
         {
           src: '/screenshots/screenshot_01.png',
           sizes: '375x811',
-          type: 'image/gif'
+          type: 'image/gif',
         },
-        {
-          src: '/screenshots/screenshot_02.png',
-          sizes: '1920x1080',
-          type: 'image/gif'
-        }
       ],
-    }
+    },
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
+    defaultAssets: {
+      font: false,
+    },
     theme: {
       dark: false,
       themes: {
+        light: {
+          dark: '#001024',
+          dark_lighten: '#001432',
+          light: '#FFFFFE',
+          light_darken: '#F2F4F6',
+          light_darken2: '#F0F0F0',
+          blue: '#00214D',
+          blue_lighten: '#1B2D45',
+          blue_lighten2: '#B7C9E4',
+          yellow: '#FDE24F',
+          red: '#FF5470',
+          red_lighten: '#FE8DA0',
+          green: '#00EBC7',
+          green_lighten: '#93DED2',
+          gray: '#929292',
+          gray_lighten: '#DEDEDE',
+        },
         dark: {
-          primary: colors.blue.darken2,
-          accent: colors.grey.darken3,
-          secondary: colors.amber.darken3,
-          info: colors.teal.lighten1,
-          warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
-          success: colors.green.accent3
-        }
-      }
-    }
+          dark: '#001024',
+          dark_lighten: '#001432',
+          light: '#FFFFFE',
+          light_darken: '#F2F4F6',
+          light_darken2: '#F0F0F0',
+          blue: '#00214D',
+          blue_lighten: '#1B2D45',
+          blue_lighten2: '#B7C9E4',
+          yellow: '#FDE24F',
+          red: '#FF5470',
+          red_lighten: '#FE8DA0',
+          green: '#00EBC7',
+          green_lighten: '#93DED2',
+          gray: '#929292',
+          gray_lighten: '#DEDEDE',
+        },
+      },
+    },
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-  }
+  },
 }
