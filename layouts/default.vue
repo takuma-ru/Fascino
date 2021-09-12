@@ -47,3 +47,9 @@ export default {
   font-family: "SmartFontUI";
 }
 </style>
+
+<style>
+html::-webkit-scrollbar {
+  display: none;
+}
+</style>
