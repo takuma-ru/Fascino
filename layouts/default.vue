@@ -1,10 +1,12 @@
 <template>
-  <v-app>
+  <v-app
+    :style="`background: ${$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background}`"
+  >
     <v-app-bar
       flat
       fixed
       app
-      color="light_darken2"
+      :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background"
     >
       <v-toolbar-title v-text="title" />
     </v-app-bar>
@@ -21,6 +23,17 @@ export default {
       title: 'Fasino ver0.0.1',
     }
   },
+
+  computed: {
+    isdarkmode () {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches
+    },
+  },
+
+  mounted () {
+    // OSのテーマに合わせる
+    this.$vuetify.theme.dark = window.matchMedia('(prefers-color-scheme: dark)').matches
+  },
 }
 </script>
 
@@ -32,6 +45,5 @@ export default {
 
 .v-application {
   font-family: "SmartFontUI";
-  background-color: #F0F0F0;
 }
 </style>

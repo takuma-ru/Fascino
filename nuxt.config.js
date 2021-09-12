@@ -54,7 +54,17 @@ export default {
       screenshots: [
         {
           src: '/screenshots/screenshot_01.png',
-          sizes: '375x811',
+          sizes: '375x812',
+          type: 'image/gif',
+        },
+        {
+          src: '/screenshots/screenshot_02.png',
+          sizes: '375x812',
+          type: 'image/gif',
+        },
+        {
+          src: '/screenshots/screenshot_03.png',
+          sizes: '375x812',
           type: 'image/gif',
         },
       ],
@@ -68,9 +78,9 @@ export default {
       font: false,
     },
     theme: {
-      dark: false,
       themes: {
         light: {
+          background: '#F0F0F0',
           dark: '#001024',
           dark_lighten: '#001432',
           light: '#FFFFFE',
@@ -88,6 +98,7 @@ export default {
           gray_lighten: '#DEDEDE',
         },
         dark: {
+          background: '#001024',
           dark: '#001024',
           dark_lighten: '#001432',
           light: '#FFFFFE',
