@@ -9,6 +9,15 @@ name: Deploy to Firebase Hosting on merge
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+    env:
+     APIKEY: '${{ secrets.APIKEY }}'
+     AUTHDOMAIN: '${{ secrets.AUTHDOMAIN }}'
+     DATABASEURL: '${{ secrets.DATABASEURL }}'
+     PROJECTID: '${{ secrets.PROJECTID }}'
+     STORAGEBUCKET: '${{ secrets.STORAGEBUCKET }}'
+     MESSAGINGSENDERID: '${{ secrets.MESSAGINGSENDERID }}'
+     APPID: '${{ secrets.APPID }}'
+     MEASUREMENTID: '${{ secrets.MEASUREMENTID }}'
     steps:
       - uses: actions/checkout@v2
       - run: npm ci && npm run generate
