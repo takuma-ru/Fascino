@@ -28,7 +28,22 @@
 | @nuxtjs/pwa | 3.3.5 |
 
 ## Getting Started
-1. `npm run dev`<br>
+0. clone
+```md
+git clone https://github.com/takuma-ru/Fascino.git
+```
+2. add env file
+Googleドライブに上がってる.envファイルをfascino直下においてください。
+※追加されたユーザーのみが閲覧できます。
+[リンク](https://drive.google.com/file/d/1JaKCga4djcn3RC9eSfA9SSwcNwPOZLel/view?usp=sharing)
+2. install
+```md
+npm install
+```
+2. run
+```md
+npm run dev
+```
 
 ## Deploy
 https://fascino-sns.web.app<br>
