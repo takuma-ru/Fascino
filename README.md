@@ -32,7 +32,7 @@
 ```md
 git clone https://github.com/takuma-ru/Fascino.git
 ```
-2. add env file
+1. add env file
 Googleドライブに上がってる.envファイルをfascino直下においてください。<br>
 ※追加されたユーザーのみが閲覧できます。<br>
 [共有リンク](https://drive.google.com/file/d/1JaKCga4djcn3RC9eSfA9SSwcNwPOZLel/view?usp=sharing)
@@ -40,7 +40,7 @@ Googleドライブに上がってる.envファイルをfascino直下において
 ```md
 npm install
 ```
-2. run
+3. run
 ```md
 npm run dev
 ```
