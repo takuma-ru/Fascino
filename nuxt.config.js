@@ -97,6 +97,7 @@ export default {
     customVariables: ['~/assets/variables.scss'],
     defaultAssets: {
       font: false,
+      icons: ['mdi', 'fa'],
     },
     theme: {
       themes: {

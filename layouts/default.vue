@@ -13,6 +13,7 @@
     <v-main>
       <Nuxt />
     </v-main>
+    <BottomNaviBar />
   </v-app>
 </template>
 

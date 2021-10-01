@@ -12,7 +12,7 @@
         </h1>
       </v-row>
       <v-row justify="center">
-        <Button color="red" to="/">
+        <Button color="red" to="/" class="my-4">
           トップ画面に戻る
         </Button>
       </v-row>

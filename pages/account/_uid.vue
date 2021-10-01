@@ -12,9 +12,9 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
-      uid: this.$route.params.uid
+      uid: this.$route.params.uid,
     }
   },
 }
