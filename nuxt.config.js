@@ -15,7 +15,7 @@ export default {
       { name: 'google-site-verification', content: 'iUZdpKqaFKB1nsiz5mR0KHODO9mT-WbzzWwZbCDl9Sg' },
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'icon', type: 'image/x-icon', href: 'icon/fascino_logo_noback.svg' },
     ],
   },
 
@@ -72,20 +72,42 @@ export default {
       background_color: '#001024',
       theme_color: '#001024',
       description: '地域創生を目的としたゲーム型SNSアプリです。あなたの地域の魅力を発信しましょう！',
+      icons: [
+        {
+          src: '/icon/fascino_logo_512.png',
+          sizes: '512x512',
+          type: 'image/png',
+        },
+        {
+          src: '/icon/fascino_logo_192.png',
+          sizes: '192x192',
+          type: 'image/png',
+        },
+        {
+          src: '/icon/fascino_logo_64.png',
+          sizes: '64x64',
+          type: 'image/png',
+        },
+        {
+          src: '/icon/fascino_logo_16.png',
+          sizes: '16x16',
+          type: 'image/png',
+        },
+      ],
       screenshots: [
         {
           src: '/screenshots/screenshot_01.png',
-          sizes: '375x812',
+          sizes: '375x808',
           type: 'image/gif',
         },
         {
           src: '/screenshots/screenshot_02.png',
-          sizes: '375x812',
+          sizes: '375x811',
           type: 'image/gif',
         },
         {
           src: '/screenshots/screenshot_03.png',
-          sizes: '375x812',
+          sizes: '375x810',
           type: 'image/gif',
         },
       ],
