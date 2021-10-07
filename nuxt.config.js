@@ -3,6 +3,8 @@ export default {
   ssr: false,
   target: 'static',
 
+  loading: './components/Loading.vue',
+
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s - fascino',
@@ -122,9 +124,11 @@ export default {
       icons: ['mdi', 'fa'],
     },
     theme: {
+      dark: false,
       themes: {
         light: {
           background: '#F0F0F0',
+          background_2: '#FFFFFE',
           dark: '#001024',
           dark_lighten: '#001432',
           light: '#FFFFFE',
@@ -143,6 +147,7 @@ export default {
         },
         dark: {
           background: '#001024',
+          background_2: '#001432',
           dark: '#001024',
           dark_lighten: '#001432',
           light: '#FFFFFE',

@@ -1,5 +1,8 @@
 <template>
-  <div id="nav">
+  <div
+    id="nav"
+    :style="`background: ${$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_2}`"
+  >
     <v-row
       class="nav_contents mx-4"
       justify="center"
@@ -55,9 +58,8 @@ export default {
   bottom: 0%;
 
   border-radius: 16px 16px 0px 0px;
-  box-shadow: 0px 0px 6px 3px #00214D;
+  box-shadow: 0px 0px 6px 3px #00214D28;
 
-  background-color: #112E56;
 }
 
 .nav_btn {

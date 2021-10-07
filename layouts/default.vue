@@ -3,10 +3,11 @@
     :style="`background: ${$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background}`"
   >
     <v-app-bar
+      :dark="$vuetify.theme.dark"
       flat
       fixed
       app
-      :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background"
+      color="background"
     >
       <v-toolbar-title v-text="title" />
     </v-app-bar>
@@ -25,15 +26,29 @@ export default {
     }
   },
 
-  computed: {
-    isdarkmode () {
-      return window.matchMedia('(prefers-color-scheme: dark)').matches
-    },
+  created () {
+    this.$nextTick(() => {
+      this.$nuxt.$loading.start()
+      this.initDarkMode()
+
+      setTimeout(() => this.$nuxt.$loading.finish(), 1000)
+    })
   },
 
-  mounted () {
-    // OSのテーマに合わせる
-    this.$vuetify.theme.dark = window.matchMedia('(prefers-color-scheme: dark)').matches
+  methods: {
+    initDarkMode () {
+      const darkMediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+
+      darkMediaQuery.addEventListener('change', (e) => {
+        this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+      })
+
+      if (darkMediaQuery.matches) {
+        setTimeout(() => {
+          this.$vuetify.theme.dark = true
+        }, 0.00)
+      }
+    },
   },
 }
 </script>
