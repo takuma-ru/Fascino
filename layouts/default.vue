@@ -31,7 +31,7 @@ export default {
       this.$nuxt.$loading.start()
       this.initDarkMode()
 
-      setTimeout(() => this.$nuxt.$loading.finish(), 1000)
+      this.$nuxt.$loading.finish()
     })
   },
 

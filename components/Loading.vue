@@ -29,8 +29,12 @@ export default {
 <style>
   .loading {
     position: fixed;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
     z-index: 99;
 
     background-color: #0000003a;
