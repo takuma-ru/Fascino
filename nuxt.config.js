@@ -123,7 +123,7 @@ export default {
     customVariables: ['~/assets/variables.scss'],
     defaultAssets: {
       font: false,
-      icons: ['mdi', 'fa'],
+      icons: false,
     },
     theme: {
       themes: {
