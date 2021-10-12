@@ -37,7 +37,7 @@ export default {
       btnGroup: [
         { value: '/timeline', name: 'タイムライン', icon: 'icon-homeIcon' },
         { value: '/map', name: 'マップ', icon: 'icon-homeIcon' },
-        { value: '/map', name: 'マップ', icon: 'icon-homeIcon' },
+        { value: '/account/asd', name: '毎アカウント', icon: 'icon-homeIcon' },
       ],
     }
   },
