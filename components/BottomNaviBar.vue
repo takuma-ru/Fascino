@@ -24,6 +24,42 @@
           <!--<span class="text-caption">{{ item.name }}</span>-->
         </button>
       </div>
+      <v-menu
+        top
+        left
+        offset-y
+        :close-on-content-click="false"
+        rounded="lg"
+      >
+        <template #activator="{ on, attrs }">
+          <v-btn
+            dark
+            icon
+            size="32"
+            class="mx-5"
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon size="32">
+              mdi-dots-vertical
+            </v-icon>
+          </v-btn>
+        </template>
+
+        <v-card color="background_2" style="border-radius: 16px">
+          <div class="px-4 py-4">
+            <v-list-item>
+              <v-list-item-title>ダークモード</v-list-item-title>
+              <v-list-item-action>
+                <v-switch
+                  v-model="isDarkMode"
+                  color="blue_lighten2"
+                />
+              </v-list-item-action>
+            </v-list-item>
+          </div>
+        </v-card>
+      </v-menu>
     </v-row>
   </div>
 </template>
@@ -37,8 +73,9 @@ export default {
       btnGroup: [
         { value: '/timeline', name: 'タイムライン', icon: 'icon-homeIcon' },
         { value: '/map', name: 'マップ', icon: 'icon-homeIcon' },
-        { value: '/account/asd', name: '毎アカウント', icon: 'icon-homeIcon' },
+        { value: '/account/asd', name: 'マイアカウント', icon: 'icon-homeIcon' },
       ],
+      isDarkMode: false,
     }
   },
 

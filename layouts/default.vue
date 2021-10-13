@@ -2,15 +2,6 @@
   <v-app
     :style="`background: ${$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background}`"
   >
-    <v-app-bar
-      :dark="$vuetify.theme.dark"
-      flat
-      fixed
-      app
-      color="background"
-    >
-      <v-toolbar-title v-text="title" />
-    </v-app-bar>
     <v-main>
       <Nuxt />
     </v-main>
@@ -22,17 +13,11 @@
 export default {
   data () {
     return {
-      title: 'Fasino ver0.0.1',
     }
   },
 
   created () {
-    this.$nextTick(() => {
-      this.$nuxt.$loading.start()
-      this.initDarkMode()
-
-      this.$nuxt.$loading.finish()
-    })
+    this.$store.dispatch('darkMode/setUpIsDarkMode')
   },
 
   methods: {

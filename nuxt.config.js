@@ -121,7 +121,7 @@ export default {
     customVariables: ['~/assets/variables.scss'],
     defaultAssets: {
       font: false,
-      icons: ['mdi', 'fa'],
+      icons: 'mdi' || 'fa',
     },
     theme: {
       dark: false,
@@ -147,7 +147,7 @@ export default {
         },
         dark: {
           background: '#001024',
-          background_2: '#001432',
+          background_2: '#112E56',
           dark: '#001024',
           dark_lighten: '#001432',
           light: '#FFFFFE',
