@@ -21,19 +21,6 @@ export default {
   },
 
   methods: {
-    initDarkMode () {
-      const darkMediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-
-      darkMediaQuery.addEventListener('change', (e) => {
-        this.$vuetify.theme.dark = !this.$vuetify.theme.dark
-      })
-
-      if (darkMediaQuery.matches) {
-        setTimeout(() => {
-          this.$vuetify.theme.dark = true
-        }, 0.00)
-      }
-    },
   },
 }
 </script>

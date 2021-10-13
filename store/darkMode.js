@@ -10,7 +10,6 @@ export const mutations = {
 
 export const actions = {
   setUpIsDarkMode ({ commit }) {
-    console.log(window.$nuxt.$root.$vuetify.theme.dark)
     let isDarkMode = false
 
     if (localStorage.isDarkMode) {
