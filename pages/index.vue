@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container style="padding: 16px">
     <v-row justify="center">
       <v-col style="text-align: center">
         <PWAInstallButton />

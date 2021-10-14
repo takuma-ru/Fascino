@@ -18,7 +18,10 @@
           @click="$router.push(item.value)"
         >
           <div v-if="path == item.value" class="nav_select_tag" />
-          <v-icon size="32px" :color="path == item.value ? '#93DED2' : '#B7C9E4'">
+          <v-icon
+            :size="'28px'"
+            :color="path == item.value ? '#93DED2' : '#B7C9E4'"
+          >
             {{ item.icon }}
           </v-icon>
           <!--<span class="text-caption">{{ item.name }}</span>-->
@@ -27,10 +30,11 @@
       <v-menu
         top
         offset-y
-        nudge-top="32"
+        nudge-top="24"
+        rounded="nomal"
+        transition="slide-y-reverse-transition"
         content-class="elevation-3"
         :close-on-content-click="false"
-        rounded="nomal"
       >
         <template #activator="{ on, attrs }">
           <v-btn
@@ -40,7 +44,7 @@
             v-bind="attrs"
             v-on="on"
           >
-            <v-icon size="32">
+            <v-icon size="32" color="#B7C9E4">
               mdi-dots-vertical
             </v-icon>
           </v-btn>
@@ -49,7 +53,9 @@
         <v-card color="background_2">
           <div class="px-4 py-4">
             <v-list-item>
-              <v-list-item-title>ダークモード</v-list-item-title>
+              <v-list-item-title>
+                ダークモード
+              </v-list-item-title>
               <v-list-item-action>
                 <v-switch
                   v-model="isDarkMode"
@@ -117,15 +123,25 @@ export default {
 
 .nav_btn .nav_select_tag {
   position: absolute;
-  width: 24px;
+  width: 28px;
   height: 4px;
   top: 0%;
   left: 50%;
 
   transform: translateX(-50%);
+  animation: select 0.2s;
 
   border-radius: 0px 0px 4px 4px;
 
   background-color: #93DED2;
+}
+
+@keyframes select {
+  0% {
+    height: 0px;
+  }
+  100% {
+    height: 4px;
+  }
 }
 </style>

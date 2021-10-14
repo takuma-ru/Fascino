@@ -1,9 +1,11 @@
 <template>
   <div>
     <v-btn
-      :color="color"
-      rounded
+      height="36"
       depressed
+      :color="color"
+      style="color: white"
+      class="rounded-nomal"
       :to="link"
       @click="clickFunc"
     >
