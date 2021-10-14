@@ -33,7 +33,6 @@
       >
         <template #activator="{ on, attrs }">
           <v-btn
-            dark
             icon
             size="32"
             class="mx-5"
@@ -83,6 +82,16 @@ export default {
     path () {
       return this.$route.path
     },
+  },
+
+  watch: {
+    isDarkMode (newVal, oldVal) {
+      this.$store.dispatch('darkMode/updateIsDarkMode', newVal)
+    },
+  },
+
+  mounted () {
+    this.isDarkMode = this.$store.state.darkMode.isDarkMode
   },
 }
 </script>
