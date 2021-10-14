@@ -26,10 +26,10 @@
       </div>
       <v-menu
         top
-        left
         offset-y
+        nudge-top="16"
         :close-on-content-click="false"
-        rounded="lg"
+        rounded="nomal"
       >
         <template #activator="{ on, attrs }">
           <v-btn
@@ -45,7 +45,7 @@
           </v-btn>
         </template>
 
-        <v-card color="background_2" style="border-radius: 16px">
+        <v-card color="background_2">
           <div class="px-4 py-4">
             <v-list-item>
               <v-list-item-title>ダークモード</v-list-item-title>
