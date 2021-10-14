@@ -27,7 +27,8 @@
       <v-menu
         top
         offset-y
-        nudge-top="16"
+        nudge-top="32"
+        content-class="elevation-3"
         :close-on-content-click="false"
         rounded="nomal"
       >

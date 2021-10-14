@@ -13,14 +13,11 @@ export const actions = {
     let isDarkMode = false
 
     if (localStorage.isDarkMode) {
-      console.log('isDarkMode')
       isDarkMode = localStorage.isDarkMode
       isDarkMode = JSON.parse(isDarkMode.toLowerCase())
       window.$nuxt.$root.$vuetify.theme.dark = isDarkMode
-      console.log(window.$nuxt.$root.$vuetify.theme.dark, isDarkMode)
       commit('updateIsDarkMode', isDarkMode)
     } else {
-      console.log('non isDarkMode')
       const darkMediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
 
       darkMediaQuery.addEventListener('change', (e) => {
