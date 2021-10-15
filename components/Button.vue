@@ -1,14 +1,20 @@
 <template>
   <div>
     <v-btn
-      height="36"
+      :min-height="btnStyle.height"
+      :min-width="btnStyle.width"
       depressed
+      x-small
       :color="color"
       style="color: white"
-      class="rounded-nomal"
+      :class="`rounded-nomal ${flat ? '': 'btn'}`"
       :to="link"
+      :style="`font-size: ${btnStyle.fontSize}px; text-transform: none;`"
       @click="clickFunc"
     >
+      <v-icon v-if="icon" :size="btnStyle.fontSize">
+        {{ icon }}
+      </v-icon>
       <slot />
     </v-btn>
   </div>
@@ -17,20 +23,92 @@
 <script>
 export default {
   props: {
+    /*
+    ボタンのタイプ
+      sml: 高さ36px、横幅指定なし
+      sml_sq: 高さ36px、横幅36px
+      nml: 高さ48px、横幅指定なし
+      nml_sq: 高さ48px、横幅48px
+      lg: 高さ64px、横幅指定なし
+      lg_sq: 高さ64px、横幅64px
+    */
+    type: {
+      type: String,
+      default: 'nml',
+    },
+    flat: {
+      type: Boolean,
+      default: false,
+    },
+    icon: {
+      type: String,
+      default: null,
+    },
     color: {
       type: String,
-      default: '',
+      default: null,
     },
     link: {
       type: String,
       default: undefined,
     },
     // eslint-disable-next-line vue/require-default-prop
-    clickFunc: Function,
+    clickFunc: {
+      type: Function,
+      default: undefined,
+    },
+  },
+
+  computed: {
+    // eslint-disable-next-line vue/return-in-computed-property
+    btnStyle () {
+      switch (this.type) {
+        case 'sml':
+          return ({
+            height: 36,
+            width: 'auto',
+            fontSize: 16,
+          })
+        case 'sml_sq':
+          return ({
+            height: 36,
+            width: 36,
+            fontSize: 16,
+          })
+        case 'nml':
+          return ({
+            height: 48,
+            width: 'auto',
+            fontSize: 24,
+          })
+        case 'nml_sq':
+          return ({
+            height: 48,
+            width: 48,
+            fontSize: 24,
+          })
+        case 'lg':
+          return ({
+            height: 64,
+            width: 'auto',
+            fontSize: 32,
+          })
+        case 'lg_sq':
+          return ({
+            height: 64,
+            width: 64,
+            fontSize: 32,
+          })
+        default:
+          break
+      }
+    },
   },
 }
 </script>
 
 <style>
-
+.btn {
+  box-shadow: 0px 0px 6px 3px #00214D28;
+}
 </style>
