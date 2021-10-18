@@ -129,7 +129,8 @@ export default {
       themes: {
         light: {
           background: '#F0F0F0',
-          background_2: '#FFFFFE',
+          background_middle: '#F2F4F6',
+          background_front: '#FFFFFE',
           dark: '#001024',
           dark_lighten: '#001432',
           light: '#FFFFFE',
@@ -148,7 +149,8 @@ export default {
         },
         dark: {
           background: '#001024',
-          background_2: '#112E56',
+          background_middle: '#1B2D45',
+          background_front: '#112E56',
           dark: '#001024',
           dark_lighten: '#001432',
           light: '#FFFFFE',

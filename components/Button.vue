@@ -23,15 +23,6 @@
 <script>
 export default {
   props: {
-    /*
-    ボタンのタイプ
-      sml: 高さ36px、横幅指定なし
-      sml_sq: 高さ36px、横幅36px
-      nml: 高さ48px、横幅指定なし
-      nml_sq: 高さ48px、横幅48px
-      lg: 高さ64px、横幅指定なし
-      lg_sq: 高さ64px、横幅64px
-    */
     type: {
       type: String,
       default: 'nml',
@@ -52,7 +43,6 @@ export default {
       type: String,
       default: undefined,
     },
-    // eslint-disable-next-line vue/require-default-prop
     clickFunc: {
       type: Function,
       default: undefined,

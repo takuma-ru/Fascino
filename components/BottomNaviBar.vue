@@ -1,7 +1,7 @@
 <template>
   <div
     id="nav"
-    :style="`background: ${$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_2}`"
+    :style="`background: ${$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_front}`"
   >
     <v-row
       class="nav_contents mx-4"
@@ -27,6 +27,19 @@
           <!--<span class="text-caption">{{ item.name }}</span>-->
         </button>
       </div>
+
+      <button
+        class="nav_btn mx-5"
+        @click="$router.push('/account/' + 'uid')"
+      >
+        <div v-if="path == '/account/' + 'uid'" class="nav_select_tag" />
+        <v-avatar
+          size="28"
+          :color="path == '/account/' + 'uid' ? '#93DED2' : '#B7C9E4'"
+        />
+        <!--<span class="text-caption">{{ item.name }}</span>-->
+      </button>
+
       <v-menu
         top
         offset-y
@@ -50,7 +63,7 @@
           </v-btn>
         </template>
 
-        <v-card color="background_2">
+        <v-card color="background_front">
           <div class="px-4 py-4">
             <v-list-item>
               <v-list-item-title>
@@ -79,7 +92,6 @@ export default {
       btnGroup: [
         { value: '/timeline', name: 'タイムライン', icon: 'icon-homeIcon' },
         { value: '/map', name: 'マップ', icon: 'icon-homeIcon' },
-        { value: '/account/asd', name: 'マイアカウント', icon: 'icon-homeIcon' },
       ],
       isDarkMode: false,
     }
