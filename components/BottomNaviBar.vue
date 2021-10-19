@@ -37,7 +37,6 @@
           size="28"
           :color="path == '/account/' + 'uid' ? '#93DED2' : '#B7C9E4'"
         />
-        <!--<span class="text-caption">{{ item.name }}</span>-->
       </button>
 
       <v-menu
@@ -63,7 +62,7 @@
           </v-btn>
         </template>
 
-        <v-card color="background_front">
+        <v-card :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_front">
           <div class="px-4 py-4">
             <v-list-item>
               <v-list-item-title>
