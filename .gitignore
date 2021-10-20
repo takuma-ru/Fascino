@@ -87,3 +87,6 @@ dist
 
 # Vim swap files
 *.swp
+
+# test page
+pages/test
