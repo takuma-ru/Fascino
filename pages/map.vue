@@ -17,11 +17,37 @@
           <l-tile-layer :url="url" />
           <l-marker
             :lat-lng="NowPlace"
+            @click="dialog = true"
           >
             <l-icon icon-url="icon/fascino_logo_noback.svg" />
           </l-marker>
         </l-map>
       </no-ssr>
+    </div>
+    <div id="modal">
+      <v-dialog
+        v-model="dialog"
+        max-width="290"
+        persistent
+      >
+        <v-card>
+          <v-card-title>
+            TITLE
+          </v-card-title>
+          <v-card-text>
+            XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer />
+            <v-btn
+              @click="dialog = false"
+            >
+              CLOSE
+            </v-btn>
+            <v-spacer />
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </div>
   </div>
 </template>
@@ -36,6 +62,7 @@ export default {
       url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
       NowPlace: [0, 0],
       crosshairGps: mdiCrosshairsGps,
+      dialog: false,
     }
   },
   mounted () {
@@ -43,6 +70,9 @@ export default {
     this.getLocation()
   },
   methods: {
+    overLay () {
+      alert('OK')
+    },
     getLocation () {
       if (!navigator.geolocation) {
         alert('ERROR')
