@@ -1,22 +1,28 @@
 <template>
   <div id="map">
-    <no-ssr>
-      <l-map :zoom="zoom" :center="NowPlace">
-        <v-btn
-          id="nowPlace"
-          fab
-          x-large
-          color="#00214D"
-          @click="getLocation"
-        >
-          <v-icon large>
-            {{ crosshairGps }}
-          </v-icon>
-        </v-btn>
-        <l-tile-layer :url="url" />
-        <l-marker :lat-lng="NowPlace" />
-      </l-map>
-    </no-ssr>
+    <div id="main">
+      <no-ssr>
+        <l-map :zoom="zoom" :center="NowPlace">
+          <v-btn
+            id="nowPlace"
+            fab
+            x-large
+            :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_front"
+            @click="getLocation"
+          >
+            <v-icon large>
+              {{ crosshairGps }}
+            </v-icon>
+          </v-btn>
+          <l-tile-layer :url="url" />
+          <l-marker
+            :lat-lng="NowPlace"
+          >
+            <l-icon icon-url="icon/fascino_logo_noback.svg" />
+          </l-marker>
+        </l-map>
+      </no-ssr>
+    </div>
   </div>
 </template>
 <script>
@@ -25,6 +31,7 @@ import { mdiCrosshairsGps } from '@mdi/js'
 export default {
   data () {
     return {
+      staticAnchor: [16, 37],
       zoom: 15,
       url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
       NowPlace: [0, 0],
@@ -32,6 +39,7 @@ export default {
     }
   },
   mounted () {
+    /* 押下時にズーム倍率もリセット */
     this.getLocation()
   },
   methods: {
@@ -57,20 +65,28 @@ export default {
     error () {
       alert('ERROR')
     },
+    nowPlace () {
+      alert('NOW PLACE')
+    },
   },
 }
 </script>
 <style lang="scss" scoped>
-#nowPlace {
-  position: relative;
-  z-index: 10000;
-  top: 80%;
-  left: 80%;
-}
 #map {
+  z-index: 0;
   position: relative;
   height: 100%;
   width: 100%;
-  z-index: 0;
+}
+#nowPlace {
+  position: relative;
+  z-index: 1000;
+  top: 80%;
+  left: 80%;
+}
+#main {
+  position: relative;
+  height: 100%;
+  width: 100%;
 }
 </style>
