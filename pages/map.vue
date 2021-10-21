@@ -27,10 +27,13 @@
     <div id="modal">
       <v-dialog
         v-model="dialog"
-        max-width="290"
+        fullscreen
+        transition="dialog-bottom-transition"
         persistent
       >
-        <v-card>
+        <v-card
+          :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_front"
+        >
           <v-card-title>
             TITLE
           </v-card-title>
