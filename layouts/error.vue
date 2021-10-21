@@ -2,20 +2,16 @@
   <v-app
     :style="`background: ${$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background}`"
   >
-    <v-container>
-      <v-row justify="center" align="center">
-        <h1 v-if="error.statusCode === 404">
-          {{ pageNotFound }}
-        </h1>
-        <h1 v-else>
-          {{ otherError }}
-        </h1>
-      </v-row>
-      <v-row justify="center">
-        <Button color="red" to="/" class="my-4">
-          トップ画面に戻る
-        </Button>
-      </v-row>
+    <v-container class="container">
+      <h1 v-if="error.statusCode === 404">
+        {{ pageNotFound }}
+      </h1>
+      <h1 v-else>
+        {{ otherError }}
+      </h1>
+      <Button color="red" to="/" class="my-4">
+        トップ画面に戻る
+      </Button>
     </v-container>
   </v-app>
 </template>
@@ -48,5 +44,10 @@ export default {
 <style scoped>
 h1 {
   font-size: 20px;
+}
+
+.container {
+  padding: 16px;
+  text-align: center;
 }
 </style>

@@ -5,6 +5,8 @@ export default {
   ssr: false,
   target: 'static',
 
+  loading: './components/Loading.vue',
+
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s - fascino',
@@ -121,23 +123,24 @@ export default {
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
+    treeShake: true,
     defaultAssets: {
       font: false,
-      icons: false,
+      icons: 'mdi' || 'fa',
     },
     theme: {
+      dark: false,
       themes: {
         light: {
           background: '#F0F0F0',
-          dark: '#001024',
-          dark_lighten: '#001432',
-          light: '#FFFFFE',
-          light_darken: '#F2F4F6',
-          light_darken2: '#F0F0F0',
-          blue: '#00214D',
-          blue_lighten: '#1B2D45',
-          blue_lighten2: '#B7C9E4',
+          background_middle: '#F2F4F6',
+          background_front: '#FFFFFE',
+          text: '#001024',
+          sub_text: '#315380',
+          sub2_text: '#929292',
           yellow: '#FDE24F',
+          blue: '#315380',
+          blue_lighten: '#B7C9E4',
           red: '#FF5470',
           red_lighten: '#FE8DA0',
           green: '#00EBC7',
@@ -147,15 +150,14 @@ export default {
         },
         dark: {
           background: '#001024',
-          dark: '#001024',
-          dark_lighten: '#001432',
-          light: '#FFFFFE',
-          light_darken: '#F2F4F6',
-          light_darken2: '#F0F0F0',
-          blue: '#00214D',
-          blue_lighten: '#1B2D45',
-          blue_lighten2: '#B7C9E4',
+          background_middle: '#1B2D45',
+          background_front: '#112E56',
+          text: '#F2F4F6',
+          sub_text: '#B7C9E4',
+          sub2_text: '#DEDEDE',
           yellow: '#FDE24F',
+          blue: '#315380',
+          blue_lighten: '#B7C9E4',
           red: '#FF5470',
           red_lighten: '#FE8DA0',
           green: '#00EBC7',
