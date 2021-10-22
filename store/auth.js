@@ -1,5 +1,5 @@
 export const state = () => ({
-  userData: {},
+  userData: null,
 })
 
 export const mutations = {
@@ -10,14 +10,42 @@ export const mutations = {
 
 export const actions = {
   userDataInit ({ commit }) {
+    commit('updateUserData', null)
+  },
+
+  async signIn ({ commit, dispatch }) {
     commit('updateUserData', {})
+
+    const provider = new this.$fireModule.default.auth.GoogleAuthProvider()
+    await this.$fire.auth.signInWithPopup(provider)
+      .then(() => {
+        console.log('success')
+      })
+      .catch((e) => {
+        console.error(e)
+      })
   },
 
-  async signIn ({ commit }) {
-
+  async signOut () {
+    await this.$fire.auth.signOut()
   },
 
-  async signOut ({ commit }) {
+  async onAuthStateChangedAction ({ commit, dispatch }, { authUser, claims }) {
+    if (!authUser) {
+      console.log('Can not get data')
+      commit('updateUserData')
+      return
+    }
 
+    const { uid, email, emailVerified, displayName } = await authUser
+
+    commit('updateUserData', {
+      uid,
+      email,
+      emailVerified,
+      displayName,
+      photoURL: claims.picture,
+      isAdmin: claims.custom_claim,
+    })
   },
 }

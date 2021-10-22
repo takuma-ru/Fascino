@@ -92,7 +92,7 @@ export default {
         { value: '/timeline', name: 'タイムライン', icon: 'icon-homeIcon' },
         { value: '/map', name: 'マップ', icon: 'icon-homeIcon' },
       ],
-      isDarkMode: false,
+      isDarkMode: this.$store.state.darkMode.isDarkMode,
     }
   },
 
@@ -106,10 +106,6 @@ export default {
     isDarkMode (newVal, oldVal) {
       this.$store.dispatch('darkMode/updateIsDarkMode', newVal)
     },
-  },
-
-  mounted () {
-    this.isDarkMode = this.$store.state.darkMode.isDarkMode
   },
 }
 </script>
