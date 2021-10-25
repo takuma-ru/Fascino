@@ -2,6 +2,12 @@ export const state = () => ({
   userData: null,
 })
 
+export const getters = {
+  userData (state) {
+    return state.userData
+  },
+}
+
 export const mutations = {
   updateUserData (state, status) {
     state.userData = status
@@ -19,7 +25,7 @@ export const actions = {
     const provider = new this.$fireModule.default.auth.GoogleAuthProvider()
     await this.$fire.auth.signInWithPopup(provider)
       .then(() => {
-        console.log('success')
+        console.log('success: signIn')
       })
       .catch((e) => {
         console.error(e)
@@ -28,11 +34,17 @@ export const actions = {
 
   async signOut () {
     await this.$fire.auth.signOut()
+      .then(() => {
+        console.log('success: signOut')
+      })
+      .catch((e) => {
+        console.error(e)
+      })
   },
 
   async onAuthStateChangedAction ({ commit, dispatch }, { authUser, claims }) {
     if (!authUser) {
-      console.log('Can not get data')
+      console.warn('Can not get \'userData\'')
       commit('updateUserData')
       return
     }
