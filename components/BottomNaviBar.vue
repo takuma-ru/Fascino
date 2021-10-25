@@ -1,84 +1,93 @@
 <template>
-  <div
-    id="nav"
-    :style="`background: ${$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_front}`"
-  >
-    <v-row
-      class="nav_contents mx-4"
-      justify="center"
-      align="center"
-      style="height: 64px; margin-top: 0%"
+  <div>
+    <div
+      id="nav"
+      :style="`background: ${$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_front}`"
     >
-      <div
-        v-for="(item, i) in btnGroup"
-        :key="i"
+      <v-row
+        class="nav_contents mx-4"
+        justify="center"
+        align="center"
+        style="height: 64px; margin-top: 0%"
       >
+        <div
+          v-for="(item, i) in btnGroup"
+          :key="i"
+        >
+          <button
+            class="nav_btn mx-5"
+            @click="$router.push(item.value)"
+          >
+            <div v-if="path == item.value" class="nav_select_tag" />
+            <v-icon
+              :size="'28px'"
+              :color="path == item.value ? '#93DED2' : '#B7C9E4'"
+            >
+              {{ item.icon }}
+            </v-icon>
+            <!--<span class="text-caption">{{ item.name }}</span>-->
+          </button>
+        </div>
+
         <button
           class="nav_btn mx-5"
-          @click="$router.push(item.value)"
+          @click="$router.push('/account/' + 'uid')"
         >
-          <div v-if="path == item.value" class="nav_select_tag" />
-          <v-icon
-            :size="'28px'"
-            :color="path == item.value ? '#93DED2' : '#B7C9E4'"
-          >
-            {{ item.icon }}
-          </v-icon>
-          <!--<span class="text-caption">{{ item.name }}</span>-->
+          <div v-if="path == '/account/' + 'uid'" class="nav_select_tag" />
+          <v-avatar
+            size="28"
+            :color="path == '/account/' + 'uid' ? '#93DED2' : '#B7C9E4'"
+          />
         </button>
-      </div>
 
-      <button
-        class="nav_btn mx-5"
-        @click="$router.push('/account/' + 'uid')"
-      >
-        <div v-if="path == '/account/' + 'uid'" class="nav_select_tag" />
-        <v-avatar
-          size="28"
-          :color="path == '/account/' + 'uid' ? '#93DED2' : '#B7C9E4'"
-        />
-      </button>
+        <v-menu
+          top
+          offset-y
+          nudge-top="24"
+          rounded="nomal"
+          transition="slide-y-reverse-transition"
+          content-class="elevation-3"
+          :close-on-content-click="false"
+        >
+          <template #activator="{ on, attrs }">
+            <v-btn
+              icon
+              size="32"
+              class="mx-5"
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon size="32" color="#B7C9E4">
+                mdi-dots-vertical
+              </v-icon>
+            </v-btn>
+          </template>
 
-      <v-menu
-        top
-        offset-y
-        nudge-top="24"
-        rounded="nomal"
-        transition="slide-y-reverse-transition"
-        content-class="elevation-3"
-        :close-on-content-click="false"
-      >
-        <template #activator="{ on, attrs }">
-          <v-btn
-            icon
-            size="32"
-            class="mx-5"
-            v-bind="attrs"
-            v-on="on"
-          >
-            <v-icon size="32" color="#B7C9E4">
-              mdi-dots-vertical
-            </v-icon>
-          </v-btn>
-        </template>
-
-        <v-card :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_front">
-          <div class="px-4 py-4">
-            <v-list-item>
-              <v-list-item-title>
-                ダークモード
-              </v-list-item-title>
-              <v-list-item-action>
-                <v-switch
-                  v-model="isDarkMode"
-                  color="blue_lighten2"
-                />
-              </v-list-item-action>
-            </v-list-item>
-          </div>
-        </v-card>
-      </v-menu>
-    </v-row>
+          <v-card :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_front">
+            <div class="px-4 py-4">
+              <v-list-item>
+                <v-list-item-title>
+                  ダークモード
+                </v-list-item-title>
+                <v-list-item-action>
+                  <v-switch
+                    v-model="isDarkMode"
+                    color="blue_lighten2"
+                  />
+                </v-list-item-action>
+              </v-list-item>
+            </div>
+          </v-card>
+        </v-menu>
+      </v-row>
+      <Button
+        type="lg_sq"
+        color="green_lighten"
+        :icon-color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background"
+        :icon="buttonIcon"
+        class="button"
+      />
+    </div>
   </div>
 </template>
 
@@ -93,6 +102,7 @@ export default {
         { value: '/map', name: 'マップ', icon: 'icon-homeIcon' },
       ],
       isDarkMode: false,
+      buttonIcon: 'mdi-plus',
     }
   },
 
@@ -105,6 +115,13 @@ export default {
   watch: {
     isDarkMode (newVal, oldVal) {
       this.$store.dispatch('darkMode/updateIsDarkMode', newVal)
+    },
+    $route (to, from) {
+      if (to.name === 'timeLine') {
+        this.buttonIcon = 'mdi-plus'
+      } else if (to.name === 'map') {
+        this.buttonIcon = 'mdi-crosshairs-gps'
+      }
     },
   },
 
@@ -154,5 +171,11 @@ export default {
   100% {
     height: 4px;
   }
+}
+
+.button {
+  position: absolute;
+  top: calc(-16px - 100%);
+  right: 16px;
 }
 </style>

@@ -5,7 +5,9 @@
     <v-main>
       <Nuxt />
     </v-main>
-    <BottomNaviBar />
+    <BottomNaviBar
+      v-if="$route.path != '/'"
+    />
   </v-app>
 </template>
 
