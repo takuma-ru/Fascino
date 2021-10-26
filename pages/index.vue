@@ -32,11 +32,7 @@
 
 <script>
 export default {
-  methods: {
-    add () {
-      this.$store.dispatch('rtdb/addPostData')
-    },
-  },
+
 }
 </script>
 
