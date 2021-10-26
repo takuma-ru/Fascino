@@ -20,6 +20,11 @@
             text
           </v-card-text>
         </v-card>
+        <v-btn
+          @click="add()"
+        >
+          aaaa
+        </v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -27,7 +32,11 @@
 
 <script>
 export default {
-
+  methods: {
+    add () {
+      this.$store.dispatch('rtdb/addPostData')
+    },
+  },
 }
 </script>
 
