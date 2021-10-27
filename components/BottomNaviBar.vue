@@ -80,13 +80,6 @@
           </v-card>
         </v-menu>
       </v-row>
-      <Button
-        type="lg_sq"
-        color="green_lighten"
-        :icon-color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background"
-        :icon="buttonIcon"
-        class="button"
-      />
     </div>
   </div>
 </template>
@@ -102,7 +95,6 @@ export default {
         { value: '/map', name: 'マップ', icon: 'icon-homeIcon' },
       ],
       isDarkMode: false,
-      buttonIcon: 'mdi-plus',
     }
   },
 
@@ -115,13 +107,6 @@ export default {
   watch: {
     isDarkMode (newVal, oldVal) {
       this.$store.dispatch('darkMode/updateIsDarkMode', newVal)
-    },
-    $route (to, from) {
-      if (to.name === 'timeLine') {
-        this.buttonIcon = 'mdi-plus'
-      } else if (to.name === 'map') {
-        this.buttonIcon = 'mdi-crosshairs-gps'
-      }
     },
   },
 
