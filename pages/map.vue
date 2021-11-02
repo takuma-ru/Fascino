@@ -2,12 +2,16 @@
   <div id="map">
     <div id="main">
       <no-ssr>
-        <l-map :zoom="zoom" :center="NowPlace">
+        <l-map
+          :zoom.sync="zoom"
+          :options="mapOptions"
+          :center="NowPlace"
+        >
           <Button
             id="nowPlace"
             icon="mdi-crosshairs-gps"
             type="lg_sq"
-            @click.native="getLocation"
+            @click.native="getLocation(); resetZoom()"
           />
           <l-tile-layer :url="`https://cartodb-basemaps-{s}.global.ssl.fastly.net/${$vuetify.theme.dark ? 'dark' : 'light'}_all/{z}/{x}/{y}.png`" />
           <l-marker
@@ -56,6 +60,11 @@ export default {
       zoom: 15,
       NowPlace: [0, 0],
       modal: false,
+      mapOptions: {
+        zoomControl: false,
+        attributionControl: false,
+        zoomSnap: true,
+      },
     }
   },
   mounted () {
@@ -63,27 +72,19 @@ export default {
   },
 
   methods: {
-    reloadPlace () {
-      navigator.geolocation.getCurrentPosition(this.success, this.error, this.options)
+    resetZoom () {
+      this.zoom = 15
     },
     getLocation () {
       if (!navigator.geolocation) {
         alert('ERROR')
       }
-
-      const options = {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 1000,
-      }
-
-      navigator.geolocation.getCurrentPosition(this.success, this.error, options)
+      navigator.geolocation.getCurrentPosition(this.success, this.error)
     },
 
     success (position) {
       const coords = position.coords
       this.NowPlace = [coords.latitude, coords.longitude]
-      this.zoom = 20
     },
 
     error () {
