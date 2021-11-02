@@ -3,8 +3,10 @@
     <v-btn
       v-if="isInstalled"
       dark
-      color="red"
+      height="36"
       depressed
+      color="red"
+      class="rounded-nomal"
       @click="installApp()"
     >
       アプリをインストールする

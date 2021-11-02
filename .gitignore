@@ -1,5 +1,11 @@
+# Don't add
 assets/icons
 .vscode
+
+# Service worker
+sw.*
+firebase-auth-sw.*
+
 # Created by .ignore support plugin (hsz.mobi)
 ### Node template
 # Logs
@@ -87,3 +93,6 @@ dist
 
 # Vim swap files
 *.swp
+
+# test page
+pages/test
