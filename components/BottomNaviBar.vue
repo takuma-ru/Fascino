@@ -30,15 +30,15 @@
 
       <button
         class="nav_btn mx-5"
-        @click="$router.push('/account/' + userData.uid)"
+        @click="$router.push('/account/' + (userData ? userData.uid : 'nonlogin'))"
       >
-        <div v-if="path == '/account/' + userData.uid" class="nav_select_tag" />
+        <div v-if="path === '/account/' + (userData ? userData.uid : 'nonlogin')" class="nav_select_tag" />
         <v-avatar
           size="28"
-          :color="path == '/account/' + userData.uid ? '#93DED2' : '#B7C9E4'"
+          :color="path === '/account/' + (userData ? userData.uid : 'nonlogin') ? '#93DED2' : '#B7C9E4'"
         >
           <v-img
-            :src="userData.photoURL"
+            :src="userData ? userData.photoURL : undefined"
           />
         </v-avatar>
       </button>
