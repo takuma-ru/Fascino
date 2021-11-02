@@ -21,8 +21,8 @@ export default {
   head () {
     return {
       meta: [
-        { name: 'theme-color', content: this.$vuetify.theme.dark ? '#001024' : '#F0F0F0' },
-        { name: 'background-color', content: this.$vuetify.theme.dark ? '#001024' : '#F0F0F0' },
+        { name: 'theme-color', content: JSON.parse(localStorage.isDarkMode.toLowerCase()) ? '#001024' : '#F0F0F0' },
+        { name: 'background-color', content: JSON.parse(localStorage.isDarkMode.toLowerCase()) ? '#001024' : '#F0F0F0' },
       ],
     }
   },
