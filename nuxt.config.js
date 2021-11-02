@@ -71,8 +71,6 @@ export default {
       name: 'Fascino(地域創生ゲームSNSアプリ)',
       short_name: 'Fasino',
       lang: 'ja',
-      background_color: '#001024',
-      theme_color: '#001024',
       description: '地域創生を目的としたゲーム型SNSアプリです。あなたの地域の魅力を発信しましょう！',
       icons: [
         {
