@@ -9,7 +9,12 @@
       <h1 v-else>
         {{ otherError }}
       </h1>
-      <Button color="red" to="/" class="my-4">
+      <Button
+        type="sml"
+        color="red"
+        to="/"
+        class="my-4"
+      >
         トップ画面に戻る
       </Button>
     </v-container>
