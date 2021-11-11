@@ -21,7 +21,7 @@
             <div v-if="path == item.value" class="nav_select_tag" />
             <v-icon
               :size="'28px'"
-              :color="path == item.value ? '#93DED2' : '#B7C9E4'"
+              :color="path == item.value ? 'green_lighten' : 'blue_lighten'"
             >
               {{ item.icon }}
             </v-icon>
@@ -36,7 +36,7 @@
           <div v-if="path == '/account/' + 'uid'" class="nav_select_tag" />
           <v-avatar
             size="28"
-            :color="path == '/account/' + 'uid' ? '#93DED2' : '#B7C9E4'"
+            :color="path == '/account/' + 'uid' ? 'green_lighten' : 'blue_lighten'"
           />
         </button>
 
@@ -44,7 +44,7 @@
           top
           offset-y
           nudge-top="24"
-          rounded="nomal"
+          rounded="normal"
           transition="slide-y-reverse-transition"
           content-class="elevation-3"
           :close-on-content-click="false"
@@ -57,14 +57,18 @@
               v-bind="attrs"
               v-on="on"
             >
-              <v-icon size="32" color="#B7C9E4">
+              <v-icon size="32" color="blue_lighten">
                 mdi-dots-vertical
               </v-icon>
             </v-btn>
           </template>
 
           <v-card :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_front">
-            <div class="px-4 py-4">
+            <v-list
+              color="transparent"
+              class="px-4 pt-4 pb-0"
+            >
+              <v-subheader style="height: auto">v0.0.0</v-subheader>
               <v-list-item>
                 <v-list-item-title>
                   ダークモード
@@ -72,11 +76,30 @@
                 <v-list-item-action>
                   <v-switch
                     v-model="isDarkMode"
-                    color="blue_lighten2"
+                    color="green_lighten"
                   />
                 </v-list-item-action>
               </v-list-item>
-            </div>
+            </v-list>
+            <v-list
+              rounded="normal"
+              color="transparent"
+              class="px-4 pt-0 pb-4"
+            >
+              <v-list-item-group>
+                <v-list-item
+                  to="/setting"
+                  :ripple="{ class: 'green_lighten--text' }"
+                >
+                  <v-list-item-icon class="rounded-normal">
+                    <v-icon>mdi-cog</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-title>
+                    設定
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list-item-group>
+            </v-list>
           </v-card>
         </v-menu>
       </v-row>
@@ -138,23 +161,23 @@ export default {
   position: absolute;
   width: 28px;
   height: 4px;
-  top: 0%;
+  bottom: 8px;
   left: 50%;
 
   transform: translateX(-50%);
-  animation: select 0.2s;
+  animation: select ease-out 0.2s;
 
-  border-radius: 0px 0px 4px 4px;
+  border-radius: 4px 4px 4px 4px;
 
   background-color: #93DED2;
 }
 
 @keyframes select {
   0% {
-    height: 0px;
+    width: 0px;
   }
   100% {
-    height: 4px;
+    width: 28px;
   }
 }
 

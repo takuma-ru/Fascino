@@ -7,7 +7,7 @@
       x-small
       :color="color"
       style="color: white"
-      :class="`rounded-nomal ${flat ? '': 'btn'}`"
+      :class="`rounded-normal ${flat ? '': 'btn'}`"
       :to="link"
       :style="`font-size: ${btnStyle.fontSize}px; text-transform: none;`"
       @click="clickFunc"
