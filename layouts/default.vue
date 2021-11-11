@@ -51,4 +51,7 @@ export default {
 html::-webkit-scrollbar {
   display: none;
 }
+html {
+  overscroll-behavior-y: none;
+}
 </style>
