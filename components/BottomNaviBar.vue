@@ -38,6 +38,16 @@
           :color="path == '/account/' + 'uid' ? '#93DED2' : '#B7C9E4'"
         />
       </button>
+      <!-- <button
+        class="nav_btn mx-5"
+        @click="$router.push('/test/' + 'test')"
+      >
+        <div v-if="path == '/test/' + 'test'" class="nav_select_tag" />
+        <v-avatar
+          size="28"
+          :color="path == '/test/' + 'test' ? '#93DED2' : '#B7C9E4'"
+        />
+      </button> -->
 
       <v-menu
         top
