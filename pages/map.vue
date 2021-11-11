@@ -2,92 +2,84 @@
   <div id="map">
     <div id="main">
       <no-ssr>
-        <l-map :zoom="zoom" :center="NowPlace">
-          <v-btn
+        <l-map
+          :zoom.sync="zoom"
+          :options="mapOptions"
+          :center="NowPlace"
+        >
+          <Button
             id="nowPlace"
-            fab
-            x-large
-            :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_front"
-            @click="getLocation"
-          >
-            <v-icon large>
-              {{ crosshairGps }}
-            </v-icon>
-          </v-btn>
-          <l-tile-layer :url="url" />
+            icon="mdi-crosshairs-gps"
+            type="lg_sq"
+            @click.native="getLocation(); resetZoom()"
+          />
+          <l-tile-layer :url="`https://cartodb-basemaps-{s}.global.ssl.fastly.net/${$vuetify.theme.dark ? 'dark' : 'light'}_all/{z}/{x}/{y}.png`" />
           <l-marker
             :lat-lng="NowPlace"
-            @click="dialog = true"
+            @click="modal = true"
           >
             <l-icon icon-url="icon/fascino_logo_noback.svg" />
           </l-marker>
         </l-map>
       </no-ssr>
     </div>
-    <div id="modal">
-      <v-dialog
-        v-model="dialog"
-        fullscreen
-        transition="dialog-bottom-transition"
-        persistent
+    <swipemodal
+      v-model="modal"
+      height="auto"
+      width="100vw"
+      redius="20px"
+      style="position: absolute; z-index: 502;"
+    >
+      <v-card
+        style="margin-bottom: 72px;"
+        :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_front"
       >
-        <v-card
-          :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_front"
-        >
-          <v-card-title>
-            TITLE
-          </v-card-title>
-          <v-card-text>
-            XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer />
-            <v-btn
-              @click="dialog = false"
-            >
-              CLOSE
-            </v-btn>
-            <v-spacer />
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </div>
+        <v-card-title>
+          TITLE
+        </v-card-title>
+        <v-card-text>
+          XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        </v-card-text>
+        <v-card-text>
+          KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+        </v-card-text>
+      </v-card>
+    </swipemodal>
   </div>
 </template>
 <script>
-import { mdiCrosshairsGps } from '@mdi/js'
-
+import swipemodal from 'nekoo_vue_swipemodal'
+import 'nekoo_vue_swipemodal/dist/swipemodal.css'
 export default {
+  name: 'Map',
+  components: {
+    swipemodal,
+  },
   data () {
     return {
-      staticAnchor: [16, 37],
       zoom: 15,
-      url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
       NowPlace: [0, 0],
-      crosshairGps: mdiCrosshairsGps,
-      dialog: false,
+      modal: false,
+      mapOptions: {
+        zoomControl: false,
+        attributionControl: false,
+        zoomSnap: true,
+      },
     }
   },
   mounted () {
-    /* 押下時にズーム倍率もリセット */
     this.getLocation()
   },
+
   methods: {
-    overLay () {
-      alert('OK')
+    resetZoom () {
+      this.zoom = 15
     },
     getLocation () {
       if (!navigator.geolocation) {
         alert('ERROR')
       }
-
-      const options = {
-        enableHighAccuracy: false,
-        timeout: 5000,
-        maximumAge: 0,
-      }
-
-      navigator.geolocation.getCurrentPosition(this.success, this.error, options)
+      navigator.geolocation.getCurrentPosition(this.success, this.error)
     },
 
     success (position) {
@@ -97,9 +89,6 @@ export default {
 
     error () {
       alert('ERROR')
-    },
-    nowPlace () {
-      alert('NOW PLACE')
     },
   },
 }
@@ -113,7 +102,7 @@ export default {
 }
 #nowPlace {
   position: relative;
-  z-index: 1000;
+  z-index: 500;
   top: 80%;
   left: 80%;
 }
