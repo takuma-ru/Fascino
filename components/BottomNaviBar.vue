@@ -30,13 +30,17 @@
 
       <button
         class="nav_btn mx-5"
-        @click="$router.push('/account/' + 'uid')"
+        @click="$router.push('/account/' + (userData ? userData.uid : 'nonlogin'))"
       >
-        <div v-if="path == '/account/' + 'uid'" class="nav_select_tag" />
+        <div v-if="path === '/account/' + (userData ? userData.uid : 'nonlogin')" class="nav_select_tag" />
         <v-avatar
           size="28"
-          :color="path == '/account/' + 'uid' ? '#93DED2' : '#B7C9E4'"
-        />
+          :color="path === '/account/' + (userData ? userData.uid : 'nonlogin') ? '#93DED2' : '#B7C9E4'"
+        >
+          <v-img
+            :src="userData ? userData.photoURL : undefined"
+          />
+        </v-avatar>
       </button>
 
       <v-menu
@@ -92,7 +96,7 @@ export default {
         { value: '/timeline', name: 'タイムライン', icon: 'icon-homeIcon' },
         { value: '/map', name: 'マップ', icon: 'icon-homeIcon' },
       ],
-      isDarkMode: false,
+      isDarkMode: this.$store.state.darkMode.isDarkMode,
     }
   },
 
@@ -100,16 +104,15 @@ export default {
     path () {
       return this.$route.path
     },
+    userData () {
+      return this.$store.getters['auth/userData']
+    },
   },
 
   watch: {
     isDarkMode (newVal, oldVal) {
       this.$store.dispatch('darkMode/updateIsDarkMode', newVal)
     },
-  },
-
-  mounted () {
-    this.isDarkMode = this.$store.state.darkMode.isDarkMode
   },
 }
 </script>

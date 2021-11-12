@@ -62,7 +62,13 @@ export default {
       measurementId: process.env.MEASUREMENTID,
     },
     services: {
-      auth: true,
+      auth: {
+        persistence: 'local',
+        initialize: {
+          onAuthStateChangedAction: 'auth/onAuthStateChangedAction',
+        },
+        ssr: true,
+      },
       firestore: true,
       database: true,
       storage: true,
