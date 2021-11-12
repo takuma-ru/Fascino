@@ -58,7 +58,13 @@ export default {
       measurementId: process.env.MEASUREMENTID,
     },
     services: {
-      auth: true,
+      auth: {
+        persistence: 'local',
+        initialize: {
+          onAuthStateChangedAction: 'auth/onAuthStateChangedAction',
+        },
+        ssr: true,
+      },
       firestore: true,
       database: true,
       storage: true,
@@ -71,8 +77,6 @@ export default {
       name: 'Fascino(地域創生ゲームSNSアプリ)',
       short_name: 'Fasino',
       lang: 'ja',
-      background_color: '#001024',
-      theme_color: '#001024',
       description: '地域創生を目的としたゲーム型SNSアプリです。あなたの地域の魅力を発信しましょう！',
       icons: [
         {
