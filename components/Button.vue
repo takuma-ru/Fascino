@@ -10,7 +10,6 @@
       :class="`rounded-normal ${flat ? '': 'btn'}`"
       :to="link"
       :style="`font-size: ${btnStyle.fontSize}px; text-transform: none;`"
-      @click="clickFunc"
     >
       <v-icon
         v-if="icon"
