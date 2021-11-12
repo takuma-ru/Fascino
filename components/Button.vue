@@ -7,12 +7,15 @@
       x-small
       :color="color"
       style="color: white"
-      :class="`rounded-nomal ${flat ? '': 'btn'}`"
+      :class="`rounded-normal ${flat ? '': 'btn'}`"
       :to="link"
       :style="`font-size: ${btnStyle.fontSize}px; text-transform: none;`"
-      @click="clickFunc"
     >
-      <v-icon v-if="icon" :size="btnStyle.fontSize">
+      <v-icon
+        v-if="icon"
+        :size="btnStyle.fontSize"
+        :color="iconColor"
+      >
         {{ icon }}
       </v-icon>
       <slot />
@@ -36,6 +39,10 @@ export default {
       default: null,
     },
     color: {
+      type: String,
+      default: null,
+    },
+    iconColor: {
       type: String,
       default: null,
     },
