@@ -20,7 +20,7 @@ export const actions = {
   },
 
   async signIn ({ commit, dispatch }) {
-    commit('updateUserData', {})
+    commit('updateUserData')
 
     const provider = new this.$fireModule.default.auth.GoogleAuthProvider()
     await this.$fire.auth.signInWithPopup(provider)
