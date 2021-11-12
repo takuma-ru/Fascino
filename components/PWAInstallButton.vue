@@ -6,7 +6,7 @@
       height="36"
       depressed
       color="red"
-      class="rounded-nomal"
+      class="rounded-normal"
       @click="installApp()"
     >
       アプリをインストールする

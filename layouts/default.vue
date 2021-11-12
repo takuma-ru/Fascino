@@ -5,7 +5,9 @@
     <v-main>
       <Nuxt />
     </v-main>
-    <BottomNaviBar />
+    <BottomNaviBar
+      v-if="$route.path != '/'"
+    />
   </v-app>
 </template>
 
@@ -13,6 +15,15 @@
 export default {
   data () {
     return {
+    }
+  },
+
+  head () {
+    return {
+      meta: [
+        { name: 'theme-color', content: this.$vuetify.theme.dark ? '#001024' : '#F0F0F0' },
+        { name: 'background-color', content: this.$vuetify.theme.dark ? '#001024' : '#F0F0F0' },
+      ],
     }
   },
 
@@ -39,5 +50,8 @@ export default {
 <style>
 html::-webkit-scrollbar {
   display: none;
+}
+html {
+  overscroll-behavior-y: none;
 }
 </style>

@@ -35,6 +35,7 @@ export const actions = {
   async signOut () {
     await this.$fire.auth.signOut()
       .then(() => {
+        this.$router.go({ path: this.$router.currentRoute.path, force: true })
         console.log('success: signOut')
       })
       .catch((e) => {
