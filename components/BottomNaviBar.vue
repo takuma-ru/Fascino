@@ -4,6 +4,10 @@
       id="nav"
       :style="`background: ${$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_front}`"
     >
+      <SignInButton
+        v-show="!userData"
+        class="signInButton"
+      />
       <v-row
         class="nav_contents mx-4"
         justify="center"
@@ -72,7 +76,6 @@
               color="transparent"
               class="px-4 pt-4 pb-0"
             >
-              <v-subheader style="height: auto">v0.0.0</v-subheader>
               <v-list-item>
                 <v-list-item-title>
                   ダークモード
@@ -102,7 +105,24 @@
                     設定
                   </v-list-item-title>
                 </v-list-item>
+                <v-list-item
+                  :ripple="{ class: 'green_lighten--text' }"
+                  @click="!userData ? signIn() : signOut()"
+                >
+                  <v-list-item-icon class="rounded-normal">
+                    <v-icon>mdi-{{ !userData ? 'login' : 'logout' }}-variant</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-title>
+                    {{ !userData ? 'Googleでログイン' : 'ログアウト' }}
+                  </v-list-item-title>
+                </v-list-item>
               </v-list-item-group>
+
+              <v-divider class="my-4" />
+
+              <v-subheader style="height: auto">
+                v0.0.0
+              </v-subheader>
             </v-list>
           </v-card>
         </v-menu>
@@ -139,10 +159,26 @@ export default {
       this.$store.dispatch('darkMode/updateIsDarkMode', newVal)
     },
   },
+
+  methods: {
+    signIn () {
+      this.$store.dispatch('auth/signIn')
+    },
+    signOut () {
+      this.$store.dispatch('auth/signOut')
+    },
+  },
 }
 </script>
 
 <style>
+.signInButton {
+  position: absolute;
+  top: -44px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 #nav {
   position: fixed;
   width: 100vw;
