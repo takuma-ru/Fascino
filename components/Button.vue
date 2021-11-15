@@ -14,7 +14,7 @@
       <v-icon
         v-if="icon"
         :size="btnStyle.fontSize"
-        :color="iconColor"
+        :color="!iconColor ? $vuetify.theme.themes[$vuetify.theme.dark ? 'light' : 'dark'].background_front : iconColor"
       >
         {{ icon }}
       </v-icon>
