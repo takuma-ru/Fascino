@@ -4,22 +4,14 @@
       <v-col style="text-align: center">
         <PWAInstallButton />
         <Button
-          type="lg_sq"
+          type="sml_sq"
           flat
-          icon="mdi-plus"
           color="red"
           class="mx-2 my-2"
-        />
-        <v-card
-          :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_front"
-          class="rounded-nomal"
-          style="box-shadow: 0px 0px 6px 0px #00214D28;"
+          @click.native="$router.push('/timeline')"
         >
-          <v-card-title>title</v-card-title>
-          <v-card-text>
-            text
-          </v-card-text>
-        </v-card>
+          timelineに移動
+        </Button>
       </v-col>
     </v-row>
   </v-container>
