@@ -185,6 +185,8 @@ export default {
   height: 64px;
   bottom: 0%;
 
+  z-index: 1;
+
   border-radius: 16px 16px 0px 0px;
   box-shadow: 0px 0px 6px 3px #00214D28;
 
