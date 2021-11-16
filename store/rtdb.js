@@ -4,6 +4,8 @@ export const state = () => ({
   PostData: [],
   Userpost: [],
   userid: 'wirA5GIggboAFRoMMAkjIStPaAY5',
+  postdataId: 'a0eebc999c0b4ef8bb6d6bb9bd380a11',
+  like: true,
 })
 
 export const getters = {
@@ -35,6 +37,13 @@ export const mutations = {
       state.Userpost.push(payload[val])
     })
   },
+  likesum (state) {
+    if (state.like === false) {
+      state.like = true
+    } else if (state.like === true) {
+      state.like = false
+    }
+  },
 }
 
 export const actions = {
@@ -57,11 +66,30 @@ export const actions = {
       alert(e)
     }
   },
+  async likesum ({ state, commit }) {
+    // const likesumRef = this.$fire.datadase.ref('posts')
+    const likesumRef = this.$fire.database.ref('posts/' + state.postdataId + '/likesSum')
+    try {
+      commit('likesum')
+      if (state.like === false) {
+        await likesumRef.transaction((likesSum) => {
+          return likesSum + 1
+        })
+      } else if (state.like === true) {
+        await likesumRef.transaction((likesSum) => {
+          return likesSum - 1
+        })
+      }
+      // commit('likesum')
+    } catch (e) {
+      alert(e)
+    }
+  },
+
   async removePostData ({ state, commit }) {
     const removePostDataRef = this.$fire.database.ref('posts')
     try {
       await removePostDataRef.child('a0eebc999c0b4ef8bb6d6bb9bd380a11').remove()
-      // commit('removePostDataID')
       await removePostDataRef.orderByValue().once('value', (snapshot) => {
         commit('removePostDataID', snapshot.val())
       })
@@ -76,9 +104,6 @@ export const actions = {
         console.log(snapshot.val())
         commit('addPostDataID', snapshot.val())
       })
-      // const snapshot = await getpostdataRef.once('value')
-      // console.log(snapshot.val())
-      // commit('addPostDataID', snapshot.val())
     } catch (e) {
       alert(e)
     }
