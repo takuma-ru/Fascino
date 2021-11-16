@@ -1,28 +1,39 @@
 // rtdb/変数名import firebase from '@/plugins/firebase'
 
 export const state = () => ({
-  PostDataID: {
-    uid: '',
-    detail: '',
-    tags: [],
-    imgCoordinate: [],
-    imgName: '',
-    likesSum: null,
-    wentSum: null,
-    date: null,
-  },
+  PostData: [],
+  Userpost: [],
+  userid: 'wirA5GIggboAFRoMMAkjIStPaAY5',
 })
 
 export const getters = {
+  PostData (state) {
+    return state.PostData
+  },
 }
 
 export const mutations = {
-  addPostDataID (state) {
-
+  addPostDataID (state, payload) {
+    Object.keys(payload).forEach((val, key) => {
+      payload[val].id = val
+      state.PostData.push(payload[val])
+    })
+    // state.PostData.push(payload)
   },
-  updatePostDataID (state) {
+  removePostDataID (state, payload) {
+    if (state.PostData != null) {
+      state.PostData.splice(0, state.PostData.length)
+      Object.keys(payload).forEach((val, key) => {
+        payload[val].id = val
+        state.PostData.push(payload[val])
+      })
+    }
   },
-  removePostDataID (state) {
+  userget (state, payload) {
+    Object.keys(payload).forEach((val, key) => {
+      payload[val].id = val
+      state.Userpost.push(payload[val])
+    })
   },
 }
 
@@ -46,11 +57,40 @@ export const actions = {
       alert(e)
     }
   },
-  async getPostDataID ({ state }) {
-    const getpostdataRef = window.$nuxt.$root.$fire.database.ref('posts')
+  async removePostData ({ state, commit }) {
+    const removePostDataRef = this.$fire.database.ref('posts')
     try {
-      const snapshot = await getpostdataRef.once('value')
-      alert(snapshot.val().message)
+      await removePostDataRef.child('a0eebc999c0b4ef8bb6d6bb9bd380a11').remove()
+      // commit('removePostDataID')
+      await removePostDataRef.orderByValue().once('value', (snapshot) => {
+        commit('removePostDataID', snapshot.val())
+      })
+    } catch (e) {
+      alert(e)
+    }
+  },
+  async getPostDataID ({ commit }) {
+    const getpostdataRef = this.$fire.database.ref('posts')
+    try {
+      await getpostdataRef.orderByValue().limitToFirst(10).once('value', (snapshot) => {
+        console.log(snapshot.val())
+        commit('addPostDataID', snapshot.val())
+      })
+      // const snapshot = await getpostdataRef.once('value')
+      // console.log(snapshot.val())
+      // commit('addPostDataID', snapshot.val())
+    } catch (e) {
+      alert(e)
+    }
+  },
+  async userPostData ({ state, commit }) {
+    console.log(state.userid)
+    const userpostRef = this.$fire.database.ref('posts')
+    try {
+      await userpostRef.orderByChild('uid').startAt(state.userid).endAt(state.userid).once('value', (snapshot) => {
+        console.log(snapshot.val())
+        commit('userget', snapshot.val())
+      })
     } catch (e) {
       alert(e)
     }
