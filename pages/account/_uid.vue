@@ -31,13 +31,17 @@
       </v-row>
     </v-container>
     <v-row align="center" justify="space-around" class="bunnki">
-      <v-btn text>
+      <Button type="sml" flat color="green_lighten" @click.native="isVisible = !isVisible">
         投稿
-        </v-btn>
-      <v-btn text>
+      </Button>
+      <Button type="sml" flat color="green_lighten" @click.native="isVisible = !isVisible">
         バッチ
-        </v-btn>
+      </Button>
     </v-row>
+    <div v-if="isVisible">v-ifディレクティブを指定した要素</div>
+    <!-- isVisible=ture ならバッチの画面-->
+    <div v-if="!isVisible">v-ifディレクティブを指定してない要素</div>
+    <!-- isVisible=false なら投稿の画面-->
   </div>
 </template>
 
@@ -53,6 +57,7 @@ export default {
       batti: '555',
       name: 'josei',
       bio: 'わあああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああ',
+      isVisible: false,
     }
   },
 }
