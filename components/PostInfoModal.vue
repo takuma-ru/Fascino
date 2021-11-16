@@ -298,7 +298,6 @@ export default {
 
   transform: translateX(-50%);
 
-  overflow: scroll;
   -ms-overflow-style: none;
   scrollbar-width: none;
   backface-visibility: hidden;
@@ -357,7 +356,6 @@ export default {
 
   box-shadow: 0 10px 25px 0 #00214D;
 
-  overflow: scroll;
   -ms-overflow-style: none;
   scrollbar-width: none;
   backface-visibility: hidden;
