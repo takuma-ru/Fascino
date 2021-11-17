@@ -5,7 +5,7 @@
       :style="`background: ${$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_front}`"
     >
       <SignInButton
-        v-show="!userData"
+        v-show="!googleUserData"
         class="signInButton"
       />
       <v-row
@@ -35,15 +35,15 @@
 
         <button
           class="nav_btn mx-5"
-          @click="$router.push('/account/' + (userData ? userData.uid : 'nonlogin'))"
+          @click="$router.push('/account/' + (googleUserData ? googleUserData.uid : 'nonlogin'))"
         >
-          <div v-if="path === '/account/' + (userData ? userData.uid : 'nonlogin')" class="nav_select_tag" />
+          <div v-if="path === '/account/' + (googleUserData ? googleUserData.uid : 'nonlogin')" class="nav_select_tag" />
           <v-avatar
             size="28"
-            :color="path === '/account/' + (userData ? userData.uid : 'nonlogin') ? '#93DED2' : '#B7C9E4'"
+            :color="path === '/account/' + (googleUserData ? googleUserData.uid : 'nonlogin') ? '#93DED2' : '#B7C9E4'"
           >
             <v-img
-              :src="userData ? userData.photoURL : undefined"
+              :src="googleUserData ? googleUserData.photoURL : undefined"
             />
           </v-avatar>
         </button>
@@ -107,13 +107,13 @@
                 </v-list-item>
                 <v-list-item
                   :ripple="{ class: 'green_lighten--text' }"
-                  @click="!userData ? signIn() : signOut()"
+                  @click="!googleUserData ? signIn() : signOut()"
                 >
                   <v-list-item-icon class="rounded-normal">
-                    <v-icon>mdi-{{ !userData ? 'login' : 'logout' }}-variant</v-icon>
+                    <v-icon>mdi-{{ !googleUserData ? 'login' : 'logout' }}-variant</v-icon>
                   </v-list-item-icon>
                   <v-list-item-title>
-                    {{ !userData ? 'Googleでログイン' : 'ログアウト' }}
+                    {{ !googleUserData ? 'Googleでログイン' : 'ログアウト' }}
                   </v-list-item-title>
                 </v-list-item>
               </v-list-item-group>
@@ -149,8 +149,8 @@ export default {
     path () {
       return this.$route.path
     },
-    userData () {
-      return this.$store.getters['auth/userData']
+    googleUserData () {
+      return this.$store.getters['auth/googleUserData']
     },
   },
 
