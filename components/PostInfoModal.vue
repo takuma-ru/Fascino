@@ -1,7 +1,9 @@
 <template>
-  <div @mousemove="mouseMove">
+  <section @mousemove="mouseMove">
     <div
       v-show="modal"
+      :id="postData.postDataID"
+      class="back"
       :style="`
         --bottomMove: ${bottomMoveS};
       `"
@@ -11,7 +13,7 @@
         :class="isModalAnim ? `top_contents__open` : `top_contents__close`"
       >
         <div id="photo">
-          <img src="https://cdn.vuetifyjs.com/images/parallax/material.jpg">
+          <img :src="imgURL">
         </div>
         <div id="button">
           <Button
@@ -34,20 +36,21 @@
       >
         <div id="button">
           <Button
-            type="sml_sq"
+            type="nml_sq"
             flat
+            icon="mdi-heart"
             color="red"
             class="mx-2 my-2"
           >
-            いいね {{ 123 }}
+            &nbsp;{{ postData.likesSum }}
           </Button>
           <Button
-            type="sml_sq"
+            type="nml_sq"
             flat
-            color="red"
+            color="green_lighten"
             class="mx-2 my-2"
           >
-            行ってみたい {{ 123 }}
+            行ってみたい {{ postData.likesSum }}
           </Button>
         </div>
         <div
@@ -60,19 +63,54 @@
             @mouseup="mouseUp"
           />
           <div id="modal_contents">
-            <p>modal contents</p>
+            <v-list color="transparent">
+              <v-list-item class="grow px-0">
+                <v-list-item-avatar color="grey darken-3" size="32">
+                  <v-img
+                    alt=""
+                    src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
+                  />
+                </v-list-item-avatar>
+
+                <v-list-item-content>
+                  <v-list-item-title
+                    style="font-size: 24px"
+                  >
+                    {{ 'ユーザーネーム' }}
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-divider class="my-2" />
+              <div
+                class="detail"
+                v-html="postData.detail"
+              />
+              <div
+                class="coordinate py-2"
+                :style="`color: ${$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].sub2_text};`"
+              >
+                <v-icon>mdi-map-marker</v-icon>
+                {{ '東京都江東区青海' }}
+              </div>
+              <div>
+                <span
+                  v-for="tag in postData.tags"
+                  :key="tag"
+                  :style="`color: ${$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].sub_text};`"
+                >
+                  #{{ tag }}&nbsp;
+                </span>
+              </div>
+            </v-list>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
-import Button from './Button.vue'
 export default {
-  components: { Button },
-
   model: {
     prop: 'modal',
     event: 'change-modal',
@@ -80,6 +118,10 @@ export default {
 
   props: {
     modal: Boolean,
+    postData: {
+      type: Object,
+      default: null,
+    },
   },
 
   data () {
@@ -93,6 +135,7 @@ export default {
       topMoveS: '0px',
       bottomMove: 0,
       bottomMoveS: '0px',
+      imgURL: null,
     }
   },
 
@@ -123,6 +166,9 @@ export default {
 
   mounted () {
     document.querySelector('#bottom_contents').addEventListener('scroll', this.handleScroll)
+    this.getFileUrl(this.postData.imgName).then((res) => {
+      this.imgURL = res
+    })
   },
 
   destroyed () {
@@ -130,6 +176,16 @@ export default {
   },
 
   methods: {
+    // eslint-disable-next-line no-empty-pattern
+    async getFileUrl (name) {
+      const storageRef = this.$fire.storage.ref('postImages').child(`${name}`)
+      try {
+        const url = await storageRef.getDownloadURL()
+        return url
+      } catch (e) {
+        console.error(e.message)
+      }
+    },
     // common
     init () {
       this.isMouseDown = false
@@ -222,6 +278,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/**背景 */
+.back {
+  position: fixed;
+  background: #00214D6E;
+  height: 100vh;
+  width: 100vw;
+
+  top: 0%;
+  left: 50%;
+  z-index: 2;
+
+  transform: translateX(-50%);
+}
+
 /**上から出てくる要素 */
 #top_contents {
   position: fixed;
@@ -230,7 +300,7 @@ export default {
 
   top: 0%;
   left: 50%;
-  z-index: 2;
+  z-index: 3;
 
   transform: translateX(-50%);
 }
@@ -279,10 +349,12 @@ export default {
 #photo img {
   position: relative;
   height: calc(70vh + 24px);
-  width: 100vw;
+  width: min(100vw, 960px);
+  background-color: #DEDEDE;
   object-fit: cover;
 
   border-radius: 0px 0px 16px 16px;
+  box-shadow: 0px 0px 6px 3px #00214D28;
 }
 
 /**下から出てくる要素 */
@@ -294,7 +366,7 @@ export default {
 
   bottom: 0%;
   left: 50%;
-  z-index: 2;
+  z-index: 3;
 
   transform: translateX(-50%);
 
@@ -350,11 +422,11 @@ export default {
 #modal {
   position: relative;
   min-height: 30vh;
-  width: 100vw;
+  width: min(100vw, 960px);
 
   border-radius: 16px 16px 0px 0px;
 
-  box-shadow: 0 10px 25px 0 #00214D;
+  box-shadow: 0px 0px 6px 3px #00214D28;
 
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -364,7 +436,7 @@ export default {
 
 /**上の飾り */
 #chip {
-  z-index: 2;
+  z-index: 3;
   position: sticky;
   top: 0px;
   height: 4px;
@@ -390,5 +462,11 @@ export default {
 /**メイン */
 #modal_contents {
   padding: 16px;
+}
+
+.detail {
+  width: 100%;
+
+  font-size: 16px;
 }
 </style>
