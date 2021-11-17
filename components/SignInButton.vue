@@ -2,17 +2,17 @@
   <Button
     type="sml"
     color="green_lighten"
-    @click.native="!userData ? signIn() : signOut()"
+    @click.native="!googleUserData ? signIn() : signOut()"
   >
-    {{ userData ? 'ログアウト' : 'ログイン' }}
+    {{ googleUserData ? 'ログアウト' : 'ログイン' }}
   </Button>
 </template>
 
 <script>
 export default {
   computed: {
-    userData () {
-      return this.$store.getters['auth/userData']
+    googleUserData () {
+      return this.$store.getters['auth/googleUserData']
     },
   },
 
