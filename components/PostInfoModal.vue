@@ -13,7 +13,10 @@
         :class="isModalAnim ? `top_contents__open` : `top_contents__close`"
       >
         <div id="photo">
-          <img :src="imgURL">
+          <img
+            :src="imgURL"
+            :style="`height: calc((100vh - ${modalHeight}px) + 24px);`"
+          >
         </div>
         <div id="button">
           <Button
@@ -55,6 +58,7 @@
         </div>
         <div
           id="modal"
+          ref="modal"
           :style="`background-color: ${$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_middle}`"
         >
           <div
@@ -85,14 +89,7 @@
                 class="detail"
                 v-html="postData.detail"
               />
-              <div
-                class="coordinate py-2"
-                :style="`color: ${$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].sub2_text};`"
-              >
-                <v-icon>mdi-map-marker</v-icon>
-                {{ '東京都江東区青海' }}
-              </div>
-              <div>
+              <div class="pb-2">
                 <span
                   v-for="tag in postData.tags"
                   :key="tag"
@@ -100,6 +97,13 @@
                 >
                   #{{ tag }}&nbsp;
                 </span>
+              </div>
+              <div
+                class="coordinate pb-2"
+                :style="`color: ${$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].sub2_text};`"
+              >
+                <v-icon>mdi-map-marker</v-icon>
+                {{ '東京都江東区青海' }}
               </div>
             </v-list>
           </div>
@@ -136,6 +140,7 @@ export default {
       bottomMove: 0,
       bottomMoveS: '0px',
       imgURL: null,
+      modalHeight: null,
     }
   },
 
@@ -206,6 +211,11 @@ export default {
     open () {
       // console.log('open')
       this.isModalAnim = true
+      this.$nextTick(() => {
+        const modal = document.querySelector('#modal')
+        const rect = modal.offsetHeight
+        this.modalHeight = rect
+      })
       document.body.classList.add('modal-open')
       this.$emit('change-modal', true)
     },
@@ -348,7 +358,6 @@ export default {
 /**画像 */
 #photo img {
   position: relative;
-  height: calc(70vh + 24px);
   width: min(100vw, 960px);
   background-color: #DEDEDE;
   object-fit: cover;
@@ -461,11 +470,13 @@ export default {
 
 /**メイン */
 #modal_contents {
+  position: relative;
   padding: 16px;
 }
 
 .detail {
   width: 100%;
+  padding-bottom: 8px;
 
   font-size: 16px;
 }
