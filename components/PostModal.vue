@@ -49,12 +49,12 @@
           >
             <v-container>
               <v-row
-                class="my-20"
                 justify="space-between"
               >
                 <v-col>
                   <v-btn
                     block
+                    @click="modal = false"
                   >
                     Back
                   </v-btn>
@@ -69,41 +69,41 @@
                   </v-btn>
                 </v-col>
               </v-row>
-              <v-row>
-                <v-col
-                  style="border: solid;"
+              <v-row
+                style="height: 250px; border: solid;"
+              >
+                <v-file-input
+                  v-if="isActive"
+                  id="fileInput"
+                  ref="refImage"
+                  v-model="image"
+                  accept="image/*"
+                  hide-input
+                  prepend-icon=""
+                  style="width: 0%; margin-left: calc(50% - 35px); margin-bottom: 16px;"
+                  @change="active"
                 >
-                  <v-file-input
-                    v-if="isActive"
-                    ref="refImage"
-                    v-model="image"
-                    accept="image/*"
-                    hide-input
-                    prepend-icon=""
-                    style="width: 0%; margin-left: calc(50% - 35px);"
-                    @change="active"
-                  >
-                    <template #append-outer>
-                      <v-btn
-                        icon
+                  <template #append-outer>
+                    <v-btn
+                      icon
+                      x-large
+                      @click="imgInput"
+                    >
+                      <v-icon
                         x-large
-                        @click="imgInput"
                       >
-                        <v-icon
-                          x-large
-                        >
-                          mdi-plus
-                        </v-icon>
-                      </v-btn>
-                    </template>
-                  </v-file-input>
-                  <v-img
-                    v-else
-                    class="ma-auto"
-                    max-height="500px"
-                    :src="url"
-                  />
-                </v-col>
+                        mdi-plus
+                      </v-icon>
+                    </v-btn>
+                  </template>
+                </v-file-input>
+                <v-img
+                  v-else
+                  class="ma-auto"
+                  max-height="500px"
+                  :src="url"
+                  @click="active"
+                />
               </v-row>
             </v-container>
           </v-stepper-content>
@@ -236,3 +236,5 @@ export default {
   },
 }
 </script>
+<style lang="scss" scoped>
+</style>
