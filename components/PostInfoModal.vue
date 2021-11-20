@@ -2,7 +2,6 @@
   <section @mousemove="mouseMove">
     <div
       v-show="modal"
-      :id="postData.postDataID"
       class="back"
       :style="`
         --bottomMove: ${bottomMoveS};
@@ -87,16 +86,17 @@
               <v-divider class="my-2" />
               <div
                 class="detail"
-                v-html="postData.detail"
+                style="white-space: pre-line"
+                v-text="postData.detail"
               />
               <div class="pb-2">
-                <span
+                <v-chip
                   v-for="tag in postData.tags"
                   :key="tag"
-                  :style="`color: ${$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].sub_text};`"
-                >
-                  #{{ tag }}&nbsp;
-                </span>
+                  class="mr-2"
+                  :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'light' : 'dark'].sub_text"
+                  v-text="tag"
+                />
               </div>
               <div
                 class="coordinate pb-2"
@@ -431,6 +431,7 @@ export default {
 #modal {
   position: relative;
   min-height: 30vh;
+  max-height: 50vh;
   width: min(100vw, 960px);
 
   border-radius: 16px 16px 0px 0px;
@@ -475,9 +476,27 @@ export default {
 }
 
 .detail {
+  max-height: 20vh;
   width: 100%;
   padding-bottom: 8px;
 
   font-size: 16px;
+  overflow-y: scroll;
+}
+
+.detail::-webkit-scrollbar {
+  width: 5px;
+}
+
+/*スクロールバーの軌道*/
+.detail::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: rgb(200, 200, 200, .3);
+}
+
+/*スクロールバーの動く部分*/
+.detail::-webkit-scrollbar-thumb {
+  background-color: rgba(200, 200, 200);
+  border-radius: 10px;
 }
 </style>
