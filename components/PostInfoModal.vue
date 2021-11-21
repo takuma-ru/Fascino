@@ -2,11 +2,14 @@
   <section @mousemove="mouseMove">
     <div
       v-show="modal"
-      class="back"
       :style="`
         --bottomMove: ${bottomMoveS};
       `"
     >
+      <div
+        id="back_contents"
+        @click="close()"
+      />
       <div
         id="top_contents"
         :class="isModalAnim ? `top_contents__open` : `top_contents__close`"
@@ -220,8 +223,11 @@ export default {
       this.$emit('change-modal', true)
     },
     handleScroll () {
-      const title = document.querySelector('#modal_contents')
-      const rect = title.getBoundingClientRect().y
+      let rect = 0
+      this.$nextTick(() => {
+        const title = document.querySelector('#modal_contents')
+        rect = title.getBoundingClientRect().y
+      })
       if (this.topY == null) {
         this.topY = rect
       }
@@ -289,7 +295,7 @@ export default {
 
 <style lang="scss" scoped>
 /**背景 */
-.back {
+#back_contents {
   position: fixed;
   background: #00214D6E;
   height: 100vh;
