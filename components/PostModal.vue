@@ -2,31 +2,24 @@
   <div>
     <v-container>
       <v-row>
-        <!-- colを減らせ！！！！！ -->
-        <v-col>
-          <v-card>
-            <v-card-actions
-              @click="modal = true"
-            >
-              <v-icon
-                class="mx-auto"
-                x-large
-              >
-                mdi-plus
-              </v-icon>
-            </v-card-actions>
-          </v-card>
-        </v-col>
+        <Button
+          :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].text"
+          icon="mdi-plus"
+          type="lg"
+          @click.native="modal = true"
+        />
       </v-row>
     </v-container>
     <swipemodal
       v-model="modal"
+      :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_middle"
       fullscreen
       width="100%"
       radius="16px"
     >
       <v-stepper
         v-model="el"
+        :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_middle"
         flat
       >
         <v-stepper-header
@@ -49,49 +42,60 @@
           >
             <v-container>
               <v-row
+                class="mb-2"
                 justify="space-between"
               >
-                <v-col>
-                  <v-btn
-                    block
-                    @click="modal = false"
+                <v-col
+                  class="ml-2"
+                >
+                  <Button
+                    type="nml"
+                    color="green"
+                    @click.native="modal = false"
                   >
-                    Back
-                  </v-btn>
+                    戻る
+                  </Button>
                 </v-col>
                 <v-spacer />
-                <v-col>
-                  <v-btn
-                    block
-                    @click="el = 2"
+                <v-col
+                  style="text-align: right;"
+                  class="mr-2"
+                >
+                  <Button
+                    type="nml"
+                    color="green"
+                    @click.native="el = 2"
                   >
-                    Next
-                  </v-btn>
+                    次へ
+                  </Button>
                 </v-col>
               </v-row>
               <v-row
-                style="height: 200px; border: solid;"
+                color=""
+                class="mx-2 my-0 rounded-xl"
+                style="height: 30vh;"
               >
+                <p class="selectImg">
+                  写真を選ぶ
+                </p>
                 <v-file-input
                   v-if="isActive"
-                  id="fileInput"
                   ref="refImage"
                   v-model="image"
+                  class="fileInput"
                   accept="image/*"
                   hide-input
                   prepend-icon=""
-                  style="height:50%; position: absolute; top: calc(50% + 60px); left: 50%; transform: translate(-50%, -50%);"
                   @change="active"
                 >
                   <template #append-outer>
                     <v-btn
-                      style="margin-bottom:50%;"
                       icon
                       x-large
                       @click="imgInput"
                     >
                       <v-icon
-                        x-large
+                        size="60px"
                       >
                         mdi-plus
                       </v-icon>
@@ -118,20 +122,24 @@
                 justify="space-between"
               >
                 <v-col>
-                  <v-btn
-                    block
-                    @click="el = 1"
+                  <Button
+                    type="nml"
+                    color="green"
+                    @click.native="el = 1"
                   >
-                    Back
-                  </v-btn>
+                    戻る
+                  </Button>
                 </v-col>
                 <v-spacer />
-                <v-col>
-                  <v-btn
-                    block
+                <v-col
+                  style="text-align: right;"
+                >
+                  <Button
+                    type="nml"
+                    color="green"
                   >
-                    Next
-                  </v-btn>
+                    投稿
+                  </Button>
                 </v-col>
               </v-row>
               <v-row>
@@ -238,4 +246,18 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.fileInput {
+  height:50%;
+  position: absolute;
+  top: calc(70% + 10px);
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.selectImg {
+  font-size: 24px;
+  position: absolute;
+  top: calc(50% + 60px);
+  left: 50%;
+  transform: translate(-50%);
+}
 </style>
