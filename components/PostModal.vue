@@ -21,9 +21,9 @@
     </v-container>
     <swipemodal
       v-model="modal"
-      height="80vh"
+      fullscreen
       width="100%"
-      radius="20px"
+      radius="16px"
     >
       <v-stepper
         v-model="el"
@@ -70,7 +70,7 @@
                 </v-col>
               </v-row>
               <v-row
-                style="height: 250px; border: solid;"
+                style="height: 200px; border: solid;"
               >
                 <v-file-input
                   v-if="isActive"
@@ -80,11 +80,12 @@
                   accept="image/*"
                   hide-input
                   prepend-icon=""
-                  style="width: 0%; margin-left: calc(50% - 35px); margin-bottom: 16px;"
+                  style="height:50%; position: absolute; top: calc(50% + 60px); left: 50%; transform: translate(-50%, -50%);"
                   @change="active"
                 >
                   <template #append-outer>
                     <v-btn
+                      style="margin-bottom:50%;"
                       icon
                       x-large
                       @click="imgInput"
