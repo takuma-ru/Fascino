@@ -9,12 +9,16 @@
       style="color: white"
       :class="`rounded-normal ${flat ? '': 'btn'}`"
       :to="link"
-      :style="`font-size: ${btnStyle.fontSize}px; text-transform: none;`"
+      :style="`
+        font-size: ${btnStyle.fontSize}px;
+        text-transform: none;
+        color: ${!textColor ? $vuetify.theme.themes[$vuetify.theme.dark ? 'light' : 'dark'].background_front : textColor};
+      `"
     >
       <v-icon
         v-if="icon"
         :size="btnStyle.fontSize"
-        :color="iconColor"
+        :color="!iconColor ? $vuetify.theme.themes[$vuetify.theme.dark ? 'light' : 'dark'].background_front : iconColor"
       >
         {{ icon }}
       </v-icon>
@@ -43,6 +47,10 @@ export default {
       default: null,
     },
     iconColor: {
+      type: String,
+      default: null,
+    },
+    textColor: {
       type: String,
       default: null,
     },
