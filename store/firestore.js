@@ -1,7 +1,3 @@
-export const state = () => ({
-  userData: null,
-})
-// test
 export const getters = {
   userData (state) {
     return state.userData
@@ -15,16 +11,16 @@ export const mutations = {
 }
 
 export const actions = {
-  userDatareset ({ commit }) {
+  userDataReset ({ commit }) {
     commit('updateuserData', null)
   },
 
   async getData ({ commit }, uid) {
     console.log('get data')
     // FireStoreからデータを取ってくる
-    const messageRef = this.$fire.firestore.collection('user').doc(uid)
+    const userDataRef = this.$fire.firestore.collection('user').doc(uid)
     try {
-      const getData = await messageRef.get()
+      const getData = await userDataRef.get()
       console.log(getData.data())
       commit('updateuserData', getData.data())
     } catch (e) {
@@ -34,9 +30,9 @@ export const actions = {
   async addData ({ commit }, { uid, name, detail, liked, wented }) {
     console.log('add data')
     // FireStoreからデータを追加
-    const messageRef = this.$fire.firestore.collection('user').doc(uid)
+    const userDataRef = this.$fire.firestore.collection('user').doc(uid)
     try {
-      await messageRef.set({
+      await userDataRef.set({
         name,
         detail,
         liked,
@@ -50,9 +46,9 @@ export const actions = {
   async updateData ({ commit }, { uid, name, detail, liked, wented }) {
     console.log('update data')
     // firestoreの値を更新
-    const messageRef = this.$fire.firestore.collection('user').doc(uid)
+    const userDataRef = this.$fire.firestore.collection('user').doc(uid)
     try {
-      await messageRef.update({
+      await userDataRef.update({
         name,
         detail,
         liked,
@@ -63,12 +59,12 @@ export const actions = {
     }
   },
 
-  async deleteData ({ commit }, { uid, name, detail, liked, wented }) {
+  async deleteData ({ commit }, { uid }) {
     console.log('delete data')
     // FireStoreから既存データを削除
-    const messageRef = this.$fire.firestore.collection('user').doc(uid)
+    const userDataRef = this.$fire.firestore.collection('user').doc(uid)
     try {
-      await messageRef.update({
+      await userDataRef.update({
         uid: this.$fireModule.firestore.FieldValue.delete(),
         detail: this.$fireModule.firestore.FieldValue.delete(),
         liked: this.$fireModule.firestore.FieldValue.delete(),
