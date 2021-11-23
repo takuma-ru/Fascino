@@ -1,26 +1,26 @@
 export const state = () => ({
-  userData: null,
+  googleUserData: null,
 })
 
 export const getters = {
-  userData (state) {
-    return state.userData
+  googleUserData (state) {
+    return state.googleUserData
   },
 }
 
 export const mutations = {
-  updateUserData (state, status) {
-    state.userData = status
+  updateGoogleUserData (state, status) {
+    state.googleUserData = status
   },
 }
 
 export const actions = {
-  userDataInit ({ commit }) {
-    commit('updateUserData', null)
+  googleUserDataInit ({ commit }) {
+    commit('updateGoogleUserData', null)
   },
 
   async signIn ({ commit, dispatch }) {
-    commit('updateUserData')
+    commit('updateGoogleUserData')
 
     const provider = new this.$fireModule.default.auth.GoogleAuthProvider()
     await this.$fire.auth.signInWithPopup(provider)
@@ -45,14 +45,14 @@ export const actions = {
 
   async onAuthStateChangedAction ({ commit, dispatch }, { authUser, claims }) {
     if (!authUser) {
-      console.warn('Can not get \'userData\'')
-      commit('updateUserData')
+      console.warn('Can not get \'googleUserData\'')
+      commit('updateGoogleUserData')
       return
     }
 
     const { uid, email, emailVerified, displayName } = await authUser
 
-    commit('updateUserData', {
+    commit('updateGoogleUserData', {
       uid,
       email,
       emailVerified,
