@@ -1,15 +1,6 @@
 <template>
+  <!-- 果たしてこれはコンポーネントと呼べるのだろうか、、、 -->
   <div class="postmodal">
-    <!-- <v-container>
-      <v-row>
-        <Button
-          :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].text"
-          icon="mdi-plus"
-          type="lg"
-          @click.native="modal = true"
-        />
-      </v-row>
-    </v-container> -->
     <swipemodal
       v-model="modal"
       :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_middle"
@@ -120,6 +111,7 @@
                   prepend-icon=""
                 >
                   <template #append-outer>
+                    <!-- 画像を再選択しなかった場合のエラー処理；； -->
                     <Button
                       style="margin: auto;
                             position: absolute;
@@ -238,6 +230,7 @@
                 <v-col
                   v-else
                 >
+                  <!-- なぜかマーカーが表示されない；； -->
                   <l-map
                     class="rounded-xl"
                     style="height: 30vh; pointer-events: none;"
