@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-container>
+  <div class="postmodal">
+    <!-- <v-container>
       <v-row>
         <Button
           :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].text"
@@ -9,7 +9,7 @@
           @click.native="modal = true"
         />
       </v-row>
-    </v-container>
+    </v-container> -->
     <swipemodal
       v-model="modal"
       :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_middle"
@@ -19,6 +19,7 @@
     >
       <v-stepper
         v-model="el"
+        style="background-color: rgba(0,0,0,0);"
         :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_middle"
         flat
       >
@@ -37,49 +38,45 @@
         </v-stepper-header>
         <v-stepper-items>
           <v-stepper-content
-            class="px-0"
+            class="px-0 pb-8"
             step="1"
           >
-            <v-container>
+            <v-container style="padding: 12px;">
               <v-row
                 class="mb-2"
                 justify="space-between"
               >
-                <v-col
-                  class="ml-2"
-                >
+                <v-col>
                   <Button
                     type="nml"
                     color="green"
                     @click.native="modal = false"
                   >
-                    戻る
+                    戻 る
                   </Button>
                 </v-col>
                 <v-spacer />
                 <v-col
                   style="text-align: right;"
-                  class="mr-2"
                 >
                   <Button
                     type="nml"
                     color="green"
                     @click.native="el = 2"
                   >
-                    次へ
+                    次 へ
                   </Button>
                 </v-col>
               </v-row>
               <v-row
-                color=""
-                class="mx-2 my-0 rounded-xl"
-                style="height: 30vh;"
+                v-if="isActive"
+                class="mx-4 my-0 rounded-xl"
+                style="height: 30vh; background-color: #929292"
               >
                 <p class="selectImg">
                   写真を選ぶ
                 </p>
                 <v-file-input
-                  v-if="isActive"
                   ref="refImage"
                   v-model="image"
                   class="fileInput"
@@ -95,20 +92,48 @@
                       @click="imgInput"
                     >
                       <v-icon
-                        size="60px"
+                        color="#F0F0F0"
+                        size="64px"
                       >
                         mdi-plus
                       </v-icon>
                     </v-btn>
                   </template>
                 </v-file-input>
+              </v-row>
+              <v-row
+                v-else
+                style="margin: 0"
+              >
                 <v-img
-                  v-else
-                  class="ma-auto"
-                  max-height="500px"
+                  id="spotImg"
+                  class="rounded-xl"
+                  max-height="50vh"
                   :src="url"
-                  @click="active"
                 />
+                <v-file-input
+                  ref="refImage"
+                  v-model="image"
+                  class="fileInput2"
+                  accept="image/*"
+                  hide-input
+                  prepend-icon=""
+                >
+                  <template #append-outer>
+                    <Button
+                      style="margin: auto;
+                            position: absolute;
+                            bottom: 2%;
+                            left: 50%;
+                            transform: translate(-50%);"
+                      color="green"
+                      text-color="text"
+                      @click.native="imgInput"
+                    >
+                      選びなおす
+                    </Button>
+                  </template>
+                </v-file-input>
               </v-row>
             </v-container>
           </v-stepper-content>
@@ -118,7 +143,6 @@
           >
             <v-container>
               <v-row
-                class="my-20"
                 justify="space-between"
               >
                 <v-col>
@@ -127,7 +151,7 @@
                     color="green"
                     @click.native="el = 1"
                   >
-                    戻る
+                    戻 る
                   </Button>
                 </v-col>
                 <v-spacer />
@@ -137,61 +161,185 @@
                   <Button
                     type="nml"
                     color="green"
+                    @click.native="modal = false"
                   >
-                    投稿
+                    投 稿
                   </Button>
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
-                  <v-textarea
-                    label="内容"
+                <v-col class="pb-0">
+                  <v-text-field
+                    id="text-field"
+                    placeholder="魅力や感想を伝えましょう！"
                     auto-grow
                     outlined
-                    rows="1"
-                    row-height="5"
-                  />
+                    clearable
+                    color="green"
+                    style="word-break: break-all; white-space: normal;"
+                  >
+                    <template #label>
+                      <p style="font-size: 20px;">
+                        内容
+                      </p>
+                    </template>
+                  </v-text-field>
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
+                <v-col class="pb-0">
                   <v-combobox
                     v-model="model"
-                    :search-input.sync="search"
                     hide-selected
-                    hint="Maximum of 5 tags"
-                    label="Add some tags"
+                    hint="最大5個 (タグとタグの間には半角スペースを入れてください)"
                     multiple
+                    outlined
+                    color="green"
+                    clearable
+                    deletable-chips
                     hide-no-data
+                    placeholder="例) タグ1 タグ2"
                     persistent-hint
                     small-chips
                   >
                     <v-icon
                       slot="append"
                     />
-                    <template #no-data>
-                      <v-list-item>
-                        <v-list-item-content>
-                          <v-list-item-title>
-                            No results matching "<strong>{{ search }}</strong>". Press <kbd>enter</kbd> to create a new one
-                          </v-list-item-title>
-                        </v-list-item-content>
-                      </v-list-item>
+                    <template #label>
+                      <p style="font-size: 20px;">
+                        タグ
+                      </p>
                     </template>
                   </v-combobox>
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
-                  <v-textarea
-                    v-col
-                    label="撮影場所"
+                <v-col
+                  v-if="isActive2"
+                  class="pb-0"
+                >
+                  <v-text-field
+                    persistent-hint
+                    hint="タップして地図から選択してください！"
                     auto-grow
+                    clearable
+                    readonly
+                    color="green"
                     outlined
-                    rows="1"
-                    row-height="5"
-                  />
+                    @click="mapDialog=true, getLocation()"
+                  >
+                    <template #label>
+                      <p style="font-size: 20px;">
+                        撮影場所
+                      </p>
+                    </template>
+                  </v-text-field>
                 </v-col>
+                <v-col
+                  v-else
+                >
+                  <l-map
+                    class="rounded-xl"
+                    style="height: 30vh; pointer-events: none;"
+                    :zoom="zoom"
+                    :center="NowPlace"
+                    :options="{zoomControl: false}"
+                  >
+                    <l-tile-layer
+                      :url="mapUrl"
+                      :attribution="attribution"
+                    >
+                      <l-marker
+                        :lat-lng="NowPlace"
+                        :icon="icon"
+                      />
+                    </l-tile-layer>
+                  </l-map>
+                  <Button
+                    style="text-align: center;"
+                    class="mt-2"
+                    color="green"
+                    text-color="text"
+                    @click.native="mapDialog=true, getLocation(), active2()"
+                  >
+                    選びなおす
+                  </Button>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-dialog
+                  v-model="mapDialog"
+                  fullscreen
+                  transition="dialog-top-transition"
+                >
+                  <l-map
+                    :zoom="zoom"
+                    :center.sync="NowPlace"
+                    :options="{zoomControl: false}"
+                  >
+                    <l-tile-layer
+                      :url="mapUrl"
+                      :attribution="attribution"
+                    />
+                    <l-marker
+                      :lat-lng="NowPlace"
+                      :icon="icon"
+                      @click="thisPlace=true"
+                    />
+
+                    <v-dialog
+                      v-model="thisPlace"
+                    >
+                      <v-card>
+                        <v-card-title>
+                          スポットの確認
+                        </v-card-title>
+                        <v-card-text class="pb-2">
+                          この場所を追加しますか？
+                        </v-card-text>
+                        <v-card-actions>
+                          <Button
+                            type="lg"
+                            color="green"
+                            text-color="text"
+                            @click.native="thisPlace=false"
+                          >
+                            いいえ
+                          </Button>
+                          <v-spacer />
+                          <Button
+                            type="lg"
+                            color="green"
+                            text-color="text"
+                            @click.native="mapDialog=false, active2()"
+                          >
+                            追 加
+                          </Button>
+                        </v-card-actions>
+                      </v-card>
+                    </v-dialog>
+
+                    <l-control position="bottomright">
+                      <Button
+                        id="nowPlace"
+                        icon="mdi-crosshairs-gps"
+                        type="lg_sq"
+                        color="blue"
+                        icon-color="text"
+                        @click.native="getLocation"
+                      />
+                    </l-control>
+                    <l-control>
+                      <Button
+                        type="lg_sq"
+                        color="blue"
+                        icon="mdi-close"
+                        text-color="text"
+                        @click.native="mapDialog=false"
+                      />
+                    </l-control>
+                  </l-map>
+                </v-dialog>
               </v-row>
             </v-container>
           </v-stepper-content>
@@ -202,24 +350,45 @@
 </template>
 
 <script>
+import L from 'leaflet'
 import swipemodal from 'nekoo_vue_swipemodal'
+import iconImg from '../static/icon/target.svg'
+import spoticonImg from '../static/icon/map-marker-star.svg'
 import 'nekoo_vue_swipemodal/dist/swipemodal.css'
+import Button from './Button.vue'
 
 export default {
   name: 'PostModal',
 
   components: {
     swipemodal,
+    Button,
   },
-
   data () {
     return {
+      thisPlace: false,
+      mapDialog: false,
+      modal: false,
+      isActive: true,
+      isActive2: true,
       model: [],
       search: null,
       el: 1,
       image: null,
-      modal: false,
-      isActive: true,
+      zoom: 18,
+      mapUrl: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+      NowPlace: [0, 0],
+      icon: L.icon({
+        iconUrl: iconImg,
+        iconSize: [64, 64],
+        iconAnchor: [32, 32],
+      }),
+      spotIcon: L.icon({
+        iconUrl: spoticonImg,
+        iconSize: [64, 64],
+        iconAnchor: [32, 32],
+      }),
     }
   },
   computed: {
@@ -236,11 +405,39 @@ export default {
     },
   },
   methods: {
+    openModal () {
+      this.modal = true
+    },
     imgInput () {
       this.$refs.refImage.$el.querySelector('input').click()
     },
     active () {
       this.isActive = !this.isActive
+    },
+    active2 () {
+      this.isActive2 = !this.isActive2
+    },
+    getLocation () {
+      if (!navigator.geolocation) {
+        alert('ERROR')
+      }
+
+      const options = {
+        enableHighAccuracy: false,
+        timeout: 5000,
+        maximumAge: 0,
+      }
+
+      navigator.geolocation.getCurrentPosition(this.success, this.error, options)
+    },
+
+    success (position) {
+      const coords = position.coords
+      this.NowPlace = [coords.latitude, coords.longitude]
+    },
+
+    error () {
+      alert('ERROR')
     },
   },
 }
@@ -254,6 +451,7 @@ export default {
   transform: translate(-50%, -50%);
 }
 .selectImg {
+  color: #F0F0F0;
   font-size: 24px;
   position: absolute;
   top: calc(50% + 60px);
