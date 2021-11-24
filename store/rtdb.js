@@ -141,7 +141,7 @@ export const actions = {
           commit('addPostDataID', snapshot.val())
         })
       } else {
-        await getpostdataRef.orderByKey().limitToFirst(2).once('value', (snapshot) => {
+        await getpostdataRef.orderByKey().limitToFirst(10).once('value', (snapshot) => {
           console.log(snapshot.val())
           commit('addPostDataID', snapshot.val())
         })
