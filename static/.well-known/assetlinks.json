@@ -4,7 +4,7 @@
     "target": {
       "namespace": "android_app",
       "package_name": "takumaru.nekoo.fascino",
-      "sha256_cert_fingerprints": ["1D:AA:D1:33:52:31:81:82:C9:36:FA:8C:A6:33:5C:64:C8:C3:1E:E9:E2:24:A7:57:B7:DF:54:2A:63:33:12:52"]
+      "sha256_cert_fingerprints": ["C8:B1:76:21:1D:5A:57:0F:9E:E4:A8:7C:17:E2:7E:BC:17:66:06:ED:59:CB:58:94:EE:C8:2A:C2:68:89:1A:D2"]
     }
   }
 ]
