@@ -181,9 +181,12 @@ export default {
 
 #nav {
   position: fixed;
-  width: 100vw;
+  width: min(100vw, 960px);
   height: 64px;
   bottom: 0%;
+  left: 50%;
+
+  transform: translateX(-50%);
 
   border-radius: 16px 16px 0px 0px;
   box-shadow: 0px 0px 6px 3px #00214D28;
