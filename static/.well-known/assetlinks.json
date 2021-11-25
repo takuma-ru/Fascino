@@ -1,0 +1,10 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "takumaru.nekoo.fascino",
+      "sha256_cert_fingerprints": ["1D:AA:D1:33:52:31:81:82:C9:36:FA:8C:A6:33:5C:64:C8:C3:1E:E9:E2:24:A7:57:B7:DF:54:2A:63:33:12:52"]
+    }
+  }
+]
