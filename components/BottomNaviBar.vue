@@ -89,7 +89,7 @@
               </v-list-item>
             </v-list>
             <v-list
-              rounded="normal"
+              rounded
               color="transparent"
               class="px-4 pt-0 pb-4"
             >
