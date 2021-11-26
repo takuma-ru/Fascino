@@ -2,7 +2,8 @@
   <!-- 果たしてこれはコンポーネントと呼べるのだろうか、、、 -->
   <div class="postmodal">
     <swipemodal
-      v-model="modal"
+      ref="nekooModal"
+      v-model="_modal"
       :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_middle"
       fullscreen
       width="100%"
@@ -41,7 +42,7 @@
                   <Button
                     type="nml"
                     color="green"
-                    @click.native="modal = false"
+                    @click.native="closeModal"
                   >
                     戻 る
                   </Button>
@@ -153,7 +154,7 @@
                   <Button
                     type="nml"
                     color="green"
-                    @click.native="modal = false"
+                    @click.native="closeModal"
                   >
                     投 稿
                   </Button>
@@ -357,11 +358,20 @@ export default {
     swipemodal,
     Button,
   },
+  model: {
+    prop: 'modal',
+    event: 'change',
+  },
+  props: {
+    modal: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data () {
     return {
       thisPlace: false,
       mapDialog: false,
-      modal: false,
       isActive: true,
       isActive2: true,
       model: [],
@@ -389,6 +399,14 @@ export default {
       // eslint-disable-next-line no-useless-return
       if (this.image === null) { return } else { return URL.createObjectURL(this.image) }
     },
+    _modal: {
+      get () {
+        return this.modal
+      },
+      set (value) {
+        this.$emit('change', value)
+      },
+    },
   },
   watch: {
     model (val) {
@@ -398,8 +416,8 @@ export default {
     },
   },
   methods: {
-    openModal () {
-      this.modal = true
+    closeModal () {
+      this.$refs.nekooModal.close()
     },
     imgInput () {
       this.$refs.refImage.$el.querySelector('input').click()
