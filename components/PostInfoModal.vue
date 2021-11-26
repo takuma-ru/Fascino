@@ -52,10 +52,11 @@
           <Button
             type="nml_sq"
             flat
-            color="green_lighten"
+            icon="mdi-hail"
+            color="green"
             class="mx-2 my-2"
           >
-            行ってみたい {{ postData.likesSum }}
+            &nbsp;行きたい！ {{ postData.likesSum }}
           </Button>
         </div>
         <div
@@ -92,7 +93,7 @@
                 style="white-space: pre-line"
                 v-text="postData.detail"
               />
-              <div class="pb-2">
+              <div class="pt-2">
                 <v-chip
                   v-for="tag in postData.tags"
                   :key="tag"
@@ -102,7 +103,7 @@
                 />
               </div>
               <div
-                class="coordinate pb-2"
+                class="coordinate pt-2"
                 :style="`color: ${$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].sub2_text};`"
               >
                 <v-icon>mdi-map-marker</v-icon>
@@ -484,7 +485,6 @@ export default {
 .detail {
   max-height: 20vh;
   width: 100%;
-  padding-bottom: 8px;
 
   font-size: 16px;
   overflow-y: scroll;
