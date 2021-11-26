@@ -3,11 +3,7 @@ export default {
   ssr: false,
   target: 'static',
 
-  // loading: './components/Loading.vue',
-
-  loadingIndicator: {
-    name: './assets/loadingIndicator.html',
-  },
+  loading: './components/Loading.vue',
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -147,7 +143,7 @@ export default {
           blue_lighten: '#B7C9E4',
           red: '#FF5470',
           red_lighten: '#FE8DA0',
-          green: '#00EBC7',
+          green: '#20D0B5',
           green_lighten: '#93DED2',
           gray: '#929292',
           gray_lighten: '#DEDEDE',
@@ -164,7 +160,7 @@ export default {
           blue_lighten: '#B7C9E4',
           red: '#FF5470',
           red_lighten: '#FE8DA0',
-          green: '#00EBC7',
+          green: '#20D0B5',
           green_lighten: '#93DED2',
           gray: '#929292',
           gray_lighten: '#DEDEDE',
