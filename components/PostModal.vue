@@ -30,16 +30,16 @@
         </v-stepper-header>
         <v-stepper-items>
           <v-stepper-content
-            class="px-0 pb-8"
+            class="px-4"
             step="1"
           >
-            <v-container style="padding: 12px;">
+            <v-container>
               <v-row
-                class="mb-2"
                 justify="space-between"
               >
-                <v-col>
+                <v-col class="px-0">
                   <Button
+                    flat
                     type="nml"
                     color="green"
                     @click.native="closeModal"
@@ -49,9 +49,11 @@
                 </v-col>
                 <v-spacer />
                 <v-col
+                  class="px-0"
                   style="text-align: right;"
                 >
                   <Button
+                    flat
                     type="nml"
                     color="green"
                     @click.native="el = 2"
@@ -62,7 +64,7 @@
               </v-row>
               <v-row
                 v-if="isActive"
-                class="mx-4 my-0 rounded-xl"
+                class="rounded-xl"
                 style="height: 30vh; background-color: #929292"
               >
                 <p class="selectImg">
@@ -95,7 +97,6 @@
               </v-row>
               <v-row
                 v-else
-                style="margin: 0"
               >
                 <v-img
                   id="spotImg"
@@ -114,6 +115,7 @@
                   <template #append-outer>
                     <!-- 画像を再選択しなかった場合のエラー処理；； -->
                     <Button
+                      flat
                       style="margin: auto;
                             position: absolute;
                             bottom: 2%;
@@ -131,15 +133,16 @@
             </v-container>
           </v-stepper-content>
           <v-stepper-content
-            class="px-0"
+            class="px-4"
             step="2"
           >
             <v-container>
               <v-row
                 justify="space-between"
               >
-                <v-col>
+                <v-col class="px-0">
                   <Button
+                    flat
                     type="nml"
                     color="green"
                     @click.native="el = 1"
@@ -149,9 +152,11 @@
                 </v-col>
                 <v-spacer />
                 <v-col
+                  class="px-0"
                   style="text-align: right;"
                 >
                   <Button
+                    flat
                     type="nml"
                     color="green"
                     @click.native="closeModal"
@@ -161,7 +166,7 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col class="pb-0">
+                <v-col class="px-0">
                   <v-text-field
                     id="text-field"
                     placeholder="魅力や感想を伝えましょう！"
@@ -180,7 +185,7 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col class="pb-0">
+                <v-col class="px-0">
                   <v-combobox
                     v-model="model"
                     hide-selected
@@ -209,7 +214,7 @@
               <v-row>
                 <v-col
                   v-if="isActive2"
-                  class="pb-0"
+                  class="px-0"
                 >
                   <v-text-field
                     persistent-hint
@@ -250,6 +255,7 @@
                     </l-tile-layer>
                   </l-map>
                   <Button
+                    flat
                     style="text-align: center;"
                     class="mt-2"
                     color="green"
@@ -293,6 +299,7 @@
                         </v-card-text>
                         <v-card-actions>
                           <Button
+                            flat
                             type="lg"
                             color="green"
                             text-color="text"
@@ -302,6 +309,7 @@
                           </Button>
                           <v-spacer />
                           <Button
+                            flat
                             type="lg"
                             color="green"
                             text-color="text"
@@ -316,6 +324,7 @@
                     <l-control position="bottomright">
                       <Button
                         id="nowPlace"
+                        flat
                         icon="mdi-crosshairs-gps"
                         type="lg_sq"
                         color="blue"
@@ -325,6 +334,7 @@
                     </l-control>
                     <l-control>
                       <Button
+                        flat
                         type="lg_sq"
                         color="blue"
                         icon="mdi-close"
