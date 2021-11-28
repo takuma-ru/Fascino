@@ -17,7 +17,7 @@
             style="max-width: 100%;"
           />
           <div class="mt-10 px-auto">
-            <p>
+            <p style="color: #001024">
               現在開発中（アルファ版）です。<br><span class="br">UIや使用できる機能が</span><span class="br">大幅に変更される可能性があります。</span>
             </p>
             <PWAInstallButton />
