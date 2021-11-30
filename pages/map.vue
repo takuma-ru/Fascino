@@ -9,62 +9,46 @@
         >
           <Button
             id="nowPlace"
+            icon-color="text"
             icon="mdi-crosshairs-gps"
             type="lg_sq"
             @click.native="getLocation(); resetZoom()"
           />
-          <l-tile-layer :url="`https://cartodb-basemaps-{s}.global.ssl.fastly.net/${$vuetify.theme.dark ? 'dark' : 'light'}_all/{z}/{x}/{y}.png`" />
+          <l-tile-layer
+            :url="`https://cartodb-basemaps-{s}.global.ssl.fastly.net/${$vuetify.theme.dark ? 'dark' : 'light'}_all/{z}/{x}/{y}.png`"
+            :attribution="attribution"
+          />
+          <l-control-attribution position="topright" />
           <l-marker
             :lat-lng="NowPlace"
-            @click="modal = true"
-          >
-            <l-icon icon-url="icon/fascino_logo_noback.svg" />
-          </l-marker>
+            :icon="icon"
+          />
         </l-map>
       </no-ssr>
     </div>
-    <swipemodal
-      v-model="modal"
-      height="auto"
-      width="100vw"
-      redius="20px"
-      style="position: absolute; z-index: 502;"
-    >
-      <v-card
-        style="margin-bottom: 72px;"
-        :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_front"
-      >
-        <v-card-title>
-          TITLE
-        </v-card-title>
-        <v-card-text>
-          XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-        </v-card-text>
-        <v-card-text>
-          KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
-        </v-card-text>
-      </v-card>
-    </swipemodal>
   </div>
 </template>
 <script>
-import swipemodal from 'nekoo_vue_swipemodal'
-import 'nekoo_vue_swipemodal/dist/swipemodal.css'
+import L from 'leaflet'
+import iconImage from '../static/icon/fascino_logo_noback.svg'
 export default {
   name: 'Map',
   components: {
-    swipemodal,
   },
   data () {
     return {
-      zoom: 15,
+      zoom: 17,
       NowPlace: [0, 0],
-      modal: false,
+      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       mapOptions: {
         zoomControl: false,
-        attributionControl: false,
-        zoomSnap: true,
+        zoomSnap: 0.5,
       },
+      icon: L.icon({
+        iconUrl: iconImage,
+        iconSize: [48, 48],
+        iconAnchor: [24, 24],
+      }),
     }
   },
   mounted () {
@@ -73,7 +57,7 @@ export default {
 
   methods: {
     resetZoom () {
-      this.zoom = 15
+      this.zoom = 17
     },
     getLocation () {
       if (!navigator.geolocation) {
