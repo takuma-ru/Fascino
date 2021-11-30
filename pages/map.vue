@@ -5,22 +5,22 @@
         <l-map
           :zoom.sync="zoom"
           :options="mapOptions"
-          :center="NowPlace"
+          :center="center"
         >
           <Button
             id="nowPlace"
             icon-color="text"
+            color="green_lighten"
             icon="mdi-crosshairs-gps"
             type="lg_sq"
-            @click.native="getLocation(); resetZoom()"
+            @click.native="getLocation()"
           />
           <l-tile-layer
             :url="`https://cartodb-basemaps-{s}.global.ssl.fastly.net/${$vuetify.theme.dark ? 'dark' : 'light'}_all/{z}/{x}/{y}.png`"
             :attribution="attribution"
           />
-          <l-control-attribution position="topright" />
           <l-marker
-            :lat-lng="NowPlace"
+            :lat-lng="center"
             :icon="icon"
           />
         </l-map>
@@ -38,7 +38,7 @@ export default {
   data () {
     return {
       zoom: 17,
-      NowPlace: [0, 0],
+      center: [0, 0],
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       mapOptions: {
         zoomControl: false,
@@ -56,19 +56,23 @@ export default {
   },
 
   methods: {
-    resetZoom () {
-      this.zoom = 17
-    },
     getLocation () {
       if (!navigator.geolocation) {
         alert('ERROR')
       }
-      navigator.geolocation.getCurrentPosition(this.success, this.error)
+
+      this.options = {
+        enableHighAccuracy: false,
+        timeout: 500,
+        maximumAge: 0,
+      }
+      navigator.geolocation.getCurrentPosition(this.success, this.error, this.options)
     },
 
     success (position) {
+      this.zoom = 17
       const coords = position.coords
-      this.NowPlace = [coords.latitude, coords.longitude]
+      this.center = [coords.latitude, coords.longitude]
     },
 
     error () {
@@ -85,10 +89,10 @@ export default {
   width: 100%;
 }
 #nowPlace {
-  position: relative;
+  position: absolute;
   z-index: 500;
-  top: 80%;
-  left: 80%;
+  bottom: 72px;
+  right: 16px;
 }
 #main {
   position: relative;
