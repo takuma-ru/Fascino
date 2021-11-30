@@ -27,7 +27,7 @@
               color="green"
               class="py-4"
               text-color="#001024"
-              @click.native="$router.push('/timeline')"
+              @click.native="$store.dispatch('darkMode/setUpIsDarkMode'); $router.push('/timeline')"
             >
               投稿を見てみる
             </Button>
@@ -56,6 +56,9 @@
 
 <script>
 export default {
+  mounted () {
+    this.$vuetify.theme.dark = false
+  },
 }
 </script>
 
