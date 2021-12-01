@@ -23,6 +23,12 @@
             :lat-lng="NowPlace"
             :icon="icon"
           />
+          <l-marker
+            v-for="marker in markers"
+            :key="marker.id"
+            :lat-lng.sync="marker.position"
+            :icon="spotIcon"
+          />
         </l-map>
       </no-ssr>
     </div>
@@ -31,6 +37,7 @@
 <script>
 import L from 'leaflet'
 import iconImage from '../static/icon/fascino_logo_noback.svg'
+import spoticonImage from '../static/icon/map-marker-star.svg'
 export default {
   name: 'Map',
   components: {
@@ -49,6 +56,29 @@ export default {
         iconSize: [48, 48],
         iconAnchor: [24, 24],
       }),
+      spotIcon: L.icon({
+        iconUrl: spoticonImage,
+        iconsize: [48, 48],
+        iconAnchor: [24, 24],
+      }),
+      markers: [
+        {
+          id: 'm1',
+          position: { lat: 39.42, lng: 141.09 },
+        },
+        {
+          id: 'm2',
+          position: { lat: 51.8905, lng: -0.09 },
+        },
+        {
+          id: 'm3',
+          position: { lat: 51.005, lng: -0.09 },
+        },
+        {
+          id: 'm4',
+          position: { lat: 50.7605, lng: -0.09 },
+        },
+      ],
     }
   },
   mounted () {
