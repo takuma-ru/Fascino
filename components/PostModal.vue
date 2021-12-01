@@ -273,6 +273,7 @@
                   transition="dialog-top-transition"
                 >
                   <l-map
+                    id="selectMap"
                     :zoom="zoom"
                     :center.sync="NowPlace"
                     :options="{zoomControl: false}"
@@ -284,9 +285,16 @@
                     <l-marker
                       :lat-lng="NowPlace"
                       :icon="icon"
-                      @click="thisPlace=true"
                     />
-
+                    <Button
+                      id="here"
+                      type="lg_sq"
+                      text-color="text"
+                      color="red"
+                      @click.native="thisPlace=true"
+                    >
+                      ここにする！
+                    </Button>
                     <v-dialog
                       v-model="thisPlace"
                     >
@@ -478,5 +486,17 @@ export default {
   top: calc(50% + 60px);
   left: 50%;
   transform: translate(-50%);
+}
+#selectMap {
+  position: absolute;
+  z-index: 0;
+}
+#here {
+  position: absolute;
+  z-index: 500;
+  left: 50%;
+  bottom: -4px;
+  transform: translate(-50%, -50%);
+
 }
 </style>
