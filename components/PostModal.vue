@@ -74,7 +74,7 @@
                   ref="refImage"
                   v-model="image"
                   class="fileInput"
-                  accept="image/*"
+                  accept=".png, .jpeg, .jpg"
                   hide-input
                   prepend-icon=""
                   @change="active"
@@ -108,7 +108,7 @@
                   ref="refImage"
                   v-model="image"
                   class="fileInput2"
-                  accept="image/*"
+                  accept="image/png, image/jpeg, image/jpg"
                   hide-input
                   prepend-icon=""
                 >
