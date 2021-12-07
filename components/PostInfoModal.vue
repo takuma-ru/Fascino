@@ -75,7 +75,7 @@
                 <v-list-item-avatar color="grey darken-3" size="32">
                   <v-img
                     alt=""
-                    src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
+                    :src="postedUserData.photoURL"
                   />
                 </v-list-item-avatar>
 
@@ -83,7 +83,7 @@
                   <v-list-item-title
                     style="font-size: 24px"
                   >
-                    {{ 'ユーザーネーム' }}
+                    {{ postedUserData.name }}
                   </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
@@ -127,6 +127,10 @@ export default {
   props: {
     modal: Boolean,
     postData: {
+      type: Object,
+      default: null,
+    },
+    postedUserData: {
       type: Object,
       default: null,
     },
