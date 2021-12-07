@@ -1,40 +1,35 @@
 <template>
   <div id="map">
     <div id="main">
-      <no-ssr>
-        <l-map
-          :zoom.sync="zoom"
-          :options="mapOptions"
-          :center="center"
-        >
-          <Button
-            id="nowPlace"
-            icon-color="text"
-            color="green_lighten"
-            icon="mdi-crosshairs-gps"
-            type="lg_sq"
-            @click.native="getLocation()"
-          />
-          <v-card style="position: absolute; z-index: 500;">
-            {{ zoom }}
-          </v-card>
-          <l-tile-layer
-            :url="`https://cartodb-basemaps-{s}.global.ssl.fastly.net/${$vuetify.theme.dark ? 'dark' : 'light'}_all/{z}/{x}/{y}.png`"
-            :attribution="attribution"
-          />
-          <l-marker
-            :lat-lng="center"
-            :icon="icon"
-          />
-          <!--一定のズーム値になるまではマーカー非表示とかのほうがいいかも-->
-          <l-marker
-            v-for="marker in markers"
-            :key="marker.id"
-            :lat-lng="marker.position"
-            :icon="spotIcon"
-          />
-        </l-map>
-      </no-ssr>
+      <l-map
+        :zoom.sync="zoom"
+        :options="mapOptions"
+        :center="center"
+      >
+        <Button
+          id="nowPlace"
+          icon-color="text"
+          color="green_lighten"
+          icon="mdi-crosshairs-gps"
+          type="lg_sq"
+          @click.native="getLocation()"
+        />
+        <l-tile-layer
+          :url="`https://cartodb-basemaps-{s}.global.ssl.fastly.net/${$vuetify.theme.dark ? 'dark' : 'light'}_all/{z}/{x}/{y}.png`"
+          :attribution="attribution"
+        />
+        <l-marker
+          :lat-lng="center"
+          :icon="icon"
+        />
+        <!--一定のズーム値になるまではマーカー非表示とかのほうがいいかも-->
+        <l-marker
+          v-for="marker in markers"
+          :key="marker.id"
+          :lat-lng="marker.position"
+          :icon="spotIcon"
+        />
+      </l-map>
     </div>
   </div>
 </template>
@@ -84,32 +79,34 @@ export default {
           position: { lat: 38.935654177411884, lng: 141.13602725401006 },
         },
       ],
+      options: {
+        enableHighAccuracy: false,
+        timeout: 5000,
+        maximumAge: 0,
+      },
     }
   },
   mounted () {
     this.getLocation()
   },
-
   methods: {
     getLocation () {
+      this.zoom = 17
       if (!navigator.geolocation) {
         alert('ERROR')
       }
-
-      this.options = {
-        enableHighAccuracy: false,
-        timeout: 500,
-        maximumAge: 0,
-      }
       navigator.geolocation.getCurrentPosition(this.success, this.error, this.options)
     },
-
+    watchLocation () {
+      if (!navigator.geolocation) {
+        alert('ERROR')
+      }
+      this.ID = navigator.geolocation.watchPosition(this.success, this.error, this.options)
+    },
     success (position) {
-      this.zoom = 17
       const coords = position.coords
       this.center = [coords.latitude, coords.longitude]
     },
-
     error () {
       alert('ERROR')
     },
