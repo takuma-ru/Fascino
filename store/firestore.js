@@ -1,5 +1,5 @@
 export const actions = {
-  
+
   async getData ({ commit }, uid) {
     console.log('get data')
     // FireStoreからデータを取ってくる
