@@ -1,24 +1,29 @@
 export const actions = {
   // storageにファイルをアップロード
   async putImgFile ({ commit }, { img, postDataIDKey }) {
-    let name = null
+    let fileType = null
     switch (img.type) {
       case 'image/png':
-        name = postDataIDKey + '.png'
+        fileType = 'png'
         break
       case 'image/jpeg':
-        name = postDataIDKey + '.jpeg'
+        fileType = 'jpeg'
         break
       case 'image/jpg':
-        name = postDataIDKey + '.jpg'
+        fileType = 'jpg'
         break
       default:
         console.error('対応していないファイル形式です')
         break
     }
-    const storageRef = this.$fire.storage.ref('postImages').child(name)
+    const metaData = {
+      cacheControl: 'public,max-age=2592000',
+      contentType: 'image/' + fileType,
+    }
+    const storageRef = this.$fire.storage.ref('postImages').child(postDataIDKey + '.' + fileType)
     try {
       await storageRef.put(img)
+      await storageRef.updateMetadata(metaData)
       return true
     } catch (e) {
       alert(e.message)
