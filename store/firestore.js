@@ -1,19 +1,4 @@
-export const getters = {
-  userData (state) {
-    return state.userData
-  },
-}
-
-export const mutations = {
-  updateuserData (state, condition) {
-    state.userData = condition
-  },
-}
-
 export const actions = {
-  userDataReset ({ commit }) {
-    commit('updateuserData', null)
-  },
 
   async getData ({ commit }, uid) {
     console.log('get data')
@@ -22,7 +7,7 @@ export const actions = {
     try {
       const getData = await userDataRef.get()
       console.log(getData.data())
-      commit('updateuserData', getData.data())
+      return getData.data()
     } catch (e) {
       console.log(e)
     }
