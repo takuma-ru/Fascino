@@ -89,7 +89,7 @@
               </v-list-item>
             </v-list>
             <v-list
-              rounded="normal"
+              rounded
               color="transparent"
               class="px-4 pt-0 pb-4"
             >
@@ -98,7 +98,7 @@
                   to="/setting"
                   :ripple="{ class: 'green_lighten--text' }"
                 >
-                  <v-list-item-icon class="rounded-normal">
+                  <v-list-item-icon>
                     <v-icon>mdi-cog</v-icon>
                   </v-list-item-icon>
                   <v-list-item-title>
@@ -109,7 +109,7 @@
                   :ripple="{ class: 'green_lighten--text' }"
                   @click="!googleUserData ? signIn() : signOut()"
                 >
-                  <v-list-item-icon class="rounded-normal">
+                  <v-list-item-icon>
                     <v-icon>mdi-{{ !googleUserData ? 'login' : 'logout' }}-variant</v-icon>
                   </v-list-item-icon>
                   <v-list-item-title>
@@ -184,6 +184,8 @@ export default {
   width: 100vw;
   height: 64px;
   bottom: 0%;
+
+  z-index: 1;
 
   border-radius: 16px 16px 0px 0px;
   box-shadow: 0px 0px 6px 3px #00214D28;
