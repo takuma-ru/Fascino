@@ -1,5 +1,3 @@
-
-// rtdb/変数名import firebase from '@/plugins/firebase'
 export const state = () => ({
   PostData: [],
   UserPostData: [],
