@@ -66,8 +66,10 @@ export const actions = {
     })
 
     // firestoreからuserDataをログインしているユーザーのドキュメントが取得できるか
-    await dispatch('firestore/getData', uid, { root: true })
-    const userData = rootState.firestore.userData
+    let userData = null
+    await dispatch('firestore/getData', uid, { root: true }).then((res) => {
+      userData = res
+    })
     if (userData === undefined || userData === null) {
       // 取得できなかった場合
       await dispatch('firestore/addData', {
@@ -76,10 +78,10 @@ export const actions = {
         detail: '',
         liked: 0,
         wented: 0,
+        photoURL: claims.picture,
       }, { root: true })
       // eslint-disable-next-line no-useless-return
       return
     }
-    // console.log('アカウント作成済み')
   },
 }
