@@ -24,7 +24,7 @@ export const actions = {
     try {
       await storageRef.put(img)
       await storageRef.updateMetadata(metaData)
-      return true
+      return (postDataIDKey + '.' + fileType)
     } catch (e) {
       alert(e.message)
       return false
