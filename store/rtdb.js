@@ -1,8 +1,9 @@
+
 // rtdb/変数名import firebase from '@/plugins/firebase'
 export const state = () => ({
   PostData: [],
-  Userpost: [],
-  // userid: 'wirA5GIggboAFRoMMAkjIStPaAY5',
+  UserPostData: [],
+  imgCoordinatePostData: [],
   postdataId: '',
   // 今のところ投稿データごとには出来ないだよねー
   like: false,
@@ -13,13 +14,13 @@ export const getters = {
   PostData (state) {
     return state.PostData
   },
-  Userpost (state) {
+  UserPostData (state) {
     return state.Userpost
   },
 }
 
 export const mutations = {
-  addPostDataID (state, payload) {
+  addPostData (state, payload) {
     if (state.PostData.length) {
       state.PostData.pop()
     }
@@ -29,7 +30,7 @@ export const mutations = {
       state.postdataId = payload[val].id
     })
   },
-  removePostDataID (state, payload) {
+  removePostData (state, payload) {
     if (state.PostData != null) {
       state.PostData.splice(0, state.PostData.length)
       Object.keys(payload).forEach((val, key) => {
@@ -39,12 +40,21 @@ export const mutations = {
     }
   },
   userget (state, payload) {
-    if (state.Userpost != null) {
-      state.Userpost = null
+    if (state.UserpostData != null) {
+      state.UserpostData = null
     }
     Object.keys(payload).forEach((val, key) => {
       payload[val].id = val
-      state.Userpost.push(payload[val])
+      state.UserpostData.push(payload[val])
+    })
+  },
+  imgCoordinate (state, payload) {
+    if (state.imgCoordinatePostData.find(value => value.id !== payload.id)) {
+      console.log('good')
+    }
+    Object.keys(payload).forEach((val, key) => {
+      payload[val].id = val
+      state.imgCoordinatePostData.push(payload[val])
     })
   },
   likesum (state) {
@@ -61,13 +71,15 @@ export const mutations = {
       state.went = false
     }
   },
+
 }
 
 export const actions = {
   async updataPostData ({ rootState }, { detail, tags, imgCoordinate, imgName }) {
     const updataPostdataRef = this.$fire.database.ref('posts')
+    const newref = updataPostdataRef.push()
     try {
-      await updataPostdataRef.push({
+      await newref.set({
         uid: rootState.auth.googleUserData.uid,
         detail,
         tags,
@@ -82,7 +94,7 @@ export const actions = {
     }
   },
   // 修正後でしないとね
-  async likesum ({ state, commit }) {
+  async likechange ({ state, commit }) {
     // const likesumRef = this.$fire.datadase.ref('posts')
     const likesumRef = this.$fire.database.ref('posts/' + state.postdataId + '/likesSum')
     try {
@@ -101,7 +113,7 @@ export const actions = {
       alert(e)
     }
   },
-  async wentsum ({ state, commit }) {
+  async wentchange ({ state, commit }) {
     const wentsumRef = this.$fire.database.ref('posts/' + state.postdataId + '/wentSum')
     try {
       commit('wentsum')
@@ -124,24 +136,24 @@ export const actions = {
     try {
       await removePostDataRef.child(PostDataId).remove()
       await removePostDataRef.orderByKey().endAt(state.postdataId).once('value', (snapshot) => {
-        commit('removePostDataID', snapshot.val())
+        commit('removePostData', snapshot.val())
       })
     } catch (e) {
       alert(e)
     }
   },
-  async getPostDataID ({ state, commit }) {
+  async getPostData ({ state, commit }) {
     const getpostdataRef = this.$fire.database.ref('posts')
     try {
       if (state.PostData.length) {
         await getpostdataRef.orderByKey().startAt(state.postdataId).limitToFirst(11).once('value', (snapshot) => {
           console.log(snapshot.val())
-          commit('addPostDataID', snapshot.val())
+          commit('addPostData', snapshot.val())
         })
       } else {
         await getpostdataRef.orderByKey().limitToFirst(10).once('value', (snapshot) => {
           console.log(snapshot.val())
-          commit('addPostDataID', snapshot.val())
+          commit('addPostData', snapshot.val())
         })
       }
     } catch (e) {
@@ -156,6 +168,17 @@ export const actions = {
         console.log(snapshot.val())
         commit('userget', snapshot.val())
         // EqualTo()で出来るくね？
+      })
+    } catch (e) {
+      alert(e)
+    }
+  },
+  async imgCoordinate ({ commit }, { coords }) {
+    const imgCoordinateref = this.$fire.database.ref('posts')
+    try {
+      await imgCoordinateref.orderByChild('imgCoordinate/0').startAt(-0.05 + coords[0]).endAt(0.05 + coords[0]).once('value', (snapshot) => {
+        console.log(snapshot.val())
+        commit('imgCoordinate', snapshot.val())
       })
     } catch (e) {
       alert(e)
