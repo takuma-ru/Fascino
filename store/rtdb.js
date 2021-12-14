@@ -42,7 +42,7 @@ export const mutations = {
       })
     }
   },
-  userget (state, payload) {
+  updateuserPostData (state, payload) {
     if (state.UserpostData != null) {
       state.UserpostData = null
     }
@@ -78,10 +78,17 @@ export const mutations = {
 }
 
 export const actions = {
-  async updataPostData ({ rootState }, { detail, tags, imgCoordinate, imgName }) {
+  async updataPostData ({ rootState, dispatch }, { detail, tags, imgCoordinate, img }) {
     const updataPostdataRef = this.$fire.database.ref('posts')
     const newref = updataPostdataRef.push()
     try {
+      let imgName = ''
+      await dispatch('storage/putImgFile', {
+        img,
+        postDataIDkey: newref.key,
+      }).then((res) => {
+        imgName = res
+      })
       await newref.set({
         uid: rootState.auth.googleUserData.uid,
         detail,
@@ -163,7 +170,7 @@ export const actions = {
       alert(e)
     }
   },
-  async getuserPostData ({ commit }, { uid }) {
+  async updatauserPostData ({ commit }, { uid }) {
     console.log(uid)
     const userpostRef = this.$fire.database.ref('posts')
     try {
