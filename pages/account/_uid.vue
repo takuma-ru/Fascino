@@ -4,43 +4,70 @@
       <v-row>
         <v-col>
           <!--アイコン-->
+          <v-avatar
+            size="28"
+          >
+            <v-img
+              :src="googleUserData ? googleUserData.photoURL : undefined"
+            />
+          </v-avatar>
         </v-col>
         <v-col>
-          <p class="b">{{name}}</p>
+          <p class="b">
+            {{ googleUserData.displayName }}
+          </p>
         </v-col>
       </v-row>
       <v-row>
         <v-col>
-          <p class="a">投稿</p>
-          <p class="hen-number">{{toukou}}</p>
+          <p class="a">
+            投稿
+          </p>
+          <p class="hen-number">
+            {{ toukou }}
+          </p>
         </v-col>
         <v-col>
-          <p class="a">いったよ</p>
-          <p class="hen-number">{{ittayo}}</p>
+          <p class="a">
+            いったよ
+          </p>
+          <p class="hen-number">
+            {{ ittayo }}
+          </p>
         </v-col>
         <v-col>
-          <p class="a">バッチ</p>
-          <p class="hen-number">{{batti}}</p>
+          <p class="a">
+            バッチ
+          </p>
+          <p class="hen-number">
+            {{ batti }}
+          </p>
         </v-col>
       </v-row>
       <v-row class="location">
-        <v-icon small>mdi-map-marker</v-icon>{{location}}
+        <v-icon small>
+          mdi-map-marker
+        </v-icon>{{ location }}
       </v-row>
-      <v-row class="bio">
-        {{bio}}
+      <v-row class="bio" color="text">
+        {{ bio }}
       </v-row>
     </v-container>
     <v-row align="center" justify="space-around" class="bunnki">
-      <Button type="sml" flat color="green_lighten" @click.native="isVisible = !isVisible">
+      <Button type="sml" flat :color="isVisible ? 'green_lighten' : 'transparent'" @click.native="isVisible = !isVisible">
         投稿
       </Button>
-      <Button type="sml" flat color="green_lighten" @click.native="isVisible = !isVisible">
+      <Button type="sml" flat :color="isVisible ? 'transparent' : 'green_lighten'" @click.native="isVisible = !isVisible">
         バッチ
       </Button>
     </v-row>
-    <div v-if="isVisible">v-ifディレクティブを指定した要素</div>
+    <div v-if="isVisible">
+      coming soon..
+    </div>
     <!-- isVisible=ture ならバッチの画面-->
-    <div v-if="!isVisible">v-ifディレクティブを指定してない要素</div>
+    <div v-if="!isVisible">
+      coming soon...
+    </div>
     <!-- isVisible=false なら投稿の画面-->
   </div>
 </template>
@@ -55,10 +82,14 @@ export default {
       toukou: '555',
       ittayo: '555',
       batti: '555',
-      name: 'josei',
-      bio: 'わあああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああ',
+      bio: 'coming soon...',
       isVisible: false,
     }
+  },
+  computed: {
+    googleUserData () {
+      return this.$store.getters['auth/googleUserData']
+    },
   },
 }
 </script>
