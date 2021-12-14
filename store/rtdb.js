@@ -85,7 +85,7 @@ export const actions = {
       let imgName = ''
       await dispatch('storage/putImgFile', {
         img,
-        postDataIDkey: newref.key,
+        postDataIDKey: newref.key,
       }).then((res) => {
         imgName = res
       })
@@ -170,7 +170,7 @@ export const actions = {
       alert(e)
     }
   },
-  async updatauserPostData ({ commit }, { uid }) {
+  async updateuserPostData ({ commit }, { uid }) {
     console.log(uid)
     const userpostRef = this.$fire.database.ref('posts')
     try {
