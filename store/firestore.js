@@ -12,7 +12,7 @@ export const actions = {
       console.log(e)
     }
   },
-  async addData ({ commit }, { uid, name, detail, liked, wented }) {
+  async addData ({ commit }, { uid, name, detail, liked, wented, photoURL }) {
     console.log('add data')
     // FireStoreからデータを追加
     const userDataRef = this.$fire.firestore.collection('user').doc(uid)
@@ -22,13 +22,14 @@ export const actions = {
         detail,
         liked,
         wented,
+        photoURL,
       })
     } catch (e) {
       console.log(e)
     }
   },
 
-  async updateData ({ commit }, { uid, name, detail, liked, wented }) {
+  async updateData ({ commit }, { uid, name, detail, liked, wented, photoURL }) {
     console.log('update data')
     // firestoreの値を更新
     const userDataRef = this.$fire.firestore.collection('user').doc(uid)
@@ -38,6 +39,7 @@ export const actions = {
         detail,
         liked,
         wented,
+        photoURL,
       })
     } catch (e) {
       console.log(e)
@@ -54,6 +56,7 @@ export const actions = {
         detail: this.$fireModule.firestore.FieldValue.delete(),
         liked: this.$fireModule.firestore.FieldValue.delete(),
         wented: this.$fireModule.firestore.FieldValue.delete(),
+        photoURL: this.$fireModule.firestore.FieldValue.delete(),
       })
     } catch (e) {
       console.log(e)
