@@ -17,6 +17,9 @@ export const getters = {
   UserPostData (state) {
     return state.Userpost
   },
+  imgCoordinatePostData (state) {
+    return state.imgCoordinatePostData
+  },
 }
 
 export const mutations = {
@@ -48,7 +51,7 @@ export const mutations = {
       state.UserpostData.push(payload[val])
     })
   },
-  imgCoordinate (state, payload) {
+  getimgCoordinatePostData (state, payload) {
     if (state.imgCoordinatePostData.find(value => value.id !== payload.id)) {
       console.log('good')
     }
@@ -173,12 +176,12 @@ export const actions = {
       alert(e)
     }
   },
-  async imgCoordinate ({ commit }, { coords }) {
+  async getimgCoordinatePostData ({ commit }, { coords }) {
     const imgCoordinateref = this.$fire.database.ref('posts')
     try {
       await imgCoordinateref.orderByChild('imgCoordinate/0').startAt(-0.05 + coords[0]).endAt(0.05 + coords[0]).once('value', (snapshot) => {
         console.log(snapshot.val())
-        commit('imgCoordinate', snapshot.val())
+        commit('getimgCoordinatePostData', snapshot.val())
       })
     } catch (e) {
       alert(e)
