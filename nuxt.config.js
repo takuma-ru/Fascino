@@ -76,7 +76,7 @@ export default {
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     manifest: {
-      name: 'Fascino(地域創生ゲームSNSアプリ)',
+      name: 'ファシノ',
       short_name: 'Fasino',
       lang: 'ja',
       description: '地域創生を目的としたゲーム型SNSアプリです。あなたの地域の魅力を発信しましょう！',
