@@ -54,7 +54,12 @@ export const actions = {
       return
     }
 
-    const { uid, email, emailVerified, displayName } = await authUser
+    const {
+      uid,
+      email,
+      emailVerified,
+      displayName,
+    } = await authUser
 
     commit('updateGoogleUserData', {
       uid,
