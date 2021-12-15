@@ -3,7 +3,9 @@ export default {
   ssr: false,
   target: 'static',
 
-  loading: './components/Loading.vue',
+  loadingIndicator: {
+    name: './assets/loadingIndicator.html',
+  },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
