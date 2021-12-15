@@ -19,11 +19,7 @@
 
 <script>
 export default {
-  beforeCreate () {
-    if (this.$store.getters['auth/googleUserData']) {
-      this.$router.push('/timeLine')
-    }
-  },
+
 }
 </script>
 
