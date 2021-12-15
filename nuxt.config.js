@@ -3,7 +3,9 @@ export default {
   ssr: false,
   target: 'static',
 
-  loading: './components/Loading.vue',
+  loadingIndicator: {
+    name: './assets/loadingIndicator.html',
+  },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -74,7 +76,7 @@ export default {
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     manifest: {
-      name: 'Fascino(地域創生ゲームSNSアプリ)',
+      name: 'ファシノ',
       short_name: 'Fasino',
       lang: 'ja',
       description: '地域創生を目的としたゲーム型SNSアプリです。あなたの地域の魅力を発信しましょう！',
@@ -143,7 +145,7 @@ export default {
           blue_lighten: '#B7C9E4',
           red: '#FF5470',
           red_lighten: '#FE8DA0',
-          green: '#00EBC7',
+          green: '#20D0B5',
           green_lighten: '#93DED2',
           gray: '#929292',
           gray_lighten: '#DEDEDE',
@@ -160,7 +162,7 @@ export default {
           blue_lighten: '#B7C9E4',
           red: '#FF5470',
           red_lighten: '#FE8DA0',
-          green: '#00EBC7',
+          green: '#20D0B5',
           green_lighten: '#93DED2',
           gray: '#929292',
           gray_lighten: '#DEDEDE',
