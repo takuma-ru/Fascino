@@ -10,6 +10,7 @@
           <v-card-title>
             {{ $store.getters['rtdb/imgCoordinatePostData'] }}
           </v-card-title>
+
           <v-card-text>
             {{ center }}
           </v-card-text>
@@ -30,16 +31,22 @@
           :lat-lng="center"
           :icon="icon"
         />
-        <!--一定のズーム値になるまではマーカー非表示とかのほうがいいかも-->
         <l-marker
-          v-for="marker in markers"
-          :key="marker.id"
-          :lat-lng="marker.position"
+          v-for="marker in $store.getters['rtdb/imgCoordinatePostData']"
+          :key="marker.uid"
+          :lat-lng="marker.imgCoordinate"
           :icon="spotIcon"
+          @click="modal=true"
         />
       </l-map>
     </div>
-    <PostInfoModal v-show="modal" />
+
+    <!-- <div id="infoModal">
+      <PostInfoModal
+        v-model="modal"
+        :post-data="$store.getters['rtdb/imgCoordinatePostData']"
+      />
+    </div> -->
   </div>
 </template>
 <script>
@@ -48,11 +55,8 @@ import iconImage from '../static/icon/fascino_logo_noback.svg'
 import spoticonImage from '../static/icon/map-marker.svg'
 export default {
   name: 'Map',
-  components: {
-  },
   data () {
     return {
-      expand: false,
       zoom: 17,
       center: [0, 0],
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -70,24 +74,6 @@ export default {
         iconsize: [60, 60],
         iconAnchor: [30, 30],
       }),
-      markers: [
-        {
-          id: 'm1',
-          position: { lat: 38.919609806206346, lng: 141.1240648198379 },
-        },
-        {
-          id: 'm2',
-          position: { lat: 38.92480770805559, lng: 141.10752110839584 },
-        },
-        {
-          id: 'm3',
-          position: { lat: 38.93283557272672, lng: 141.10622267771873 },
-        },
-        {
-          id: 'm4',
-          position: { lat: 38.935654177411884, lng: 141.13602725401006 },
-        },
-      ],
       options: {
         enableHighAccuracy: false,
         timeout: 20000,
@@ -106,19 +92,20 @@ export default {
     getLocation () {
       this.zoom = 17
       if (!navigator.geolocation) {
-        alert('ERROR')
+        alert('ERROR_getLocation')
       }
       navigator.geolocation.getCurrentPosition(this.success, this.error, this.options)
     },
     watchLocation () {
       if (!navigator.geolocation) {
-        alert('ERROR')
+        alert('ERROR_watchLocation')
       }
       this.ID = navigator.geolocation.watchPosition(this.success, this.error, this.options)
     },
     success (position) {
       const coords = position.coords
       this.center = [coords.latitude, coords.longitude]
+      this.$store.dispatch('rtdb/getimgCoordinatePostData', { coords: [1, 12] })
     },
     error () {
       alert('ERROR')
