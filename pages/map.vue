@@ -6,13 +6,21 @@
         :options="mapOptions"
         :center="center"
       >
+        <v-card style="position: absolute; z-index: 500;">
+          <v-card-title>
+            {{ $store.getters['rtdb/imgCoordinatePostData'] }}
+          </v-card-title>
+          <v-card-text>
+            {{ center }}
+          </v-card-text>
+        </v-card>
         <Button
           id="nowPlace"
           icon-color="text"
           color="green_lighten"
           icon="mdi-crosshairs-gps"
           type="lg_sq"
-          @click.native="getLocation()"
+          @click.native="getLocation(), findSpot()"
         />
         <l-tile-layer
           :url="`https://cartodb-basemaps-{s}.global.ssl.fastly.net/${$vuetify.theme.dark ? 'dark' : 'light'}_all/{z}/{x}/{y}.png`"
@@ -31,6 +39,7 @@
         />
       </l-map>
     </div>
+    <PostInfoModal v-show="modal" />
   </div>
 </template>
 <script>
@@ -81,15 +90,19 @@ export default {
       ],
       options: {
         enableHighAccuracy: false,
-        timeout: 10000,
+        timeout: 20000,
         maximumAge: 0,
       },
     }
   },
   mounted () {
     this.watchLocation()
+    this.findSpot()
   },
   methods: {
+    findSpot () {
+      this.$store.dispatch('rtdb/getimgCoordinatePostData', { coords: [1, 12] })
+    },
     getLocation () {
       this.zoom = 17
       if (!navigator.geolocation) {
