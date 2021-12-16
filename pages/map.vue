@@ -7,13 +7,7 @@
         :center="center"
       >
         <v-card style="position: absolute; z-index: 500;">
-          <v-card-title>
-            {{ $store.getters['rtdb/imgCoordinatePostData'] }}
-          </v-card-title>
-
-          <v-card-text>
-            {{ center }}
-          </v-card-text>
+          {{ userData }}
         </v-card>
         <Button
           id="nowPlace"
@@ -21,7 +15,7 @@
           color="green_lighten"
           icon="mdi-crosshairs-gps"
           type="lg_sq"
-          @click.native="getLocation(), findSpot()"
+          @click.native="getLocation()"
         />
         <l-tile-layer
           :url="`https://cartodb-basemaps-{s}.global.ssl.fastly.net/${$vuetify.theme.dark ? 'dark' : 'light'}_all/{z}/{x}/{y}.png`"
@@ -41,12 +35,14 @@
       </l-map>
     </div>
 
-    <!-- <div id="infoModal">
+    <div id="infoModal">
       <PostInfoModal
         v-model="modal"
-        :post-data="$store.getters['rtdb/imgCoordinatePostData']"
+        style="position: relative; z-index: 5000;"
+        :post-data="postData"
+        :posted-user-data="$store.dispatch('firestore/getData', uid).then((res) => {})"
       />
-    </div> -->
+    </div>
   </div>
 </template>
 <script>
@@ -57,6 +53,19 @@ export default {
   name: 'Map',
   data () {
     return {
+      userData: {
+        uid: null,
+        detail: null,
+        tags: [],
+        imgCoordinate: [],
+        imgName: 0,
+        likesum: 0,
+        wentsum: 0,
+        date: 0,
+      },
+      postData: {},
+      uid: 'qNx541diE8TO861wdZTWnLUweK83',
+      modal: false,
       zoom: 17,
       center: [0, 0],
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -83,11 +92,18 @@ export default {
   },
   mounted () {
     this.watchLocation()
-    this.findSpot()
   },
   methods: {
-    findSpot () {
-      this.$store.dispatch('rtdb/getimgCoordinatePostData', { coords: [1, 12] })
+    getPostdata () {
+      this.postData = this.$store.getters['rtdb/imgCoordinatePostData']
+    },
+    getUid () {
+
+    },
+    getUserdata () {
+      this.$store.dispatch('firestore/getData', this.uid).then((res) => {
+        this.userData = res
+      })
     },
     getLocation () {
       this.zoom = 17
@@ -106,6 +122,7 @@ export default {
       const coords = position.coords
       this.center = [coords.latitude, coords.longitude]
       this.$store.dispatch('rtdb/getimgCoordinatePostData', { coords: [1, 12] })
+      this.getPostdata()
     },
     error () {
       alert('ERROR')
