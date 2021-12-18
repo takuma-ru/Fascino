@@ -42,23 +42,25 @@
         <div id="button">
           <Button
             type="nml_sq"
-            flat
+            :flat="isLike"
+            :outlined="!isLike"
             icon="mdi-heart"
             color="red"
             class="mx-2 my-2"
             @click.native="isLike = !isLike"
           >
-            &nbsp;{{ postData.likesSum }}<span v-if="isLike">+1</span>
+            &nbsp;{{ postData.likesSum }}
           </Button>
           <Button
             type="nml_sq"
-            flat
+            :flat="isWent"
+            :outlined="!isWent"
             icon="mdi-hail"
             color="green"
             class="mx-2 my-2"
             @click.native="isWent = !isWent"
           >
-            &nbsp;行きたい！ {{ postData.wentSum }}<span v-if="isWent">+1</span>
+            &nbsp;行きたい！ {{ postData.wentSum }}
           </Button>
         </div>
         <div
