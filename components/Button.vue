@@ -14,6 +14,7 @@
         font-size: ${btnStyle.fontSize}px;
         text-transform: none;
         color: ${!textColor ? $vuetify.theme.themes[$vuetify.theme.dark ? 'light' : 'dark'].background_front : textColor};
+        ${outlined ? 'background-color:' + $vuetify.theme.themes['dark'].background_front + '8F' : null};
       `"
     >
       <v-icon
