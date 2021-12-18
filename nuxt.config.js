@@ -105,17 +105,17 @@ export default {
       screenshots: [
         {
           src: '/screenshots/screenshot_01.png',
-          sizes: '375x808',
+          sizes: '428x926',
           type: 'image/gif',
         },
         {
           src: '/screenshots/screenshot_02.png',
-          sizes: '375x811',
+          sizes: '428x926',
           type: 'image/gif',
         },
         {
           src: '/screenshots/screenshot_03.png',
-          sizes: '375x810',
+          sizes: '330x634',
           type: 'image/gif',
         },
       ],
