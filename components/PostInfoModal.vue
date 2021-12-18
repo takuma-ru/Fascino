@@ -46,8 +46,9 @@
             icon="mdi-heart"
             color="red"
             class="mx-2 my-2"
+            @click.native="isLike = !isLike"
           >
-            &nbsp;{{ postData.likesSum }}
+            &nbsp;{{ postData.likesSum }}<span v-if="isLike">+1</span>
           </Button>
           <Button
             type="nml_sq"
@@ -55,8 +56,9 @@
             icon="mdi-hail"
             color="green"
             class="mx-2 my-2"
+            @click.native="isWent = !isWent"
           >
-            &nbsp;行きたい！ {{ postData.likesSum }}
+            &nbsp;行きたい！ {{ postData.wentSum }}<span v-if="isWent">+1</span>
           </Button>
         </div>
         <div
@@ -70,9 +72,15 @@
             @mouseup="mouseUp"
           />
           <div id="modal_contents">
-            <v-list color="transparent">
-              <v-list-item class="grow px-0">
-                <v-list-item-avatar color="grey darken-3" size="32">
+            <v-list rounded color="transparent">
+              <v-list-item
+                class="grow px-0"
+              >
+                <v-list-item-avatar
+                  color="grey darken-3"
+                  size="32"
+                  @click="$router.push('/account/' + postedUserData.uid)"
+                >
                   <v-img
                     alt=""
                     :src="postedUserData.photoURL"
@@ -81,7 +89,8 @@
 
                 <v-list-item-content>
                   <v-list-item-title
-                    style="font-size: 24px"
+                    style="font-size: 24px;"
+                    @click="$router.push('/account/' + postedUserData.uid)"
                   >
                     {{ postedUserData.name }}
                   </v-list-item-title>
@@ -138,6 +147,11 @@ export default {
 
   data () {
     return {
+      isLike: false,
+      isWent: false,
+      isLikeInList: false,
+      isWentInList: false,
+
       isTop: true,
       isModalAnim: true,
       isMouseDown: false,
@@ -179,9 +193,6 @@ export default {
 
   mounted () {
     document.querySelector('#bottom_contents').addEventListener('scroll', this.handleScroll)
-    this.getFileUrl(this.postData.imgName).then((res) => {
-      this.imgURL = res
-    })
   },
 
   destroyed () {
@@ -214,11 +225,21 @@ export default {
     },
     close () {
       this.isModalAnim = false
+      if (this.isLike && !this.isLikeInList) { // 新たにいいねした場合
+        // todo - listにPostDataID追加
+      } else if (!this.isLike && this.isLikeInList) { // いいねを取り消した場合
+        // todo - listからPostDataID削除
+      }
       setTimeout(this.init, 235)
     },
     open () {
       // console.log('open')
       this.isModalAnim = true
+      this.$store.dispatch('storage/getFileUrl', this.postData.imgName).then((res) => {
+        this.imgURL = res
+      })
+      const list = [] // todo - ログインしているユーザーがいいねを押した情報listを取得
+      this.isLikeInList = list.includes(this.postData.id) // listにこのPostDataIDがあるか
       this.$nextTick(() => {
         const modal = document.querySelector('#modal')
         const rect = modal.offsetHeight
