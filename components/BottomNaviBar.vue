@@ -14,6 +14,20 @@
         align="center"
         style="height: 64px; margin-top: 0%"
       >
+        <button
+          class="nav_btn mx-5"
+          @click="$router.push('/account/' + (googleUserData ? googleUserData.uid : 'nonlogin'))"
+        >
+          <div v-if="path === '/account/' + (googleUserData ? googleUserData.uid : 'nonlogin')" class="nav_select_tag" />
+          <v-avatar
+            size="28"
+            :color="path === '/account/' + (googleUserData ? googleUserData.uid : 'nonlogin') ? '#93DED2' : '#B7C9E4'"
+          >
+            <v-img
+              :src="googleUserData ? googleUserData.photoURL : undefined"
+            />
+          </v-avatar>
+        </button>
         <div
           v-for="(item, i) in btnGroup"
           :key="i"
@@ -32,21 +46,6 @@
             <!--<span class="text-caption">{{ item.name }}</span>-->
           </button>
         </div>
-
-        <button
-          class="nav_btn mx-5"
-          @click="$router.push('/account/' + (googleUserData ? googleUserData.uid : 'nonlogin'))"
-        >
-          <div v-if="path === '/account/' + (googleUserData ? googleUserData.uid : 'nonlogin')" class="nav_select_tag" />
-          <v-avatar
-            size="28"
-            :color="path === '/account/' + (googleUserData ? googleUserData.uid : 'nonlogin') ? '#93DED2' : '#B7C9E4'"
-          >
-            <v-img
-              :src="googleUserData ? googleUserData.photoURL : undefined"
-            />
-          </v-avatar>
-        </button>
 
         <v-menu
           top
@@ -89,7 +88,7 @@
               </v-list-item>
             </v-list>
             <v-list
-              rounded="normal"
+              rounded
               color="transparent"
               class="px-4 pt-0 pb-4"
             >
@@ -98,7 +97,7 @@
                   to="/setting"
                   :ripple="{ class: 'green_lighten--text' }"
                 >
-                  <v-list-item-icon class="rounded-normal">
+                  <v-list-item-icon>
                     <v-icon>mdi-cog</v-icon>
                   </v-list-item-icon>
                   <v-list-item-title>
@@ -109,7 +108,7 @@
                   :ripple="{ class: 'green_lighten--text' }"
                   @click="!googleUserData ? signIn() : signOut()"
                 >
-                  <v-list-item-icon class="rounded-normal">
+                  <v-list-item-icon>
                     <v-icon>mdi-{{ !googleUserData ? 'login' : 'logout' }}-variant</v-icon>
                   </v-list-item-icon>
                   <v-list-item-title>
@@ -139,7 +138,7 @@ export default {
     return {
       btnGroup: [
         { value: '/timeline', name: 'タイムライン', icon: 'icon-homeIcon' },
-        { value: '/map', name: 'マップ', icon: 'icon-homeIcon' },
+        { value: '/map', name: 'マップ', icon: 'icon-mapIcon' },
       ],
       isDarkMode: this.$store.state.darkMode.isDarkMode,
     }
@@ -181,9 +180,14 @@ export default {
 
 #nav {
   position: fixed;
-  width: 100vw;
+  width: min(100vw, 960px);
   height: 64px;
   bottom: 0%;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  z-index: 1;
 
   border-radius: 16px 16px 0px 0px;
   box-shadow: 0px 0px 6px 3px #00214D28;
