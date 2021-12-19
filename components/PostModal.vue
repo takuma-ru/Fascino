@@ -5,7 +5,7 @@
       v-model="_modal"
       :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_middle"
       fullscreen
-      width="100%"
+      width="min(100vw, 960px)"
       radius="16px"
     >
       <v-stepper
@@ -39,7 +39,7 @@
                 <v-col class="px-0">
                   <Button
                     flat
-                    type="nml"
+                    type="sml"
                     color="green"
                     @click.native="closeModal"
                   >
@@ -53,7 +53,7 @@
                 >
                   <Button
                     flat
-                    type="nml"
+                    type="sml"
                     color="green"
                     @click.native="el = 2"
                   >
@@ -97,7 +97,6 @@
               <v-row
                 v-else
               >
-                {{ image }}
                 <v-img
                   id="spotImg"
                   class="rounded-xl"
@@ -143,7 +142,7 @@
                 <v-col class="px-0">
                   <Button
                     flat
-                    type="nml"
+                    type="sml"
                     color="green"
                     @click.native="el = 1"
                   >
@@ -157,9 +156,9 @@
                 >
                   <Button
                     flat
-                    type="nml"
+                    type="sml"
                     color="green"
-                    @click.native="closeModal(), post()"
+                    @click.native="closeModal(), post(), submit()"
                   >
                     投 稿
                   </Button>
@@ -170,12 +169,15 @@
                   <v-text-field
                     id="text-field"
                     v-model="Detail"
+                    :error-messages="detailError"
                     placeholder="魅力や感想を伝えましょう！"
                     auto-grow
                     outlined
                     clearable
                     color="green"
                     style="word-break: break-all; white-space: normal;"
+                    @input="$v.Detail.$touch()"
+                    @blur="$v.Detail.$touch()"
                   >
                     <template #label>
                       <p style="font-size: 20px;">
@@ -190,6 +192,7 @@
                   <v-combobox
                     v-model="Tag"
                     hide-selected
+                    :error-messages="tagError"
                     hint="最大5個 (タグとタグの間には半角スペースを入れてください)"
                     multiple
                     outlined
@@ -200,6 +203,8 @@
                     placeholder="例) タグ1 タグ2"
                     persistent-hint
                     small-chips
+                    @input="$v.Tag.$touch()"
+                    @blur="$v.Tag.$touch()"
                   >
                     <v-icon
                       slot="append"
@@ -222,10 +227,13 @@
                     hint="タップして地図から選択してください！"
                     auto-grow
                     clearable
+                    :error-messages="postPlaceError"
                     readonly
                     color="green"
                     outlined
                     @click="mapDialog=true, getLocation()"
+                    @input="$v.postPlace.$touch()"
+                    @blur="$v.postPlace.$touch()"
                   >
                     <template #label>
                       <p style="font-size: 20px;">
@@ -363,19 +371,27 @@
 </template>
 
 <script>
+import { validationMixin } from 'vuelidate'
+import { required, maxLength } from 'vuelidate/lib/validators'
 import L from 'leaflet'
 import swipemodal from 'nekoo_vue_swipemodal'
 import iconImg from '../static/icon/target.svg'
 import spoticonImg from '../static/icon/map-marker-star.svg'
 import 'nekoo_vue_swipemodal/dist/swipemodal.css'
-import Button from './Button.vue'
 
 export default {
   name: 'PostModal',
 
   components: {
     swipemodal,
-    Button,
+  },
+
+  mixins: [validationMixin],
+
+  validations: {
+    Detail: { required, maxLength: maxLength(140) },
+    Tag: { required },
+    postPlace: { required },
   },
   model: {
     prop: 'modal',
@@ -428,6 +444,25 @@ export default {
         this.$emit('change', value)
       },
     },
+    detailError () {
+      const errors = []
+      if (!this.$v.Detail.$dirty) { return errors }
+      !this.$v.Detail.maxLength && errors.push('140字以下で入力してください。')
+      !this.$v.Detail.required && errors.push('入力必須')
+      return errors
+    },
+    tagError () {
+      const errors = []
+      if (!this.$v.Tag.$dirty) { return errors }
+      !this.$v.Tag.required && errors.push('入力必須')
+      return errors
+    },
+    postPlaceError () {
+      const errors = []
+      if (!this.$v.postPlace.$dirty) { return errors }
+      !this.$v.postPlace.required && errors.push('選択必須')
+      return errors
+    },
   },
   watch: {
     model (val) {
@@ -437,6 +472,9 @@ export default {
     },
   },
   methods: {
+    submit () {
+      this.$v.$touch()
+    },
     post () {
       this.$store.dispatch('rtdb/updataPostData', { detail: this.Detail, tags: this.Tag, imgCoordinate: this.postPlace, img: this.image })
     },
