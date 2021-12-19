@@ -4,8 +4,6 @@ export const state = () => ({
   imgCoordinatePostData: [],
   postdataId: '',
   // 今のところ投稿データごとには出来ないだよねー
-  like: false,
-  went: false,
 })
 
 export const getters = {
@@ -58,20 +56,6 @@ export const mutations = {
       state.imgCoordinatePostData.push(payload[val])
     })
   },
-  likesum (state) {
-    if (state.like === false) {
-      state.like = true
-    } else if (state.like === true) {
-      state.like = false
-    }
-  },
-  wentsum (state) {
-    if (state.went === false) {
-      state.went = true
-    } else if (state.like === true) {
-      state.went = false
-    }
-  },
 
 }
 
@@ -102,11 +86,14 @@ export const actions = {
     }
   },
   // 修正後でしないとね
-  async likechange ({ state, commit }) {
+  async likechange ({ state, commit }, { PostDataId }) {
     // const likesumRef = this.$fire.datadase.ref('posts')
-    const likesumRef = this.$fire.database.ref('posts/' + state.postdataId + '/likesSum')
+    // const likesumRef = this.$fire.database.ref('posts/' + PostDataId + '/likesSum')
+    const likesumRef = this.$fire.database.ref('posts/' + PostDataId + '/likesSum')
+    likesumRef.once('value', (snapshot) => {
+      console.log(snapshot.val())
+    })
     try {
-      commit('likesum')
       if (state.like === false) {
         await likesumRef.transaction((likesSum) => {
           return likesSum + 1
@@ -116,15 +103,14 @@ export const actions = {
           return likesSum - 1
         })
       }
-      // commit('likesum')
     } catch (e) {
       alert(e)
     }
   },
-  async wentchange ({ state, commit }) {
-    const wentsumRef = this.$fire.database.ref('posts/' + state.postdataId + '/wentSum')
+  async wentchange ({ state, commit }, { PostDataId }) {
+    const wentsumRef = this.$fire.database.ref('posts/' + PostDataId + '/wentSum')
+    console.log(wentsumRef)
     try {
-      commit('wentsum')
       if (state.like === false) {
         await wentsumRef.transaction((wentSum) => {
           return wentSum + 1
@@ -134,7 +120,6 @@ export const actions = {
           return wentSum - 1
         })
       }
-      // commit('likesum')
     } catch (e) {
       alert(e)
     }
@@ -143,7 +128,7 @@ export const actions = {
     const removePostDataRef = this.$fire.database.ref('posts')
     try {
       await removePostDataRef.child(PostDataId).remove()
-      await removePostDataRef.orderByKey().endAt(state.postdataId).once('value', (snapshot) => {
+      await removePostDataRef.orderByKey().endAt(PostDataId).once('value', (snapshot) => {
         commit('removePostData', snapshot.val())
       })
     } catch (e) {
