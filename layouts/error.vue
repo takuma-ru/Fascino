@@ -6,12 +6,14 @@
       <h1
         v-if="error.statusCode === 404"
         :style="`color: ${$vuetify.theme.themes[$vuetify.theme.dark ? 'light' : 'dark'].background}`"
-        v-html="pageNotFound"
+        style="white-space:pre-wrap; word-wrap:break-word;"
+        v-text="pageNotFound"
       />
       <h1
         v-else
         :style="`color: ${$vuetify.theme.themes[$vuetify.theme.dark ? 'light' : 'dark'].background}`"
-        v-html="otherError"
+        style="white-space:pre-wrap; word-wrap:break-word;"
+        v-text="otherError"
       />
       <Button
         type="sml"
@@ -46,7 +48,7 @@ export default {
   },
   data () {
     return {
-      pageNotFound: '404 Not Found<br>ページが見つかりません',
+      pageNotFound: '404 Not Found\nページが見つかりません',
       otherError: 'エラーが発生しました',
     }
   },
