@@ -6,10 +6,26 @@
         :options="mapOptions"
         :center="center"
       >
-        <v-card style="position: absolute; z-index: 500;">
+        <v-card
+          style="position: absolute; z-index: 500;"
+        >
+          <v-btn
+            @click="modal = !modal"
+          >
+            open
+          </v-btn>
           <v-card-title>
-            {{ $store.getters['rtdb/imgCoordinatePostData'] }}
+            {{ modal }}
           </v-card-title>
+          <v-card-text>
+            {{ postData }}
+          </v-card-text>
+          <v-card-text>
+            {{ zoom }}
+          </v-card-text>
+          <v-card-text>
+            {{ center }}
+          </v-card-text>
         </v-card>
         <Button
           id="nowPlace"
@@ -32,16 +48,27 @@
           :key="marker.uid"
           :lat-lng="marker.imgCoordinate"
           :icon="spotIcon"
-          @click="modal=true"
         />
       </l-map>
     </div>
-    <!-- <div id="infoModal">
-      <PostInfoModal
-        v-model="modal"
-        :post-data="$store.getters['rtdb/imgCoordinatePostData']"
-      />
-    </div> -->
+    <PostInfoModal
+      v-model="modal"
+      :post-data="{
+        date : 1634863170,
+        detail : 'ここからの眺めは最高！',
+        imgCoordinate : [ 74.355, 65.1 ],
+        imgName : '-MpEYScCrAgS-GrH1Lt3.jpg',
+        likesSum : 154,
+        tags : [ '絶景', '観光', '夜景' ],
+        uid : 'wirA5GIggboAFRoMMAkjIStPaAY5',
+        wentSum : 35
+      }"
+      :posted-user-data="{
+        uid: 'aaa',
+        photoURL: 'https://lh3.googleusercontent.com/a-/AOh14GjcMttL113-cCGPplKyv5TEWgquHkOC3qwEyudVUw=s96-c',
+        name: 'test'
+      }"
+    />
   </div>
 </template>
 <script>
@@ -52,12 +79,30 @@ export default {
   name: 'Map',
   data () {
     return {
+      postData: {
+        uid: 0,
+        detail: 0,
+        tags: [],
+        imgCoordinate: [],
+        imgName: 0,
+        likesum: 0,
+        wentsum: 0,
+        date: 0,
+      },
+      userData: {
+        uid: 0,
+        name: 0,
+        detail: 0,
+        liked: 0,
+        wented: 0,
+      },
+      modal: false,
       zoom: 17,
       center: [0, 0],
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       mapOptions: {
         zoomControl: false,
-        zoomSnap: 0.5,
+        zoomSnap: 1,
       },
       icon: L.icon({
         iconUrl: iconImage,
@@ -71,15 +116,27 @@ export default {
       }),
       options: {
         enableHighAccuracy: false,
-        timeout: 10000,
+        timeout: 20000,
         maximumAge: 0,
       },
     }
   },
+
   mounted () {
     this.watchLocation()
   },
   methods: {
+    getPostdata () {
+      this.postData = this.$store.getters['rtdb/imgCoordinatePostData']
+    },
+    getUid () {
+
+    },
+    getUserdata () {
+      this.$store.dispatch('firestore/getData', this.uid).then((res) => {
+        this.userData = res
+      })
+    },
     getLocation () {
       this.zoom = 17
       if (!navigator.geolocation) {
@@ -96,7 +153,8 @@ export default {
     success (position) {
       const coords = position.coords
       this.center = [coords.latitude, coords.longitude]
-      this.$store.dispatch('rtdb/getimgCoordinatePostData', { coords: [1, 12] })
+      this.$store.dispatch('rtdb/getimgCoordinatePostData', { coords: this.center })
+      this.getPostdata()
     },
     error () {
       alert('ERROR')
@@ -106,8 +164,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 #map {
-  z-index: 0;
-  position: relative;
   height: 100%;
   width: 100%;
 }
@@ -118,6 +174,7 @@ export default {
   right: 16px;
 }
 #main {
+  z-index: 0;
   position: relative;
   height: 100%;
   width: 100%;
