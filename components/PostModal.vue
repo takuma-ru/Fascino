@@ -1,5 +1,4 @@
 <template>
-  <!-- 果たしてこれはコンポーネントと呼べるのだろうか、、、 -->
   <div class="postmodal">
     <swipemodal
       ref="nekooModal"
@@ -98,6 +97,7 @@
               <v-row
                 v-else
               >
+                {{ image }}
                 <v-img
                   id="spotImg"
                   class="rounded-xl"
@@ -159,7 +159,7 @@
                     flat
                     type="nml"
                     color="green"
-                    @click.native="closeModal"
+                    @click.native="closeModal(), post()"
                   >
                     投 稿
                   </Button>
@@ -169,6 +169,7 @@
                 <v-col class="px-0">
                   <v-text-field
                     id="text-field"
+                    v-model="Detail"
                     placeholder="魅力や感想を伝えましょう！"
                     auto-grow
                     outlined
@@ -187,7 +188,7 @@
               <v-row>
                 <v-col class="px-0">
                   <v-combobox
-                    v-model="model"
+                    v-model="Tag"
                     hide-selected
                     hint="最大5個 (タグとタグの間には半角スペースを入れてください)"
                     multiple
@@ -388,11 +389,12 @@ export default {
   },
   data () {
     return {
+      Detail: '', // 投稿文
       thisPlace: false,
       mapDialog: false,
       isActive: true,
       isActive2: true,
-      model: [],
+      Tag: [], // 投稿タグ
       search: null,
       el: 1,
       image: null,
@@ -400,6 +402,7 @@ export default {
       mapUrl: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       NowPlace: [0, 0],
+      postPlace: new Array(2), // 投稿位置
       icon: L.icon({
         iconUrl: iconImg,
         iconSize: [64, 64],
@@ -434,6 +437,9 @@ export default {
     },
   },
   methods: {
+    post () {
+      this.$store.dispatch('rtdb/updataPostData', { detail: this.Detail, tags: this.Tag, imgCoordinate: this.postPlace, img: this.image })
+    },
     closeModal () {
       this.$refs.nekooModal.close()
     },
@@ -463,6 +469,7 @@ export default {
     success (position) {
       const coords = position.coords
       this.NowPlace = [coords.latitude, coords.longitude]
+      this.postPlace = [coords.latitude, coords.longitude]
     },
 
     error () {
