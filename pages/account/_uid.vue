@@ -2,19 +2,19 @@
   <div>
     <v-container class="header">
       <v-row>
-        <v-col>
-          <!--アイコン-->
+        <v-col cols="4">
           <v-avatar
             size="28"
+            style="float: left;"
           >
             <v-img
-              :src="googleUserData ? googleUserData.photoURL : undefined"
+              :src="userData.photoURL"
             />
           </v-avatar>
         </v-col>
-        <v-col>
-          <p class="b">
-            {{ googleUserData.displayName }}
+        <v-col cols="8">
+          <p class="b" style="float: left;">
+            {{ userData.name }}
           </p>
         </v-col>
       </v-row>
@@ -24,7 +24,7 @@
             投稿
           </p>
           <p class="hen-number">
-            {{ toukou }}
+            0
           </p>
         </v-col>
         <v-col>
@@ -32,7 +32,7 @@
             いったよ
           </p>
           <p class="hen-number">
-            {{ ittayo }}
+            {{ userData.wented }}
           </p>
         </v-col>
         <v-col>
@@ -40,17 +40,17 @@
             バッチ
           </p>
           <p class="hen-number">
-            {{ batti }}
+            0
           </p>
         </v-col>
       </v-row>
-      <v-row class="location">
+      <!--<v-row class="location">
         <v-icon small>
           mdi-map-marker
         </v-icon>{{ location }}
-      </v-row>
+      </v-row>-->
       <v-row class="bio" color="text">
-        {{ bio }}
+        {{ userData.detail }}
       </v-row>
     </v-container>
     <v-row align="center" justify="space-around" class="bunnki">
@@ -78,18 +78,30 @@ export default {
     return {
       uid: this.$route.params.uid,
       dialog: false,
-      location: '日本',
-      toukou: '555',
-      ittayo: '555',
-      batti: '555',
       bio: 'coming soon...',
       isVisible: false,
+      userData: {
+        name: null,
+        liked: null,
+        wented: null,
+        detail: null,
+        photoURL: null,
+      },
     }
   },
+
   computed: {
     googleUserData () {
       return this.$store.getters['auth/googleUserData']
     },
+  },
+
+  async mounted () {
+    console.log(this.uid)
+    await this.$store.dispatch('firestore/getData', this.uid).then((res) => {
+      this.userData = res
+      console.log(this.userData)
+    })
   },
 }
 </script>
@@ -119,6 +131,7 @@ export default {
 }
 .b{
   font-size: 24px;
+  text-align: center;
 }
 .bunnki{
   padding: 16px 16px 8px 16px;
