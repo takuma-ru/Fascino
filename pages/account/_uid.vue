@@ -53,7 +53,7 @@
         {{ userData.detail }}
       </v-row>
     </v-container>
-    <v-row align="center" justify="space-around" class="bunnki">
+    <v-row align="center" justify="space-around" class="bunnki no-gutters">
       <Button type="sml" flat :color="isVisible ? 'green_lighten' : 'transparent'" @click.native="isVisible = !isVisible">
         投稿
       </Button>
@@ -134,6 +134,6 @@ export default {
   text-align: center;
 }
 .bunnki{
-  padding: 16px 16px 8px 16px;
+  padding: 16px 0px 16px 0px;
 }
 </style>
