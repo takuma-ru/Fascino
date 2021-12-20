@@ -56,6 +56,12 @@
 
 <script>
 export default {
+  middleware ({ store, redirect }) {
+    if (store.getters['auth/googleUserData'] != null || undefined) {
+      return redirect('/timeLine')
+    }
+  },
+
   mounted () {
     this.$vuetify.theme.dark = false
   },
