@@ -1,5 +1,5 @@
 <template>
-  <div style="background-color: #F0F0F0">
+  <div :style="`background: ${$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background}`">
     <v-container class="pa-0">
       <v-row
         id="top"
@@ -17,7 +17,7 @@
             style="max-width: 100%;"
           />
           <div class="mt-10 px-auto">
-            <p style="color: #001024">
+            <p :style="`color:${$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].text}`">
               現在開発中（アルファ版）です。<br><span class="br">UIや使用できる機能が</span><span class="br">大幅に変更される可能性があります。</span>
             </p>
             <PWAInstallButton />
@@ -38,7 +38,7 @@
             </p>
             <div>
               <svg style="height: 5vh" xmlns="http://www.w3.org/2000/svg" width="74.272" height="64" viewBox="0 0 74.272 64">
-                <path id="多角形_1" data-name="多角形 1" d="M30.216,11.925a8,8,0,0,1,13.839,0L67.3,51.985A8,8,0,0,1,60.38,64H13.891a8,8,0,0,1-6.92-12.015Z" transform="translate(74.272 64) rotate(180)" fill="#001024" />
+                <path id="多角形_1" data-name="多角形 1" d="M30.216,11.925a8,8,0,0,1,13.839,0L67.3,51.985A8,8,0,0,1,60.38,64H13.891a8,8,0,0,1-6.92-12.015Z" transform="translate(74.272 64) rotate(180)" :fill="$vuetify.theme.themes[$vuetify.theme.dark ? 'light' : 'dark'].background" />
               </svg>
             </div>
           </div>
@@ -69,10 +69,6 @@ export default {
     if (store.getters['auth/googleUserData'] != null || undefined) {
       return redirect('/timeLine')
     }
-  },
-
-  mounted () {
-    this.$vuetify.theme.dark = false
   },
 }
 </script>
