@@ -4,10 +4,10 @@
   >
     <v-main>
       <Nuxt />
+      <BottomNaviBar
+        v-if="$route.path != '/'"
+      />
     </v-main>
-    <BottomNaviBar
-      v-if="$route.path != '/'"
-    />
   </v-app>
 </template>
 
