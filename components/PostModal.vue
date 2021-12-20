@@ -501,10 +501,12 @@ export default {
       this.image = null
       this.$v.$reset()
       this.isActive = true
+      this.isActive2 = true
       this.imgErrMessage = ''
     },
     submit () {
       this.$v.$touch()
+      this.$store.dispatch('rtdb/updataPostData', { detail: this.Detail, tags: this.Tag, imgCoordinate: this.postPlace, img: this.image })
       if (!this.$v.$invalid) { this.closeModal() }
     },
     nextStep () {
