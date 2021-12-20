@@ -18,12 +18,14 @@
           :url="`https://cartodb-basemaps-{s}.global.ssl.fastly.net/${$vuetify.theme.dark ? 'dark' : 'light'}_all/{z}/{x}/{y}.png`"
           :attribution="attribution"
         />
+        <l-control-attribution position="topright" />
         <l-marker
           :lat-lng="center"
           :icon="icon"
         />
         <SpotMarkerAndModal
           v-for="data in imgCoordinatePostData"
+          id="modal"
           :key="data.index"
           :post-data="data"
         />
@@ -46,6 +48,7 @@ export default {
       center: [0, 0],
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       mapOptions: {
+        attributionControl: false,
         zoomControl: false,
         zoomSnap: 0.5,
       },
@@ -97,13 +100,11 @@ export default {
 }
 #nowPlace {
   position: absolute;
-  z-index: 500;
+  z-index: 401;
   bottom: 72px;
   right: 16px;
 }
 #main {
-  z-index: 0;
-  position: relative;
   height: 100%;
   width: 100%;
 }
