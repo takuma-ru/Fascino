@@ -84,7 +84,7 @@ export const actions = {
       await dispatch('storage/putImgFile', {
         img,
         postDataIDKey: newref.key,
-      }).then((res) => {
+      }, { root: true }).then((res) => {
         imgName = res
       })
       await newref.set({
