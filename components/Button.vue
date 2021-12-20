@@ -6,6 +6,7 @@
       depressed
       x-small
       :color="color"
+      :outlined="outlined"
       style="color: white"
       :class="`rounded-normal ${flat ? '': 'btn'}`"
       :to="link"
@@ -13,12 +14,13 @@
         font-size: ${btnStyle.fontSize}px;
         text-transform: none;
         color: ${!textColor ? $vuetify.theme.themes[$vuetify.theme.dark ? 'light' : 'dark'].background_front : textColor};
+        ${outlined ? 'background-color:' + $vuetify.theme.themes['dark'].background_front + '8F' : null};
       `"
     >
       <v-icon
         v-if="icon"
         :size="btnStyle.fontSize"
-        :color="!iconColor ? $vuetify.theme.themes[$vuetify.theme.dark ? 'light' : 'dark'].background_front : iconColor"
+        :color="ComIconColor"
       >
         {{ icon }}
       </v-icon>
@@ -35,6 +37,10 @@ export default {
       default: 'nml',
     },
     flat: {
+      type: Boolean,
+      default: false,
+    },
+    outlined: {
       type: Boolean,
       default: false,
     },
@@ -62,9 +68,20 @@ export default {
       type: Function,
       default: undefined,
     },
+
   },
 
   computed: {
+    ComIconColor () {
+      if (this.iconColor) {
+        return this.iconColor
+      } else if (this.outlined) {
+        return this.color
+      } else {
+        return this.$vuetify.theme.themes[this.$vuetify.theme.dark ? 'light' : 'dark'].background_front
+      }
+    },
+
     // eslint-disable-next-line vue/return-in-computed-property
     btnStyle () {
       switch (this.type) {

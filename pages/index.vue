@@ -19,7 +19,11 @@
 
 <script>
 export default {
-
+  middleware ({ store, redirect }) {
+    if (store.getters['auth/googleUserData'] != null || undefined) {
+      return redirect('/timeLine')
+    }
+  },
 }
 </script>
 
