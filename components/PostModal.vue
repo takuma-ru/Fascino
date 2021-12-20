@@ -29,7 +29,7 @@
         </v-stepper-header>
         <v-stepper-items>
           <v-stepper-content
-            class="px-4"
+            class="px-4 pb-8"
             step="1"
           >
             <v-container>
@@ -41,7 +41,7 @@
                     flat
                     type="sml"
                     color="green"
-                    @click.native="closeModal"
+                    @click.native="closeModal()"
                   >
                     戻 る
                   </Button>
@@ -55,7 +55,7 @@
                     flat
                     type="sml"
                     color="green"
-                    @click.native="el = 2"
+                    @click.native="nextStep()"
                   >
                     次 へ
                   </Button>
@@ -64,15 +64,16 @@
               <v-row
                 v-if="isActive"
                 class="rounded-xl"
-                style="height: 30vh; background-color: #929292"
+                style="height: 30vh; background-color: #929292;"
               >
-                <p class="selectImg">
+                <div class="selectImg">
                   写真を選ぶ
-                </p>
+                </div>
                 <v-file-input
                   ref="refImage"
                   v-model="image"
                   class="fileInput"
+                  style="padding-top: 0;"
                   accept=".png, .jpeg, .jpg"
                   hide-input
                   prepend-icon=""
@@ -129,6 +130,11 @@
                   </template>
                 </v-file-input>
               </v-row>
+              <v-row
+                style="color: #FF5470; position: absolute; left: 42%; font-size: 24px; text-decoration:underline; text-decoration-color:#FF5470;"
+              >
+                {{ imgErrMessage }}
+              </v-row>
             </v-container>
           </v-stepper-content>
           <v-stepper-content
@@ -156,9 +162,10 @@
                 >
                   <Button
                     flat
+                    disabled
                     type="sml"
                     color="green"
-                    @click.native="closeModal(), post(), submit()"
+                    @click.native="submit()"
                   >
                     投 稿
                   </Button>
@@ -298,27 +305,32 @@
                     <Button
                       id="here"
                       type="lg_sq"
+                      flat
                       text-color="text"
                       color="red"
                       @click.native="thisPlace=true"
                     >
-                      ここにする！
+                      &nbsp;決定&nbsp;
                     </Button>
                     <v-dialog
                       v-model="thisPlace"
+                      style="border-radius: 16px;"
                     >
-                      <v-card>
+                      <v-card
+                        class="rounded-normal"
+                        :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_middle"
+                      >
                         <v-card-title>
                           スポットの確認
                         </v-card-title>
                         <v-card-text class="pb-2">
-                          この場所を追加しますか？
+                          この場所でよろしいですか？
                         </v-card-text>
-                        <v-card-actions>
+                        <v-card-actions class="py-4">
                           <Button
                             flat
-                            type="lg"
-                            color="green"
+                            type="nml"
+                            color="red_lighten"
                             text-color="text"
                             @click.native="thisPlace=false"
                           >
@@ -327,12 +339,12 @@
                           <v-spacer />
                           <Button
                             flat
-                            type="lg"
+                            type="nml"
                             color="green"
                             text-color="text"
                             @click.native="mapDialog=false, active2()"
                           >
-                            追 加
+                            &nbsp;はい&nbsp;
                           </Button>
                         </v-card-actions>
                       </v-card>
@@ -351,12 +363,12 @@
                     </l-control>
                     <l-control>
                       <Button
+                        type="nml_sq"
                         flat
-                        type="lg_sq"
-                        color="blue"
                         icon="mdi-close"
-                        text-color="text"
-                        @click.native="mapDialog=false"
+                        :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_middle"
+                        class="mx-2 my-2"
+                        @click.native="mapDialog = false"
                       />
                     </l-control>
                   </l-map>
@@ -392,6 +404,7 @@ export default {
     Detail: { required, maxLength: maxLength(140) },
     Tag: { required },
     postPlace: { required },
+    image: { required },
   },
   model: {
     prop: 'modal',
@@ -414,6 +427,7 @@ export default {
       search: null,
       el: 1,
       image: null,
+      imgErrMessage: '',
       zoom: 18,
       mapUrl: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -470,16 +484,35 @@ export default {
         this.$nextTick(() => this.model.pop())
       }
     },
+    isActive (newisActive) {
+      if (!newisActive) { this.imgErrMessage = '' }
+    },
+    // eslint-disable-next-line camelcase
+    _modal (new_modal) {
+      // eslint-disable-next-line camelcase
+      if (new_modal) { this.el = 1 }
+    },
   },
   methods: {
+    clear () {
+      this.Detail = ''
+      this.Tag = []
+      this.postPlace = []
+      this.image = null
+      this.$v.$reset()
+      this.isActive = true
+      this.imgErrMessage = ''
+    },
     submit () {
       this.$v.$touch()
+      if (!this.$v.$invalid) { this.closeModal() }
     },
-    post () {
-      this.$store.dispatch('rtdb/updataPostData', { detail: this.Detail, tags: this.Tag, imgCoordinate: this.postPlace, img: this.image })
+    nextStep () {
+      if (this.isActive) { this.imgErrMessage = '選択必須' } else { this.el = 2 }
     },
     closeModal () {
       this.$refs.nekooModal.close()
+      this.clear()
     },
     imgInput () {
       this.$refs.refImage.$el.querySelector('input').click()
@@ -529,7 +562,7 @@ export default {
   font-size: 24px;
   position: absolute;
   top: calc(50% + 60px);
-  left: 50%;
+  left: calc(50% + 5px);
   transform: translate(-50%);
 }
 #selectMap {
