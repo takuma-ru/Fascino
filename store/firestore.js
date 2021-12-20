@@ -1,5 +1,5 @@
-/* eslint-disable no-console */
 export const actions = {
+  // storageにファイルをアップロード
   async getData ({ commit }, uid) {
     console.log('get data')
     // FireStoreからデータを取ってくる
