@@ -48,8 +48,17 @@
         justify="center"
         align="center"
         no-gutters
-        style="min-height: 100vh; max-width: 100vw; z-index: 1;"
-      />
+        class="px-4"
+        style="min-height: 100vh; max-width: 100vw; text-align: center"
+      >
+        <div>
+          <h1 :style="`color: ${$vuetify.theme.themes['dark'].green}`">
+            地域の魅力をしろう！
+          </h1>
+          <p class="mt-4">このアプリでは地域の魅力（おいしい食べ物、綺麗な景色）を発信する目的で作られました。</p>
+          <p>あなたの見つけた魅力を投稿したり、アプリで新たな魅力を知りましょう！</p>
+        </div>
+      </v-row>
     </v-container>
   </div>
 </template>
