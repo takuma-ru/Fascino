@@ -6,16 +6,6 @@
         :options="mapOptions"
         :center="center"
       >
-        <!-- <v-card
-          style="position: absolute; z-index: 500;"
-        >
-          <v-btn
-            @click="modal = !modal"
-          >
-            open
-          </v-btn>
-          {{ imgCoordinatePostData }}
-        </v-card> -->
         <Button
           id="nowPlace"
           icon-color="text"
