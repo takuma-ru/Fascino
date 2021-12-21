@@ -8,7 +8,7 @@
       type="lg_sq"
       @click.native="isPostModal = !isPostModal"
     />
-    <PostModal v-model="isPostModal" style="posttion: fixed; z-index: 2" />
+    <PostModal v-model="isPostModal" />
   </v-container>
 </template>
 

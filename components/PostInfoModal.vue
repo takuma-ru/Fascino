@@ -331,7 +331,7 @@ export default {
 
   top: 0%;
   left: 50%;
-  z-index: 2;
+  z-index: 402;
 
   transform: translateX(-50%);
 }
@@ -344,7 +344,7 @@ export default {
 
   top: 0%;
   left: 50%;
-  z-index: 3;
+  z-index: 403;
 
   transform: translateX(-50%);
 }
@@ -409,7 +409,7 @@ export default {
 
   bottom: 0%;
   left: 50%;
-  z-index: 3;
+  z-index: 403;
 
   transform: translateX(-50%);
 
@@ -480,7 +480,7 @@ export default {
 
 /**上の飾り */
 #chip {
-  z-index: 3;
+  z-index: 403;
   position: sticky;
   top: 0px;
   height: 4px;
