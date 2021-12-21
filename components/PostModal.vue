@@ -102,6 +102,7 @@
                   id="spotImg"
                   class="rounded-xl"
                   max-height="50vh"
+                  width="100%"
                   :src="url"
                 />
                 <v-file-input
@@ -578,6 +579,11 @@ export default {
   left: calc(50% + 5px);
   transform: translate(-50%);
 }
+// #spotImg {
+//   position: absolute;
+//   left: 50%;
+//   transform: translate(-50%, -50%);
+// }
 #selectMap {
   position: absolute;
   z-index: 0;
