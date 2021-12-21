@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div>
     <Button
       id="post"
       icon-color="text"
@@ -8,8 +8,8 @@
       type="lg_sq"
       @click.native="isPostModal = !isPostModal"
     />
-    <PostModal v-model="isPostModal" />
-  </v-container>
+    <PostModal v-model="isPostModal" style="position: fixed; z-index: 402" />
+  </div>
 </template>
 
 <script>
