@@ -285,23 +285,26 @@
               <v-row>
                 <v-dialog
                   v-model="mapDialog"
+                  style=" position: absolute; z-index: 500;"
                   fullscreen
                   transition="dialog-top-transition"
                 >
                   <l-map
                     id="selectMap"
-                    :zoom="zoom"
-                    :center.sync="NowPlace"
+                    :zoom.sync="zoom"
+                    :center="NowPlace"
                     :options="{zoomControl: false}"
                   >
                     <l-tile-layer
                       :url="mapUrl"
                       :attribution="attribution"
                     />
-                    <l-marker
-                      :lat-lng="NowPlace"
-                      :icon="icon"
-                    />
+                    <v-icon
+                      id="thisPlace"
+                      size="64px"
+                    >
+                      mdi-target
+                    </v-icon>
                     <Button
                       id="here"
                       type="lg_sq"
@@ -428,7 +431,7 @@ export default {
       el: 1,
       image: null,
       imgErrMessage: '',
-      zoom: 18,
+      zoom: 17,
       mapUrl: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       NowPlace: [0, 0],
@@ -443,6 +446,11 @@ export default {
         iconSize: [64, 64],
         iconAnchor: [32, 32],
       }),
+      options: {
+        enableHighAccuracy: false,
+        timeout: 20000,
+        maximumAge: 0,
+      },
     }
   },
   computed: {
@@ -493,6 +501,9 @@ export default {
       if (new_modal) { this.el = 1 }
     },
   },
+  mounted () {
+    this.watchLocation()
+  },
   methods: {
     clear () {
       this.Detail = ''
@@ -526,19 +537,19 @@ export default {
       this.isActive2 = !this.isActive2
     },
     getLocation () {
+      this.zoom = 17
       if (!navigator.geolocation) {
         alert('ERROR')
       }
 
-      const options = {
-        enableHighAccuracy: false,
-        timeout: 5000,
-        maximumAge: 0,
-      }
-
-      navigator.geolocation.getCurrentPosition(this.success, this.error, options)
+      navigator.geolocation.getCurrentPosition(this.success, this.error, this.options)
     },
-
+    watchLocation () {
+      if (!navigator.geolocation) {
+        alert('ERROR_watchLocation')
+      }
+      this.ID = navigator.geolocation.watchPosition(this.success, this.error, this.options)
+    },
     success (position) {
       const coords = position.coords
       this.NowPlace = [coords.latitude, coords.longitude]
@@ -578,5 +589,12 @@ export default {
   bottom: -4px;
   transform: translate(-50%, -50%);
 
+}
+#thisPlace {
+  position: absolute;
+  z-index: 402;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>
