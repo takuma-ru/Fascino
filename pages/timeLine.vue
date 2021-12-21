@@ -1,15 +1,32 @@
 <template>
-  <div>
-    timeLine
-  </div>
+  <v-container>
+    <Button
+      id="post"
+      icon-color="text"
+      color="green_lighten"
+      icon="mdi-plus"
+      type="lg_sq"
+      @click.native="isPostModal = !isPostModal"
+    />
+    <PostModal v-model="isPostModal" style="posttion: fixed; z-index: 2" />
+  </v-container>
 </template>
 
 <script>
 export default {
-
+  data () {
+    return {
+      isPostModal: false,
+    }
+  },
 }
 </script>
 
 <style>
-
+#post {
+  position: fixed;
+  z-index: 401;
+  bottom: 72px;
+  right: 16px;
+}
 </style>
