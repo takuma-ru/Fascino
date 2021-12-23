@@ -1,16 +1,15 @@
 <template>
   <div>
-    <v-btn
+    <Button
       v-if="isInstalled"
-      dark
-      height="36"
-      depressed
+      type="nml"
+      flat
       color="red"
-      class="rounded-normal"
-      @click="installApp()"
+      :text-color="$vuetify.theme.themes[$vuetify.theme.dark ? 'light' : 'dark'].text"
+      @click.native="installApp()"
     >
-      アプリをインストールする
-    </v-btn>
+      インストールする
+    </Button>
   </div>
 </template>
 
@@ -33,7 +32,7 @@ export default {
     },
   },
 
-  mounted () {
+  created () {
     // ページ読み込み時にインストールバナーを非表示にさせる
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault()

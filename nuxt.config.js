@@ -1,4 +1,6 @@
 export default {
+  server: {
+  },
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
   target: 'static',
@@ -46,6 +48,9 @@ export default {
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
     '@nuxtjs/firebase',
+    '@nuxtjs/axios',
+    'nuxt-leaflet',
+    ['nuxt-leaflet', {/* module options */}],
   ],
 
   firebase: {
