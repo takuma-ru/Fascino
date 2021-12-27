@@ -37,13 +37,16 @@ export default {
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault()
       this.defferedPrompt = e
-      return false
+    })
+
+    window.addEventListener('appinstalled', () => {
+      this.deferredPrompt = null
     })
   },
 
   methods: {
-    installApp () {
-      this.defferedPrompt.prompt()
+    async installApp () {
+      await this.deferredPrompt.prompt()
     },
   },
 }
