@@ -20,7 +20,14 @@
             <p :style="`color:${$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].text}`">
               現在開発中（アルファ版）です。<br><span class="br">UIや使用できる機能が</span><span class="br">大幅に変更される可能性があります。</span>
             </p>
-            <PWAInstallButton />
+            <Button
+              type="nml"
+              flat
+              color="red"
+              @click.native="$router.push('/signin')"
+            >
+              簡単にはじめてみる
+            </Button>
             <Button
               type="sml"
               flat
@@ -55,7 +62,9 @@
           <h1 :style="`color: ${$vuetify.theme.themes['dark'].green}`">
             地域の魅力をしろう！
           </h1>
-          <p class="mt-4">このアプリでは地域の魅力（おいしい食べ物、綺麗な景色）を発信する目的で作られました。</p>
+          <p class="mt-4">
+            このアプリでは地域の魅力（おいしい食べ物、綺麗な景色）を発信する目的で作られました。
+          </p>
           <p>あなたの見つけた魅力を投稿したり、アプリで新たな魅力を知りましょう！</p>
         </div>
       </v-row>
@@ -68,6 +77,13 @@ export default {
   middleware ({ store, redirect }) {
     if (store.getters['auth/googleUserData'] != null || undefined) {
       return redirect('/timeLine')
+    }
+  },
+
+  data () {
+    return {
+      dialog: false,
+      e1: 1,
     }
   },
 }
