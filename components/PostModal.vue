@@ -77,7 +77,7 @@
                   accept=".png, .jpeg, .jpg"
                   hide-input
                   prepend-icon=""
-                  @change="active"
+                  @change="isActive = !isActive"
                 >
                   <template #append-outer>
                     <v-btn
@@ -237,7 +237,7 @@
                     readonly
                     color="green"
                     outlined
-                    @click="mapDialog=true, getLocation()"
+                    @click="openModal($event), getLocation()"
                     @input="$v.postPlace.$touch()"
                     @blur="$v.postPlace.$touch()"
                   >
@@ -254,16 +254,16 @@
                   <l-map
                     class="rounded-xl"
                     style="height: 30vh; pointer-events: none;"
-                    :zoom="zoom"
-                    :center="postPlace"
-                    :options="{zoomControl: false}"
+                    :zoom="map.zoom"
+                    :center="[map.marker.latitude, map.marker.longitude]"
+                    :options="map.options"
                   >
                     <l-tile-layer
-                      :url="mapUrl"
-                      :attribution="attribution"
+                      :url="map.tileLayer.url"
+                      :attribution="map.tileLayer.attribution"
                     />
                     <l-marker
-                      :lat-lng="postPlace"
+                      :lat-lng="[map.marker.latitude, map.marker.longitude]"
                       :icon="icon"
                     />
                   </l-map>
@@ -273,7 +273,7 @@
                     class="mt-2"
                     color="green"
                     text-color="text"
-                    @click.native="mapDialog=true, getLocation(), active2()"
+                    @click.native="openModal($event), getLocation(), isActive2 = !isActive2"
                   >
                     選びなおす
                   </Button>
@@ -287,21 +287,16 @@
                   transition="dialog-top-transition"
                 >
                   <l-map
-                    id="selectMap"
-                    :zoom.sync="zoom"
-                    :center="postPlace"
-                    :options="{zoomControl: false}"
+                    ref="lmap"
+                    :zoom.sync="map.zoom"
+                    :center="map.center"
+                    :options="map.options"
+                    @drag="mapDrag($event)"
                   >
                     <l-tile-layer
-                      :url="mapUrl"
-                      :attribution="attribution"
+                      :url="map.tileLayer.url"
+                      :attribution="map.tileLayer.attribution"
                     />
-                    <v-icon
-                      id="thisPlace"
-                      size="64px"
-                    >
-                      mdi-target
-                    </v-icon>
                     <Button
                       id="here"
                       type="lg_sq"
@@ -342,14 +337,21 @@
                             type="nml"
                             color="green"
                             text-color="text"
-                            @click.native="mapDialog=false, active2()"
+                            @click.native="mapDialog=false, isActive2 = !isActive2"
                           >
                             &nbsp;はい&nbsp;
                           </Button>
                         </v-card-actions>
                       </v-card>
                     </v-dialog>
-
+                    <l-marker
+                      :lat-lng="[map.marker.latitude, map.marker.longitude]"
+                      :icon="icon"
+                    />
+                    <l-control position="topleft">
+                      {{ map.marker }}
+                      {{ map.zoom }}
+                    </l-control>
                     <l-control position="bottomright">
                       <Button
                         id="nowPlace"
@@ -358,10 +360,10 @@
                         type="lg_sq"
                         color="blue"
                         icon-color="text"
-                        @click.native="getLocation"
+                        @click.native="getLocation()"
                       />
                     </l-control>
-                    <l-control>
+                    <l-control position="topright">
                       <Button
                         type="nml_sq"
                         flat
@@ -418,6 +420,22 @@ export default {
   },
   data () {
     return {
+      map: {
+        center: [0, 0],
+        zoom: 17,
+        marker: {
+          latitude: 0,
+          longitude: 0,
+        },
+        options: {
+          zoomControl: false,
+          zoomSnap: 0.2,
+        },
+        tileLayer: {
+          attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
+          url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        },
+      },
       Detail: '', // 投稿文
       thisPlace: false,
       mapDialog: false,
@@ -428,10 +446,6 @@ export default {
       el: 1,
       image: null,
       imgErrMessage: '',
-      zoom: 17,
-      mapUrl: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
-      attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
-      postPlace: [0, 0], // 投稿位置
       icon: L.icon({
         iconUrl: iconImg,
         iconSize: [64, 64],
@@ -443,9 +457,9 @@ export default {
         iconAnchor: [32, 32],
       }),
       options: {
-        enableHighAccuracy: false,
-        timeout: 20000,
+        timeout: 1000,
         maximumAge: 0,
+        enableHighAccuracy: true,
       },
     }
   },
@@ -498,13 +512,13 @@ export default {
     },
   },
   mounted () {
-    this.getLocation()
+    this.watchLocation()
   },
   methods: {
     clear () {
       this.Detail = ''
       this.Tag = []
-      this.postPlace = []
+      this.center = []
       this.image = null
       this.$v.$reset()
       this.isActive = true
@@ -513,7 +527,7 @@ export default {
     },
     submit () {
       this.$v.$touch()
-      this.$store.dispatch('rtdb/updataPostData', { detail: this.Detail, tags: this.Tag, imgCoordinate: this.postPlace, img: this.image })
+      this.$store.dispatch('rtdb/updataPostData', { detail: this.Detail, tags: this.Tag, imgCoordinate: this.map.center, img: this.image })
       if (!this.$v.$invalid) { this.closeModal() }
     },
     nextStep () {
@@ -526,28 +540,40 @@ export default {
     imgInput () {
       this.$refs.refImage.$el.querySelector('input').click()
     },
-    active () {
-      this.isActive = !this.isActive
-    },
-    active2 () {
-      this.isActive2 = !this.isActive2
-    },
     getLocation () {
-      this.zoom = 17
       if (!navigator.geolocation) {
-        // eslint-disable-next-line no-console
-        console.error('ERROR getLocation')
+        alert('現在地を取得できません')
       }
-      navigator.geolocation.getCurrentPosition(this.success, this.error, this.options)
+      // eslint-disable-next-line no-console
+      navigator.geolocation.getCurrentPosition(this.success, console.log('ERROR_get'), this.options)
+    },
+    watchLocation () {
+      if (!navigator.geolocation) {
+        alert('現在地を取得できません')
+      }
+      // eslint-disable-next-line no-console
+      navigator.geolocation.watchPosition(this.success, console.log('ERROR_watch'), this.options)
     },
     success (position) {
-      const coords = position.coords
-      this.postPlace = [coords.latitude, coords.longitude]
-    },
-
-    error () {
+      this.map.center = [
+        position.coords.latitude,
+        position.coords.longitude,
+      ]
       // eslint-disable-next-line no-console
-      console.error('ERROR')
+      console.log('成功')
+      this.map.marker.latitude = position.coords.latitude
+      this.map.marker.longitude = position.coords.longitude
+      this.map.zoom = 17
+    },
+    mapDrag ($event) {
+      const center = $event.target.getCenter()
+      this.map.marker.latitude = center.lat
+      this.map.marker.longitude = center.lng
+    },
+    async openModal () {
+      this.mapDialog = true
+      await this.$nextTick()
+      this.$refs.lmap.mapObject.invalidateSize()
     },
   },
 }
@@ -578,10 +604,6 @@ export default {
   top: calc(50% + 60px);
   left: calc(50% + 5px);
   transform: translate(-50%);
-}
-#selectMap {
-  position: absolute;
-  z-index: 0;
 }
 #here {
   position: absolute;
