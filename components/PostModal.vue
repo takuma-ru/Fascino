@@ -131,9 +131,7 @@
                   </template>
                 </v-file-input>
               </v-row>
-              <v-row
-                style="color: #FF5470; position: absolute; left: 42%; font-size: 24px; text-decoration:underline; text-decoration-color:#FF5470;"
-              >
+              <v-row id="selectMessage">
                 {{ imgErrMessage }}
               </v-row>
             </v-container>
@@ -538,9 +536,8 @@ export default {
     getLocation () {
       this.zoom = 17
       if (!navigator.geolocation) {
-        alert('ERROR')
+        alert('ERROR_browser')
       }
-
       navigator.geolocation.getCurrentPosition(this.success, this.error, this.options)
     },
     watchLocation () {
@@ -569,6 +566,17 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+#selectMessage {
+  color: #FF5470;
+  position: absolute;
+  font-size: 24px;
+  text-decoration:underline;
+  text-decoration-color:#FF5470;
+  z-index: 402;
+  left: 50%;
+  bottom: 0%;
+  transform: translate(-34%, -24%);
+}
 .selectImg {
   color: #F0F0F0;
   font-size: 24px;
@@ -577,11 +585,6 @@ export default {
   left: calc(50% + 5px);
   transform: translate(-50%);
 }
-// #spotImg {
-//   position: absolute;
-//   left: 50%;
-//   transform: translate(-50%, -50%);
-// }
 #selectMap {
   position: absolute;
   z-index: 0;
