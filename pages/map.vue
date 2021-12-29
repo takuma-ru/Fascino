@@ -2,7 +2,6 @@
   <div id="map">
     <div id="main">
       <l-map
-        ref="lmap"
         :zoom.sync="map.zoom"
         :options="map.options"
         :center="map.center"
@@ -24,7 +23,7 @@
         />
         <l-control-attribution position="topright" />
         <l-marker
-          :lat-lng="map.center"
+          :lat-lng="[map.marker.latitude, map.marker.longitude]"
           :icon="icon"
         />
         <SpotMarkerAndModal
@@ -77,7 +76,7 @@ export default {
     }
   },
   mounted () {
-    this.watchLocation()
+    this.getLocation()
   },
   methods: {
     getLocation () {
@@ -85,32 +84,19 @@ export default {
         alert('現在地を取得できません')
       }
       // eslint-disable-next-line no-console
-      navigator.geolocation.getCurrentPosition(this.success, console.log('ERROR_get'), this.options)
-    },
-    watchLocation () {
-      if (!navigator.geolocation) {
-        alert('現在地を取得できません')
-      }
-      // eslint-disable-next-line no-console
-      navigator.geolocation.watchPosition(this.success, console.log('ERROR_watch'), this.options)
-    },
-    async success (position) {
-      this.map.center = [
-        position.coords.latitude,
-        position.coords.longitude,
-      ]
-      await this.$store.dispatch('rtdb/getimgCoordinatePostData', { coords: this.map.center })
-      this.imgCoordinatePostData = await this.$store.getters['rtdb/imgCoordinatePostData']
-      // eslint-disable-next-line no-console
-      console.log('成功')
-      this.map.marker.latitude = position.coords.latitude
-      this.map.marker.longitude = position.coords.longitude
-      this.map.zoom = 17
-    },
-    async openModal () {
-      this.mapDialog = true
-      await this.$nextTick()
-      this.$refs.lmap.mapObject.invalidateSize()
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.map.center = [
+          position.coords.latitude,
+          position.coords.longitude,
+        ]
+        this.$store.dispatch('rtdb/getimgCoordinatePostData', { coords: this.map.center })
+        this.imgCoordinatePostData = this.$store.getters['rtdb/imgCoordinatePostData']
+        // eslint-disable-next-line no-console
+        console.log('成功')
+        this.map.marker.latitude = position.coords.latitude
+        this.map.marker.longitude = position.coords.longitude
+        this.map.zoom = 17
+      }, console.log('ERROR_get'), this.options)
     },
   },
 }
