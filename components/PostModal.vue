@@ -164,7 +164,7 @@
                     disabled
                     type="sml"
                     color="green"
-                    @click.native="submit()"
+                    @click.native="submit(), closeModal()"
                   >
                     投 稿
                   </Button>
