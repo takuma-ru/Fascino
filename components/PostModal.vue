@@ -253,7 +253,6 @@
                 <v-col
                   v-else
                 >
-                  <!-- なぜかマーカーが表示されない；； -->
                   <l-map
                     class="rounded-xl"
                     style="height: 30vh; pointer-events: none;"
@@ -432,8 +431,8 @@ export default {
       image: null,
       imgErrMessage: '',
       zoom: 17,
-      mapUrl: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+      mapUrl: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
+      attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
       NowPlace: [0, 0],
       postPlace: new Array(2), // 投稿位置
       icon: L.icon({
