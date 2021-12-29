@@ -545,18 +545,17 @@ export default {
         alert('現在地を取得できません')
       }
       // eslint-disable-next-line no-console
-      navigator.geolocation.getCurrentPosition(this.success, console.log('ERROR_get'), this.options)
-    },
-    success (position) {
-      this.map.center = [
-        position.coords.latitude,
-        position.coords.longitude,
-      ]
-      // eslint-disable-next-line no-console
-      console.log('成功')
-      this.map.marker.latitude = position.coords.latitude
-      this.map.marker.longitude = position.coords.longitude
-      this.map.zoom = 17
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.map.center = [
+          position.coords.latitude,
+          position.coords.longitude,
+        ]
+        // eslint-disable-next-line no-console
+        console.log('成功')
+        this.map.marker.latitude = position.coords.latitude
+        this.map.marker.longitude = position.coords.longitude
+        this.map.zoom = 17
+      }, console.log('ERROR_get'), this.options)
     },
     mapDrag ($event) {
       const center = $event.target.getCenter()
