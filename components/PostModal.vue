@@ -264,12 +264,11 @@
                     <l-tile-layer
                       :url="mapUrl"
                       :attribution="attribution"
-                    >
-                      <l-marker
-                        :lat-lng="NowPlace"
-                        :icon="icon"
-                      />
-                    </l-tile-layer>
+                    />
+                    <l-marker
+                      :lat-lng="NowPlace"
+                      :icon="icon"
+                    />
                   </l-map>
                   <Button
                     flat
