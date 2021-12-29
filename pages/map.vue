@@ -99,7 +99,7 @@ export default {
   width: 100%;
 }
 #nowPlace {
-  position: absolute;
+  position: fixed;
   z-index: 401;
   bottom: 72px;
   right: 16px;
