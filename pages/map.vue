@@ -71,13 +71,15 @@ export default {
     getLocation () {
       this.zoom = 17
       if (!navigator.geolocation) {
-        alert('ERROR_getLocation')
+        // eslint-disable-next-line no-console
+        console.error('ERROR_getLocation')
       }
       navigator.geolocation.getCurrentPosition(this.success, this.error, this.options)
     },
     watchLocation () {
       if (!navigator.geolocation) {
-        alert('ERROR_watchLocation')
+        // eslint-disable-next-line no-console
+        console.error('ERROR_watchLocation')
       }
       this.ID = navigator.geolocation.watchPosition(this.success, this.error, this.options)
     },
@@ -88,7 +90,8 @@ export default {
       this.imgCoordinatePostData = await this.$store.getters['rtdb/imgCoordinatePostData']
     },
     error () {
-      alert('ERROR')
+      // eslint-disable-next-line no-console
+      console.error('ERROR')
     },
   },
 }
