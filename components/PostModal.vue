@@ -258,6 +258,9 @@
                     :center="[map.marker.latitude, map.marker.longitude]"
                     :options="map.options"
                   >
+                    <l-control>
+                      {{ [map.marker.latitude, map.marker.longitude] }}
+                    </l-control>
                     <l-tile-layer
                       :url="map.tileLayer.url"
                       :attribution="map.tileLayer.attribution"
