@@ -2,25 +2,29 @@
   <div id="map">
     <div id="main">
       <l-map
-        :zoom.sync="zoom"
-        :options="mapOptions"
-        :center="center"
+        ref="lmap"
+        :zoom.sync="map.zoom"
+        :options="map.options"
+        :center="map.center"
       >
-        <Button
-          id="nowPlace"
-          icon-color="text"
-          color="green_lighten"
-          icon="mdi-crosshairs-gps"
-          type="lg_sq"
-          @click.native="getLocation()"
-        />
+        <l-control position="bottomright">
+          <Button
+            id="nowPlace"
+            icon-color="text"
+            color="green_lighten"
+            icon="mdi-crosshairs-gps"
+            type="lg_sq"
+            @click.native="getLocation()"
+          />
+        </l-control>
+
         <l-tile-layer
           :url="`https://cartodb-basemaps-{s}.global.ssl.fastly.net/${$vuetify.theme.dark ? 'dark' : 'light'}_all/{z}/{x}/{y}.png`"
-          :attribution="attribution"
+          :attribution="map.tileLayer.attribution"
         />
         <l-control-attribution position="topright" />
         <l-marker
-          :lat-lng="center"
+          :lat-lng="map.center"
           :icon="icon"
         />
         <SpotMarkerAndModal
@@ -42,24 +46,32 @@ export default {
   components: { SpotMarkerAndModal },
   data () {
     return {
+      map: {
+        center: [0, 0],
+        zoom: 17,
+        marker: {
+          latitude: 0,
+          longitude: 0,
+        },
+        options: {
+          attributionControl: false,
+          zoomControl: false,
+          zoomSnap: 0.2,
+        },
+        tileLayer: {
+          attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
+        },
+      },
       imgCoordinatePostData: null,
       modal: false,
-      zoom: 17,
-      center: [0, 0],
-      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-      mapOptions: {
-        attributionControl: false,
-        zoomControl: false,
-        zoomSnap: 0.5,
-      },
       icon: L.icon({
         iconUrl: iconImage,
         iconSize: [48, 48],
         iconAnchor: [24, 24],
       }),
       options: {
-        enableHighAccuracy: false,
-        timeout: 20000,
+        enableHighAccuracy: true,
+        timeout: 1000,
         maximumAge: 0,
       },
     }
@@ -69,29 +81,36 @@ export default {
   },
   methods: {
     getLocation () {
-      this.zoom = 17
       if (!navigator.geolocation) {
-        // eslint-disable-next-line no-console
-        console.error('ERROR_getLocation')
+        alert('現在地を取得できません')
       }
-      navigator.geolocation.getCurrentPosition(this.success, this.error, this.options)
+      // eslint-disable-next-line no-console
+      navigator.geolocation.getCurrentPosition(this.success, console.log('ERROR_get'), this.options)
     },
     watchLocation () {
       if (!navigator.geolocation) {
-        // eslint-disable-next-line no-console
-        console.error('ERROR_watchLocation')
+        alert('現在地を取得できません')
       }
-      this.ID = navigator.geolocation.watchPosition(this.success, this.error, this.options)
+      // eslint-disable-next-line no-console
+      navigator.geolocation.watchPosition(this.success, console.log('ERROR_watch'), this.options)
     },
     async success (position) {
-      const coords = position.coords
-      this.center = [coords.latitude, coords.longitude]
-      await this.$store.dispatch('rtdb/getimgCoordinatePostData', { coords: this.center })
+      this.map.center = [
+        position.coords.latitude,
+        position.coords.longitude,
+      ]
+      await this.$store.dispatch('rtdb/getimgCoordinatePostData', { coords: this.map.center })
       this.imgCoordinatePostData = await this.$store.getters['rtdb/imgCoordinatePostData']
-    },
-    error () {
       // eslint-disable-next-line no-console
-      console.error('ERROR')
+      console.log('成功')
+      this.map.marker.latitude = position.coords.latitude
+      this.map.marker.longitude = position.coords.longitude
+      this.map.zoom = 17
+    },
+    async openModal () {
+      this.mapDialog = true
+      await this.$nextTick()
+      this.$refs.lmap.mapObject.invalidateSize()
     },
   },
 }
