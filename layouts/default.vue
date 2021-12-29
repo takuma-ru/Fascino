@@ -5,7 +5,7 @@
     <v-main>
       <Nuxt />
       <BottomNaviBar
-        v-if="$route.path != '/' && $route.path != '/signin'"
+        v-if="$route.path != '/' && $route.path != '/signin' && $route.path != '/signin/first'"
       />
     </v-main>
   </v-app>

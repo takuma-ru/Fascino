@@ -7,7 +7,9 @@
         icon="mdi-chevron-left"
         :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_middle"
         @click.native="$router.go(-1)"
-      />
+      >
+        戻る
+      </Button>
     </v-row>
     <v-row justify="center" no-gutters class="py-6">
       <h1>ログイン</h1>
