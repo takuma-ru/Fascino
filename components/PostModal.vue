@@ -527,7 +527,7 @@ export default {
     },
     submit () {
       this.$v.$touch()
-      this.$store.dispatch('rtdb/updataPostData', { detail: this.Detail, tags: this.Tag, imgCoordinate: this.map.center, img: this.image })
+      this.$store.dispatch('rtdb/updataPostData', { detail: this.Detail, tags: this.Tag, imgCoordinate: [this.map.marker.latitude, this.map.marker.longitude], img: this.image })
       if (!this.$v.$invalid) { this.closeModal() }
     },
     nextStep () {
