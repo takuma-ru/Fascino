@@ -109,7 +109,7 @@
                   ref="refImage"
                   v-model="image"
                   class="fileInput2"
-                  accept="image/png, image/jpeg, image/jpg"
+                  accept=".png, .jpeg, .jpg"
                   hide-input
                   prepend-icon=""
                 >
@@ -255,7 +255,7 @@
                     class="rounded-xl"
                     style="height: 30vh; pointer-events: none;"
                     :zoom="zoom"
-                    :center="NowPlace"
+                    :center="postPlace"
                     :options="{zoomControl: false}"
                   >
                     <l-tile-layer
@@ -263,7 +263,7 @@
                       :attribution="attribution"
                     />
                     <l-marker
-                      :lat-lng="NowPlace"
+                      :lat-lng="postPlace"
                       :icon="icon"
                     />
                   </l-map>
@@ -289,7 +289,7 @@
                   <l-map
                     id="selectMap"
                     :zoom.sync="zoom"
-                    :center="NowPlace"
+                    :center="postPlace"
                     :options="{zoomControl: false}"
                   >
                     <l-tile-layer
@@ -431,8 +431,7 @@ export default {
       zoom: 17,
       mapUrl: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
       attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
-      NowPlace: [0, 0],
-      postPlace: new Array(2), // 投稿位置
+      postPlace: [0, 0], // 投稿位置
       icon: L.icon({
         iconUrl: iconImg,
         iconSize: [64, 64],
@@ -499,7 +498,7 @@ export default {
     },
   },
   mounted () {
-    this.watchLocation()
+    this.getLocation()
   },
   methods: {
     clear () {
@@ -536,24 +535,19 @@ export default {
     getLocation () {
       this.zoom = 17
       if (!navigator.geolocation) {
-        alert('ERROR_browser')
+        // eslint-disable-next-line no-console
+        console.error('ERROR getLocation')
       }
       navigator.geolocation.getCurrentPosition(this.success, this.error, this.options)
     },
-    watchLocation () {
-      if (!navigator.geolocation) {
-        alert('ERROR_watchLocation')
-      }
-      this.ID = navigator.geolocation.watchPosition(this.success, this.error, this.options)
-    },
     success (position) {
       const coords = position.coords
-      this.NowPlace = [coords.latitude, coords.longitude]
       this.postPlace = [coords.latitude, coords.longitude]
     },
 
     error () {
-      alert('ERROR')
+      // eslint-disable-next-line no-console
+      console.error('ERROR')
     },
   },
 }
