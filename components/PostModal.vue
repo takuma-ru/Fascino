@@ -262,10 +262,12 @@
                       {{ [map.marker.latitude, map.marker.longitude] }}
                     </l-control>
                     <l-tile-layer
+                      style="pointer-events: none;"
                       :url="map.tileLayer.url"
                       :attribution="map.tileLayer.attribution"
                     />
                     <l-marker
+                      style="pointer-events: none;"
                       :lat-lng="[map.marker.latitude, map.marker.longitude]"
                       :icon="icon"
                     />
