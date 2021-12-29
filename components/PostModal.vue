@@ -161,10 +161,9 @@
                 >
                   <Button
                     flat
-                    disabled
                     type="sml"
                     color="green"
-                    @click.native="submit(), closeModal()"
+                    @click.native="submit()"
                   >
                     投 稿
                   </Button>
@@ -231,15 +230,12 @@
                   <v-text-field
                     persistent-hint
                     hint="タップして地図から選択してください！"
-                    auto-grow
                     clearable
                     :error-messages="postPlaceError"
                     readonly
                     color="green"
                     outlined
                     @click="openModal($event), getLocation()"
-                    @input="$v.postPlace.$touch()"
-                    @blur="$v.postPlace.$touch()"
                   >
                     <template #label>
                       <p style="font-size: 20px;">
@@ -398,6 +394,9 @@ import iconImg from '../static/icon/target.svg'
 import spoticonImg from '../static/icon/map-marker-star.svg'
 import 'nekoo_vue_swipemodal/dist/swipemodal.css'
 
+const spotValidators = (value) => {
+  return value === false
+}
 export default {
   name: 'PostModal',
 
@@ -410,7 +409,7 @@ export default {
   validations: {
     Detail: { required, maxLength: maxLength(140) },
     Tag: { required },
-    postPlace: { required },
+    isActive2: { spotValidators },
     image: { required },
   },
   model: {
@@ -496,8 +495,8 @@ export default {
     },
     postPlaceError () {
       const errors = []
-      if (!this.$v.postPlace.$dirty) { return errors }
-      !this.$v.postPlace.required && errors.push('選択必須')
+      if (!this.$v.isActive2.$dirty) { return errors }
+      !this.$v.isActive2.required && errors.push('選択必須')
       return errors
     },
   },
@@ -532,8 +531,7 @@ export default {
     },
     submit () {
       this.$v.$touch()
-      this.$store.dispatch('rtdb/updataPostData', { detail: this.Detail, tags: this.Tag, imgCoordinate: [this.map.marker.latitude, this.map.marker.longitude], img: this.image })
-      if (!this.$v.$invalid) { this.closeModal() }
+      if (this.$v.$invalid === false) { this.$store.dispatch('rtdb/updataPostData', { detail: this.Detail, tags: this.Tag, imgCoordinate: [this.map.marker.latitude, this.map.marker.longitude], img: this.image }).then(alert('投稿しました！'), this.closeModal()).catch((e) => { return alert(e) }) }
     },
     nextStep () {
       if (this.isActive) { this.imgErrMessage = '選択必須' } else { this.el = 2 }
