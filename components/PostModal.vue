@@ -512,7 +512,7 @@ export default {
     },
   },
   mounted () {
-    this.watchLocation()
+    this.getLocation()
   },
   methods: {
     clear () {
@@ -546,13 +546,6 @@ export default {
       }
       // eslint-disable-next-line no-console
       navigator.geolocation.getCurrentPosition(this.success, console.log('ERROR_get'), this.options)
-    },
-    watchLocation () {
-      if (!navigator.geolocation) {
-        alert('現在地を取得できません')
-      }
-      // eslint-disable-next-line no-console
-      navigator.geolocation.watchPosition(this.success, console.log('ERROR_watch'), this.options)
     },
     success (position) {
       this.map.center = [
