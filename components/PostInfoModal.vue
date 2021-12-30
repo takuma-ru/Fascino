@@ -1,5 +1,8 @@
 <template>
-  <section @mousemove="mouseMove">
+  <section
+    style="font-family: 'SmartFontUI';"
+    @mousemove="mouseMove"
+  >
     <div
       v-show="modal"
       :style="`
