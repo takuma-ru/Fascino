@@ -105,25 +105,25 @@ export default {
           return ({
             height: 48,
             width: 'auto',
-            fontSize: 24,
+            fontSize: 18,
           })
         case 'nml_sq':
           return ({
             height: 48,
             width: 48,
-            fontSize: 24,
+            fontSize: 18,
           })
         case 'lg':
           return ({
             height: 64,
             width: 'auto',
-            fontSize: 32,
+            fontSize: 24,
           })
         case 'lg_sq':
           return ({
             height: 64,
             width: 64,
-            fontSize: 32,
+            fontSize: 24,
           })
         default:
           break
