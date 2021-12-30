@@ -89,7 +89,7 @@ export const actions = {
       }, { root: true })
       */
       // eslint-disable-next-line no-useless-return
-      return
+      return 'noData'
     }
   },
 }

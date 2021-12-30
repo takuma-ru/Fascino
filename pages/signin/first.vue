@@ -1,28 +1,18 @@
 <template>
   <v-container class="pa-6">
-    <v-row justify="space-around" no-gutters class="pb-6">
-      <v-col>
-        <Button
-          type="nml_sq"
-          flat
-          icon="mdi-chevron-left"
-          :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_middle"
-          @click.native="$router.go(-1)"
-        >
-          戻る
-        </Button>
-      </v-col>
+    <v-row justify="right" no-gutters>
       <v-col style="text-align: right;">
         <Button
           type="nml"
           flat
-          :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_middle"
+          color="green"
           @click.native="setupUserProfile()"
         >
           OK！
         </Button>
       </v-col>
     </v-row>
+    <v-divider class="my-4" />
     <v-row no-gutters>
       <v-col class="px-0">
         <v-text-field
