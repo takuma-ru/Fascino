@@ -4,7 +4,7 @@
       :min-height="btnStyle.height"
       :min-width="btnStyle.width"
       depressed
-      x-small
+      :disabled="disabled"
       :color="color"
       :outlined="outlined"
       style="color: white"
@@ -41,6 +41,10 @@ export default {
       default: false,
     },
     outlined: {
+      type: Boolean,
+      default: false,
+    },
+    disabled: {
       type: Boolean,
       default: false,
     },
