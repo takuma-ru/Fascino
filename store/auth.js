@@ -77,7 +77,7 @@ export const actions = {
     })
     if (userData === undefined || userData === null) {
       // 取得できなかった場合
-      this.$router.push('signin/first')
+      this.$router.push('/signup?step=2')
       /*
         await dispatch('firestore/addData', {
         uid,
@@ -90,6 +90,8 @@ export const actions = {
       */
       // eslint-disable-next-line no-useless-return
       return 'noData'
+    } else {
+      return 'existsData'
     }
   },
 }

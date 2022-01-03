@@ -8,7 +8,7 @@
       :text-color="$vuetify.theme.themes[$vuetify.theme.dark ? 'light' : 'dark'].text"
       @click.native="installApp()"
     >
-      インストールする
+      アプリをインストール
     </Button>
   </div>
 </template>

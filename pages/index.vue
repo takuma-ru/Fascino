@@ -52,9 +52,9 @@
             flat
             color="red"
             text-color="white"
-            @click.native="$router.push('/signin')"
+            @click.native="$router.push('/signup')"
           >
-            簡単にはじめてみる
+            初めての方
           </Button>
           <Button
             type="sml"
