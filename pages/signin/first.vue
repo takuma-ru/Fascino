@@ -1,19 +1,20 @@
 <template>
   <v-container class="pa-6">
-    <v-row justify="right" no-gutters>
-      <v-col style="text-align: right;">
-        <Button
-          type="nml"
-          flat
-          color="green"
-          @click.native="setupUserProfile()"
-        >
-          OK！
-        </Button>
-      </v-col>
+    <v-row
+      justify="center"
+      no-gutters
+      class="py-6"
+    >
+      <h1>アカウントの登録</h1>
     </v-row>
-    <v-divider class="my-4" />
-    <v-row no-gutters>
+    <v-row
+      justify="center"
+      no-gutters
+      style="text-align: center"
+    >
+      あなたのアカウントを登録しましょう。<br>
+    </v-row>
+    <v-row no-gutters class="pt-8">
       <v-col class="px-0">
         <v-text-field
           id="text-field"
@@ -39,7 +40,7 @@
           id="text-field"
           v-model="detail"
           placeholder="あなたのことが分かるような紹介文を書いてみましょう"
-          counter="140"
+          counter="100"
           auto-grow
           outlined
           clearable
@@ -52,6 +53,19 @@
             </p>
           </template>
         </v-textarea>
+      </v-col>
+    </v-row>
+    <v-divider class="my-4" />
+    <v-row justify="right" no-gutters>
+      <v-col style="text-align: right;">
+        <Button
+          type="sml"
+          flat
+          color="green"
+          @click.native="setupUserProfile()"
+        >
+          これで登録する！
+        </Button>
       </v-col>
     </v-row>
   </v-container>
