@@ -2,9 +2,11 @@
   <div id="map">
     <div id="main">
       <l-map
+        ref="lmap"
         :zoom.sync="map.zoom"
         :options="map.options"
         :center="map.center"
+        @drag="mapDrag($event)"
       >
         <l-control position="bottomright">
           <Button
@@ -16,16 +18,42 @@
             @click.native="getLocation()"
           />
         </l-control>
-
+        <l-control position="bottomright">
+          <Button
+            id="spotFind"
+            icon-color="text"
+            color="green_lighten"
+            icon="mdi-magnify"
+            type="lg_sq"
+            @click.native="active = !active"
+          />
+        </l-control>
+        <l-marker
+          v-if="active"
+          :lat-lng="[map.marker.latitude, map.marker.longitude]"
+          :icon="spotIcon"
+        />
+        <Button
+          v-if="active"
+          id="here"
+          type="lg_sq"
+          flat
+          text-color="text"
+          color="red"
+          @click.native="findSpot"
+        >
+          &nbsp;検索&nbsp;
+        </Button>
+        <l-marker
+          v-else
+          :lat-lng="map.center"
+          :icon="icon"
+        />
         <l-tile-layer
           :url="`https://cartodb-basemaps-{s}.global.ssl.fastly.net/${$vuetify.theme.dark ? 'dark' : 'light'}_all/{z}/{x}/{y}.png`"
           :attribution="map.tileLayer.attribution"
         />
         <l-control-attribution position="topright" />
-        <l-marker
-          :lat-lng="[map.marker.latitude, map.marker.longitude]"
-          :icon="icon"
-        />
         <SpotMarkerAndModal
           v-for="data in imgCoordinatePostData"
           id="modal"
@@ -38,6 +66,7 @@
 </template>
 <script>
 import L from 'leaflet'
+import iconImg from '../static/icon/target.svg'
 import iconImage from '../static/icon/fascino_logo_noback.svg'
 import SpotMarkerAndModal from '../components/SpotMarkerAndModal.vue'
 export default {
@@ -45,6 +74,7 @@ export default {
   components: { SpotMarkerAndModal },
   data () {
     return {
+      active: false,
       map: {
         center: [0, 0],
         zoom: 17,
@@ -67,6 +97,11 @@ export default {
         iconUrl: iconImage,
         iconSize: [48, 48],
         iconAnchor: [24, 24],
+      }),
+      spotIcon: L.icon({
+        iconUrl: iconImg,
+        iconSize: [64, 64],
+        iconAnchor: [32, 32],
       }),
       options: {
         enableHighAccuracy: true,
@@ -98,6 +133,20 @@ export default {
         this.map.zoom = 17
       }, console.log('ERROR_get'), this.options)
     },
+    findSpot () {
+      this.$store.dispatch('rtdb/getimgCoordinatePostData', { coords: [this.map.marker.latitude, this.map.marker.longitude] })
+      this.imgCoordinatePostData = this.$store.getters['rtdb/imgCoordinatePostData']
+    },
+    mapDrag ($event) {
+      const center = $event.target.getCenter()
+      this.map.marker.latitude = center.lat
+      this.map.marker.longitude = center.lng
+    },
+    async openModal () {
+      this.mapDialog = true
+      await this.$nextTick()
+      this.$refs.lmap.mapObject.invalidateSize()
+    },
   },
 }
 </script>
@@ -112,8 +161,22 @@ export default {
   bottom: 72px;
   right: 16px;
 }
+#spotFind{
+  position: fixed;
+  z-index: 401;
+  bottom: 144px;
+  right: 16px;
+}
 #main {
   height: 100%;
   width: 100%;
+}
+#here {
+  position: absolute;
+  z-index: 500;
+  left: 50%;
+  bottom: calc(4% + 8px);
+  transform: translate(-50%, -50%);
+
 }
 </style>
