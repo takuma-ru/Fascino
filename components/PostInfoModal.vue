@@ -1,5 +1,8 @@
 <template>
-  <section @mousemove="mouseMove">
+  <section
+    style="font-family: 'SmartFontUI';"
+    @mousemove="mouseMove"
+  >
     <div
       v-show="modal"
       :style="`
@@ -108,17 +111,17 @@
                 <v-chip
                   v-for="tag in postData.tags"
                   :key="tag"
-                  class="mr-2"
+                  class="mr-2 mb-2"
                   :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'light' : 'dark'].sub_text"
                   v-text="tag"
                 />
               </div>
               <div
-                class="coordinate pt-2"
+                class="coordinate"
                 :style="`color: ${$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].sub2_text};`"
               >
                 <v-icon>mdi-map-marker</v-icon>
-                {{ '東京都江東区青海' }}
+                <span v-text="location" />
               </div>
             </v-list>
           </div>
@@ -153,6 +156,8 @@ export default {
       isWent: false,
       isLikeInList: false,
       isWentInList: false,
+
+      location: '',
 
       isTop: true,
       isModalAnim: true,
@@ -202,16 +207,6 @@ export default {
   },
 
   methods: {
-    // eslint-disable-next-line no-empty-pattern
-    async getFileUrl (name) {
-      const storageRef = this.$fire.storage.ref('postImages').child(`${name}`)
-      try {
-        const url = await storageRef.getDownloadURL()
-        return url
-      } catch (e) {
-        console.error(e.message)
-      }
-    },
     // common
     init () {
       this.isMouseDown = false
@@ -234,11 +229,17 @@ export default {
       }
       setTimeout(this.init, 235)
     },
-    open () {
+    async open () {
       // console.log('open')
       this.isModalAnim = true
-      this.$store.dispatch('storage/getFileUrl', this.postData.imgName).then((res) => {
+      await this.$store.dispatch('storage/getFileUrl', this.postData.imgName).then((res) => {
         this.imgURL = res
+      })
+      await this.$store.dispatch('geolocation/getReverseGeo', {
+        lat: this.postData.imgCoordinate[0],
+        lng: this.postData.imgCoordinate[1],
+      }).then((res) => {
+        this.location = res
       })
       const list = [] // todo - ログインしているユーザーがいいねを押した情報listを取得
       this.isLikeInList = list.includes(this.postData.id) // listにこのPostDataIDがあるか
