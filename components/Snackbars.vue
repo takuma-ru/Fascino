@@ -6,7 +6,7 @@
       :class="`snackbar_${item.type}`"
     >
       <div class="contents">
-        <v-icon style="grid-column: 1">
+        <v-icon style="grid-column: 1" color="#001024">
           mdi-{{ item.type === 'success' ? 'check' : item.type === 'error' ? 'alert' : 'help' }}-circle-outline
         </v-icon>
         <p
@@ -17,6 +17,8 @@
           icon
           width="24px"
           height="24px"
+          color="#315380"
+          class="my-auto"
           style="grid-column: 3"
           @click="close(index)"
         >
@@ -55,7 +57,7 @@ export default {
     min-height: 40px;
     margin-top: 8px;
 
-    border-radius: 24px;
+    border-radius: 16px;
     box-shadow: 0px 0px 6px 3px #00214D28;
   }
 
@@ -88,6 +90,7 @@ export default {
   .msg {
     grid-column: 2;
     margin: 0px;
+    color: #001024;
     white-space: pre-wrap;
   }
 }

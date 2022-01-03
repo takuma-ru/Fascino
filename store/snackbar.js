@@ -1,9 +1,5 @@
 export const state = () => ({
-  alerts: [
-    { type: 'error', msg: '投稿に失敗しました。\nオンラインかどうか確認し、時間をおいてもう一度お試しください' },
-    { type: 'success', msg: '投稿が完了しました' },
-    { type: 'warn', msg: 'オフラインです' },
-  ],
+  alerts: [],
 })
 
 export const getters = {
