@@ -23,7 +23,7 @@
         <Button
           type="sml"
           flat
-          color="background"
+          :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background"
           class="my-4"
           @click.native="$router.push('/timeline')"
         >
@@ -95,7 +95,7 @@
         <Button
           type="sml"
           flat
-          color="background"
+          :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background"
           class="my-4"
           @click.native="$router.push('/signup?step=1')"
         >
@@ -139,7 +139,7 @@
         <Button
           type="sml"
           flat
-          color="background"
+          :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background"
           class="my-4"
           @click.native="$router.push('/timeline')"
         >
