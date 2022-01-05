@@ -19,17 +19,16 @@
       <v-stepper-content step="1">
         <h2>Googleアカウントでサインインしましょう</h2>
         <p>ログインすることで、投稿が出来たり、報酬が貰えるようになります。</p>
-        <v-card-actions class="pa-0">
-          <SignInButton class="my-2 mr-4" />
-          <Button
-            type="sml"
-            flat
-            color="background"
-            @click.native="$router.push('/timeline')"
-          >
-            タイムラインに移動
-          </Button>
-        </v-card-actions>
+        <SignInButton class="my-2 mr-4" />
+        <Button
+          type="sml"
+          flat
+          color="background"
+          class="my-4"
+          @click.native="$router.push('/timeline')"
+        >
+          タイムラインに移動
+        </Button>
       </v-stepper-content>
 
       <v-stepper-step
@@ -84,25 +83,24 @@
             </v-textarea>
           </v-col>
         </v-row>
-        <v-card-actions class="pa-0">
-          <Button
-            type="sml"
-            flat
-            color="green"
-            class="mr-4"
-            @click.native="setupUserProfile()"
-          >
-            作成する！
-          </Button>
-          <Button
-            type="sml"
-            flat
-            color="background"
-            @click.native="$router.push('/signup?step=1')"
-          >
-            戻る
-          </Button>
-        </v-card-actions>
+        <Button
+          type="sml"
+          flat
+          color="green"
+          class="mr-4"
+          @click.native="setupUserProfile()"
+        >
+          作成する！
+        </Button>
+        <Button
+          type="sml"
+          flat
+          color="background"
+          class="my-4"
+          @click.native="$router.push('/signup?step=1')"
+        >
+          戻る
+        </Button>
       </v-stepper-content>
 
       <v-stepper-step
