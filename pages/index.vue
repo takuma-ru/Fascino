@@ -17,7 +17,7 @@
           xl="6"
         >
           <v-img
-            :src="require('../assets/fascino_title_logo.svg')"
+            :src="require(`../assets/fascino_title_logo${$vuetify.theme.dark ? '_dark' : ''}.svg`)"
             style="max-width: 50%; margin-left: 25%;"
           />
         </v-col>
@@ -32,7 +32,7 @@
         >
           <div class="decoBar my-4" :style="`background-color: ${$vuetify.theme.themes['dark'].red_lighten}`" />
           <v-img
-            :src="require('../assets/fascino_title.svg')"
+            :src="require(`../assets/fascino_title${$vuetify.theme.dark ? '_dark' : ''}.svg`)"
             style="max-width: 100%; margin-left: 0%;"
           />
           <div class="decoBar my-4" :style="`background-color: ${$vuetify.theme.themes['dark'].green_lighten}`" />
@@ -93,7 +93,7 @@
 export default {
   middleware ({ store, redirect }) {
     if (store.getters['auth/googleUserData'] != null || undefined) {
-      return redirect('/timeLine')
+      return redirect('/timeline')
     }
   },
 
