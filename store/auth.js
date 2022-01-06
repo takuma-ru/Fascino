@@ -77,19 +77,10 @@ export const actions = {
     })
     if (userData === undefined || userData === null) {
       // 取得できなかった場合
-      this.$router.push('signin/first')
-      /*
-        await dispatch('firestore/addData', {
-        uid,
-        name: displayName,
-        detail: '',
-        liked: 0,
-        wented: 0,
-        photoURL: claims.picture,
-      }, { root: true })
-      */
-      // eslint-disable-next-line no-useless-return
+      this.$router.push('/signup?step=2')
       return 'noData'
+    } else {
+      return 'existsData'
     }
   },
 }

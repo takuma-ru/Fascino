@@ -2,22 +2,24 @@
   <div>
     <Button
       v-if="isInstalled"
+      id="installBtn"
       type="nml"
       flat
       color="red"
       :text-color="$vuetify.theme.themes[$vuetify.theme.dark ? 'light' : 'dark'].text"
-      @click.native="installApp()"
+      @click.native="clickCallback()"
     >
-      インストールする
+      アプリをインストール
     </Button>
   </div>
 </template>
 
 <script>
+// TODO: beforeinstallprompt（EventListener）をadd出来ない。ライフサイクルに問題がありそう。
 export default {
   data () {
     return {
-      defferedPrompt: null,
+      deferredPrompt: null,
     }
   },
 
@@ -32,26 +34,27 @@ export default {
     },
   },
 
-  created () {
-    // ページ読み込み時にインストールバナーを非表示にさせる
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault()
-      this.defferedPrompt = e
-    })
-
-    window.addEventListener('appinstalled', () => {
-      this.deferredPrompt = null
-    })
+  beforeMount () {
+    this.captureEvent()
   },
 
   methods: {
-    async installApp () {
-      await this.deferredPrompt.prompt()
+    async captureEvent () {
+      await window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault()
+        this.deferredPrompt = e
+      })
+    },
+    clickCallback () {
+      // Show the prompt
+      this.deferredPrompt.prompt()
+      this.deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          // Call another function?
+        }
+        this.deferredPrompt = null
+      })
     },
   },
 }
 </script>
-
-<style>
-
-</style>

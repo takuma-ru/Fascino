@@ -11,10 +11,18 @@
         戻る
       </Button>
     </v-row>
-    <v-row justify="center" no-gutters class="py-6">
+    <v-row
+      justify="center"
+      no-gutters
+      class="py-6"
+    >
       <h1>ログイン</h1>
     </v-row>
-    <v-row justify="center" no-gutters>
+    <v-row
+      justify="center"
+      no-gutters
+      style="text-align: center"
+    >
       ログインすることで、投稿が出来たり、報酬が貰えるようになります。
     </v-row>
     <v-row
@@ -37,7 +45,7 @@
 export default {
   middleware ({ store, redirect }) {
     if (store.getters['auth/googleUserData'] != null || undefined) {
-      return redirect('/timeLine')
+      return redirect('/timeline')
     }
   },
 }

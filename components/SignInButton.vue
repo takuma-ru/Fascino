@@ -4,13 +4,8 @@
     class="login-with-google-btn"
     @click="!googleUserData ? signIn() : signOut()"
   >
-    {{ googleUserData ? 'Sign out' : 'Sign in with Google' }}
+    {{ googleUserData ? 'サインアウト' : 'Googleでサインイン' }}
   </button>
-  <!-- <Button
-    type="sml"
-    color="green_lighten"
-  >
-  </Button> -->
 </template>
 
 <script>
@@ -36,10 +31,9 @@ export default {
 .login-with-google-btn {
   transition: background-color .3s, box-shadow .3s;
 
-  padding: 12px 16px 12px 42px;
+  padding: 8px 16px 8px 42px;
   border: none;
   border-radius: 16px;
-  box-shadow: 0 -1px 0 rgba(0, 0, 0, .04), 0 1px 1px rgba(0, 0, 0, .25);
 
   color: #757575;
   font-size: 14px;
