@@ -6,7 +6,7 @@
       flat
       color="red"
       :text-color="$vuetify.theme.themes[$vuetify.theme.dark ? 'light' : 'dark'].text"
-      @click.native="installApp()"
+      @click.native="clickCallback()"
     >
       アプリをインストール
     </Button>
@@ -17,7 +17,7 @@
 export default {
   data () {
     return {
-      defferedPrompt: null,
+      deferredPrompt: null,
     }
   },
 
@@ -32,25 +32,29 @@ export default {
     },
   },
 
-  created () {
-    // ページ読み込み時にインストールバナーを非表示にさせる
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault()
-      this.defferedPrompt = e
-    })
-
-    window.addEventListener('appinstalled', () => {
-      this.deferredPrompt = null
-    })
+  mounted () {
+    this.captureEvent()
   },
 
   methods: {
-    async installApp () {
+    captureEvent () {
       window.addEventListener('beforeinstallprompt', (e) => {
+        // ! Prevent Chrome 67 and earlier from automatically showing the prompt
         e.preventDefault()
-        this.defferedPrompt = e
+        // Stash the event so it can be triggered later.
+        this.deferredPrompt = e
       })
-      await this.deferredPrompt.prompt()
+    },
+    clickCallback () {
+      // Show the prompt
+      this.deferredPrompt.prompt()
+      // Wait for the user to respond to the prompt
+      this.deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          // Call another function?
+        }
+        this.deferredPrompt = null
+      })
     },
   },
 }

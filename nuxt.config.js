@@ -1,9 +1,6 @@
 export default {
-  server: {
-  },
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
-  target: 'static',
 
   loadingIndicator: {
     name: './assets/loadingIndicator.html',
