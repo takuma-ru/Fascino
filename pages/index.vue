@@ -1,12 +1,12 @@
 <template>
   <div :style="`background: ${$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background}`">
-    <v-container class="pa-0">
+    <v-container class="pa-0" style="max-width: 1185px">
       <v-row
         id="top"
         justify="center"
         align="center"
         no-gutters
-        style="position: relative; min-height: 70vh; max-width: 100vw; text-align: center"
+        style="position: relative; min-height: 60vh; max-width: 100vw; text-align: center"
       >
         <v-col
           id="title"
@@ -41,17 +41,19 @@
       <v-row
         no-gutters
         justify="center"
-        style="position: relative; min-height: 30vh; text-align: center"
+        style="position: relative; min-height: 40vh; text-align: center"
       >
         <div class="mt-10 px-auto">
           <p :style="`color:${$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].text}`">
             現在開発中（アルファ版）です。<br><span class="br">UIや使用できる機能が</span><span class="br">大幅に変更される可能性があります。</span>
           </p>
+          <SignInButton />
           <Button
             type="nml"
             flat
             color="red"
             text-color="white"
+            class="mt-4"
             @click.native="$router.push('/signup')"
           >
             初めての方
@@ -60,8 +62,8 @@
             type="sml"
             flat
             color="green"
-            class="py-4"
             text-color="#001024"
+            class="mt-4"
             @click.native="$store.dispatch('darkMode/setUpIsDarkMode'); $router.push('/timeline')"
           >
             投稿を見てみる
@@ -99,7 +101,6 @@ export default {
 
   data () {
     return {
-      dialog: false,
       e1: 1,
     }
   },

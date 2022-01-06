@@ -34,7 +34,6 @@ export default {
   padding: 8px 16px 8px 42px;
   border: none;
   border-radius: 16px;
-  box-shadow: 0 -1px 0 rgba(0, 0, 0, .04), 0 1px 1px rgba(0, 0, 0, .25);
 
   color: #757575;
   font-size: 14px;
