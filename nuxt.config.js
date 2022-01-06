@@ -79,9 +79,10 @@ export default {
   pwa: {
     manifest: {
       name: 'ファシノ',
-      short_name: 'Fasino',
+      short_name: 'Fascino',
       lang: 'ja',
       description: '地域創生を目的としたゲーム型SNSアプリです。あなたの地域の魅力を発信しましょう！',
+      start_url: '/',
       icons: [
         {
           src: '/icon/fascino_logo_512.png',

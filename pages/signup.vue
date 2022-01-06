@@ -114,6 +114,16 @@
       <v-stepper-content step="3">
         <h2>アプリをインストールして快適に使おう</h2>
         <p>アプリをインストールすることで、気が向いた時すぐに投稿・閲覧できます。めっちゃ良くないですか？</p>
+        <PWAInstallButton class="mr-4 my-4" />
+        <Button
+          type="sml"
+          flat
+          :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background"
+          class="my-4"
+          @click.native="$router.push('/timeline')"
+        >
+          インストールせずに使う
+        </Button>
         <strong>インストール方法</strong>
         <ul class="mt-2">
           <li class="mb-4">
@@ -121,6 +131,13 @@
             ※<strong>Chromeを推奨します</strong>
             <ol>
               <li>下の「アプリをインストール」を押します</li>
+              <li>モーダルの「インストール」を押すとアプリがインストールされます</li>
+              <li>ホーム画面に「Fascino」が追加されます</li>
+            </ol>
+            <strong class="my-2">うまくいかない場合</strong>
+            <ol>
+              <li>メニュー<v-icon>mdi-dots-vertical</v-icon>を押します</li>
+              <li>「アプリをインストール」を押します</li>
               <li>モーダルの「インストール」を押すとアプリがインストールされます</li>
               <li>ホーム画面に「Fascino」が追加されます</li>
             </ol>
@@ -135,16 +152,6 @@
             </ol>
           </li>
         </ul>
-        <PWAInstallButton class="mr-4" />
-        <Button
-          type="sml"
-          flat
-          :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background"
-          class="my-4"
-          @click.native="$router.push('/timeline')"
-        >
-          インストールせずに使う
-        </Button>
       </v-stepper-content>
     </v-stepper>
   </v-container>

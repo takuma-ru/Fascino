@@ -2,6 +2,7 @@
   <div>
     <Button
       v-if="isInstalled"
+      id="installBtn"
       type="nml"
       flat
       color="red"
@@ -10,6 +11,7 @@
     >
       アプリをインストール
     </Button>
+    {{ deferredPrompt }}
   </div>
 </template>
 
@@ -32,15 +34,16 @@ export default {
     },
   },
 
-  mounted () {
+  beforeMount () {
     this.captureEvent()
   },
 
   methods: {
-    captureEvent () {
-      window.addEventListener('beforeinstallprompt', (e) => {
+    async captureEvent () {
+      await window.addEventListener('beforeinstallprompt', (e) => {
         // ! Prevent Chrome 67 and earlier from automatically showing the prompt
         e.preventDefault()
+        console.log(e)
         // Stash the event so it can be triggered later.
         this.deferredPrompt = e
       })
@@ -59,7 +62,3 @@ export default {
   },
 }
 </script>
-
-<style>
-
-</style>
