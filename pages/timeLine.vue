@@ -1,5 +1,12 @@
 <template>
   <div>
+    <div id="timeline">
+      <PostCard
+        v-for="data in PostData"
+        :key="data.id"
+        :post-data="data"
+      />
+    </div>
     <Button
       id="post"
       icon-color="text"
@@ -19,10 +26,32 @@ export default {
       isPostModal: false,
     }
   },
+
+  computed: {
+    PostData () {
+      return this.$store.getters['rtdb/PostData']
+    },
+  },
+
+  mounted () {
+    this.$store.dispatch('rtdb/getPostData')
+  },
 }
 </script>
 
 <style>
+#timeline {
+  display: grid;
+  width: min(100vw, 1600px);
+  min-height: 100vh;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 16px 8px 136px 8px;
+
+  grid-template-columns: repeat(auto-fill, min(100%, 480px));
+  justify-content: center;
+}
+
 #post {
   position: fixed;
   z-index: 401;
