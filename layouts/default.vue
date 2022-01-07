@@ -39,7 +39,7 @@ export default {
 <style lang="scss" scoped>
 @font-face {
   font-family: "SmartFontUI";
-  src: url('./assets/font/03SmartFontUI.ttf') format("truetype");
+  src: url('./assets/font/03SmartFontUI.woff') format("woff");
 }
 
 .v-application {
