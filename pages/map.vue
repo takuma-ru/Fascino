@@ -15,7 +15,7 @@
             color="green_lighten"
             icon="mdi-crosshairs-gps"
             type="lg_sq"
-            @click.native="getLocation()"
+            @click.native="getLocation(), active = false"
           />
         </l-control>
         <l-control position="bottomright">
@@ -25,7 +25,7 @@
             color="green_lighten"
             icon="mdi-magnify"
             type="lg_sq"
-            @click.native="active = !active"
+            @click.native="(active === true) ? findSpot() : active = !active"
           />
         </l-control>
         <l-marker
@@ -33,17 +33,6 @@
           :lat-lng="[map.marker.latitude, map.marker.longitude]"
           :icon="spotIcon"
         />
-        <Button
-          v-if="active"
-          id="here"
-          type="lg_sq"
-          flat
-          text-color="text"
-          color="red"
-          @click.native="findSpot"
-        >
-          &nbsp;検索&nbsp;
-        </Button>
         <l-marker
           v-else
           :lat-lng="map.center"
