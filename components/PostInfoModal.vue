@@ -228,10 +228,12 @@ export default {
         // todo - listからPostDataID削除
       }
       setTimeout(this.init, 235)
+      document.documentElement.style.overflowY = 'auto'
     },
     async open () {
       // console.log('open')
       this.isModalAnim = true
+      document.documentElement.style.overflowY = 'hidden'
       await this.$store.dispatch('storage/getFileUrl', this.postData.imgName).then((res) => {
         this.imgURL = res
       })
