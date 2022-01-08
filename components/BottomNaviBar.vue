@@ -173,7 +173,7 @@ export default {
 <style>
 .signInButton {
   position: absolute;
-  top: -44px;
+  top: -45px;
   left: 50%;
   transform: translateX(-50%);
 }

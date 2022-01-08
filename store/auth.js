@@ -51,7 +51,7 @@ export const actions = {
     if (!authUser) {
       console.warn('Can not get \'googleUserData\'')
       commit('updateGoogleUserData')
-      return
+      return 'noData'
     }
 
     const {
@@ -77,16 +77,10 @@ export const actions = {
     })
     if (userData === undefined || userData === null) {
       // 取得できなかった場合
-      await dispatch('firestore/addData', {
-        uid,
-        name: displayName,
-        detail: '',
-        liked: 0,
-        wented: 0,
-        photoURL: claims.picture,
-      }, { root: true })
-      // eslint-disable-next-line no-useless-return
-      return
+      this.$router.push('/signup?step=2')
+      return 'noData'
+    } else {
+      return 'existsData'
     }
   },
 }
