@@ -8,26 +8,22 @@
         :center="map.center"
         @drag="mapDrag($event)"
       >
-        <l-control position="bottomright">
-          <Button
-            id="nowPlace"
-            icon-color="text"
-            color="green_lighten"
-            icon="mdi-crosshairs-gps"
-            type="lg_sq"
-            @click.native="getLocation(), active = false"
-          />
-        </l-control>
-        <l-control position="bottomright">
-          <Button
-            id="spotFind"
-            icon-color="text"
-            color="green_lighten"
-            icon="mdi-magnify"
-            type="lg_sq"
-            @click.native="(active === true) ? findSpot() : active = !active"
-          />
-        </l-control>
+        <Button
+          id="nowPlace"
+          icon-color="text"
+          color="green_lighten"
+          icon="mdi-crosshairs-gps"
+          type="lg_sq"
+          @click.native="getLocation(), active = false"
+        />
+        <Button
+          id="spotFind"
+          icon-color="text"
+          color="green_lighten"
+          icon="mdi-magnify"
+          type="lg_sq"
+          @click.native="(active === true) ? findSpot() : active = !active"
+        />
         <l-marker
           v-if="active"
           :lat-lng="[map.marker.latitude, map.marker.longitude]"
