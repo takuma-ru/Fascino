@@ -33,7 +33,7 @@
           :style="`color: ${$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].sub2_text};`"
         >
           <p>
-            <v-icon size="19px">
+            <v-icon size="16px">
               mdi-map-marker
             </v-icon>
             {{ location }}
@@ -102,7 +102,7 @@ export default {
       })
     },
     openModal () {
-      this.isOpenPostInfoModal = !this.isOpenPostInfoModal
+      this.isOpenPostInfoModal = true
     },
   },
 }
@@ -154,7 +154,7 @@ export default {
       margin-bottom: 0px;
       line-height: 18px;
 
-      font-size: 16px;
+      font-size: 12px;
       font-family: 'SmartFontUI';
     }
   }
