@@ -7,6 +7,7 @@
       <BottomNaviBar
         v-if="$route.path != '/' && $route.path != '/signin' && $route.path != '/signup'"
       />
+      <Snackbars />
     </v-main>
   </v-app>
 </template>
