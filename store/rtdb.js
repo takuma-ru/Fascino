@@ -48,8 +48,8 @@ export const mutations = {
     })
   },
   getimgCoordinatePostData (state, payload) {
-    if (state.imgCoordinatePostData.find(value => value.id !== payload.id)) {
-      console.log('good')
+    if (state.imgCoordinatePostData != null) {
+      state.imgCoordinatePostData = null
     }
     Object.keys(payload).forEach((val, key) => {
       payload[val].id = val
@@ -77,8 +77,8 @@ export const actions = {
         tags,
         imgCoordinate,
         imgName,
-        likesSum: 0,
-        wentSum: 0,
+        likesSum: [],
+        wentSum: [],
         date: new Date().getTime(),
       })
     } catch (e) {
@@ -86,40 +86,52 @@ export const actions = {
     }
   },
   // 修正後でしないとね
-  async likechange ({ state, commit }, { PostDataId }) {
+  async likeChange ({ rootGetters }, { PostDataId }) {
     // const likesumRef = this.$fire.datadase.ref('posts')
+    // const likesumRef = await this.$fire.database.ref('posts/' + PostDataId)
     // const likesumRef = this.$fire.database.ref('posts/' + PostDataId + '/likesSum')
-    const likesumRef = this.$fire.database.ref('posts/' + PostDataId + '/likesSum')
-    likesumRef.once('value', (snapshot) => {
-      console.log(snapshot.val())
-    })
+    const uid = rootGetters['auth/googleUserData'].uid
     try {
-      if (state.like === false) {
-        await likesumRef.transaction((likesSum) => {
-          return likesSum + 1
-        })
-      } else if (state.like === true) {
-        await likesumRef.transaction((likesSum) => {
-          return likesSum - 1
-        })
-      }
+      const likesumRef = await this.$fire.database.ref('posts/' + PostDataId)
+      await likesumRef.transaction((snapshot) => {
+        if (snapshot == null) {
+          return 0
+        }
+        console.log(snapshot)
+        if (snapshot.likesSum) {
+          if (snapshot.likesSum.includes(uid) === true) {
+            delete snapshot.likesSum[snapshot.likesSum.indexOf(uid)]
+          } else {
+            snapshot.likesSum.push(uid)
+          }
+        } else {
+          snapshot.likesSum = [uid]
+        }
+        return snapshot
+      })
     } catch (e) {
       alert(e)
     }
   },
-  async wentchange ({ state, commit }, { PostDataId }) {
-    const wentsumRef = this.$fire.database.ref('posts/' + PostDataId + '/wentSum')
-    console.log(wentsumRef)
+  async wentChange ({ rootGetters }, { PostDataId }) {
+    const uid = rootGetters['auth/googleUserData'].uid
     try {
-      if (state.like === false) {
-        await wentsumRef.transaction((wentSum) => {
-          return wentSum + 1
-        })
-      } else if (state.like === true) {
-        await wentsumRef.transaction((wentSum) => {
-          return wentSum - 1
-        })
-      }
+      const wentsumRef = await this.$fire.database.ref('posts/' + PostDataId)
+      await wentsumRef.transaction((snapshot) => {
+        if (snapshot == null) {
+          return 0
+        }
+        if (snapshot.likesSum) {
+          if (snapshot.wentSum.includes(uid) === true) {
+            delete snapshot.wentSum[snapshot.wentSum.indexOf(uid)]
+          } else {
+            snapshot.wentSum.push(uid)
+          }
+        } else {
+          snapshot.likesSum = [uid]
+        }
+        return snapshot
+      })
     } catch (e) {
       alert(e)
     }
