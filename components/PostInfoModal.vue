@@ -1,5 +1,8 @@
 <template>
-  <section @mousemove="mouseMove">
+  <section
+    style="font-family: 'SmartFontUI';"
+    @mousemove="mouseMove"
+  >
     <div
       v-show="modal"
       :style="`
@@ -42,21 +45,25 @@
         <div id="button">
           <Button
             type="nml_sq"
-            flat
+            :flat="isLike"
+            :outlined="!isLike"
             icon="mdi-heart"
             color="red"
             class="mx-2 my-2"
+            @click.native="isLike = !isLike"
           >
             &nbsp;{{ postData.likesSum }}
           </Button>
           <Button
             type="nml_sq"
-            flat
+            :flat="isWent"
+            :outlined="!isWent"
             icon="mdi-hail"
             color="green"
             class="mx-2 my-2"
+            @click.native="isWent = !isWent"
           >
-            &nbsp;行きたい！ {{ postData.likesSum }}
+            &nbsp;行きたい！ {{ postData.wentSum }}
           </Button>
         </div>
         <div
@@ -70,9 +77,15 @@
             @mouseup="mouseUp"
           />
           <div id="modal_contents">
-            <v-list color="transparent">
-              <v-list-item class="grow px-0">
-                <v-list-item-avatar color="grey darken-3" size="32">
+            <v-list rounded color="transparent">
+              <v-list-item
+                class="grow px-0"
+              >
+                <v-list-item-avatar
+                  color="grey darken-3"
+                  size="32"
+                  @click="$router.push('/account/' + postedUserData.uid)"
+                >
                   <v-img
                     alt=""
                     :src="postedUserData.photoURL"
@@ -81,7 +94,8 @@
 
                 <v-list-item-content>
                   <v-list-item-title
-                    style="font-size: 24px"
+                    style="font-size: 24px;"
+                    @click="$router.push('/account/' + postedUserData.uid)"
                   >
                     {{ postedUserData.name }}
                   </v-list-item-title>
@@ -97,17 +111,17 @@
                 <v-chip
                   v-for="tag in postData.tags"
                   :key="tag"
-                  class="mr-2"
+                  class="mr-2 mb-2"
                   :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'light' : 'dark'].sub_text"
                   v-text="tag"
                 />
               </div>
               <div
-                class="coordinate pt-2"
+                class="coordinate"
                 :style="`color: ${$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].sub2_text};`"
               >
                 <v-icon>mdi-map-marker</v-icon>
-                {{ '東京都江東区青海' }}
+                <span v-text="location" />
               </div>
             </v-list>
           </div>
@@ -138,6 +152,13 @@ export default {
 
   data () {
     return {
+      isLike: false,
+      isWent: false,
+      isLikeInList: false,
+      isWentInList: false,
+
+      location: '',
+
       isTop: true,
       isModalAnim: true,
       isMouseDown: false,
@@ -179,9 +200,6 @@ export default {
 
   mounted () {
     document.querySelector('#bottom_contents').addEventListener('scroll', this.handleScroll)
-    this.getFileUrl(this.postData.imgName).then((res) => {
-      this.imgURL = res
-    })
   },
 
   destroyed () {
@@ -189,16 +207,6 @@ export default {
   },
 
   methods: {
-    // eslint-disable-next-line no-empty-pattern
-    async getFileUrl (name) {
-      const storageRef = this.$fire.storage.ref('postImages').child(`${name}`)
-      try {
-        const url = await storageRef.getDownloadURL()
-        return url
-      } catch (e) {
-        console.error(e.message)
-      }
-    },
     // common
     init () {
       this.isMouseDown = false
@@ -214,11 +222,27 @@ export default {
     },
     close () {
       this.isModalAnim = false
+      if (this.isLike && !this.isLikeInList) { // 新たにいいねした場合
+        // todo - listにPostDataID追加
+      } else if (!this.isLike && this.isLikeInList) { // いいねを取り消した場合
+        // todo - listからPostDataID削除
+      }
       setTimeout(this.init, 235)
     },
-    open () {
+    async open () {
       // console.log('open')
       this.isModalAnim = true
+      await this.$store.dispatch('storage/getFileUrl', this.postData.imgName).then((res) => {
+        this.imgURL = res
+      })
+      await this.$store.dispatch('geolocation/getReverseGeo', {
+        lat: this.postData.imgCoordinate[0],
+        lng: this.postData.imgCoordinate[1],
+      }).then((res) => {
+        this.location = res
+      })
+      const list = [] // todo - ログインしているユーザーがいいねを押した情報listを取得
+      this.isLikeInList = list.includes(this.postData.id) // listにこのPostDataIDがあるか
       this.$nextTick(() => {
         const modal = document.querySelector('#modal')
         const rect = modal.offsetHeight
@@ -308,7 +332,7 @@ export default {
 
   top: 0%;
   left: 50%;
-  z-index: 2;
+  z-index: 402;
 
   transform: translateX(-50%);
 }
@@ -321,7 +345,7 @@ export default {
 
   top: 0%;
   left: 50%;
-  z-index: 3;
+  z-index: 403;
 
   transform: translateX(-50%);
 }
@@ -386,7 +410,7 @@ export default {
 
   bottom: 0%;
   left: 50%;
-  z-index: 3;
+  z-index: 403;
 
   transform: translateX(-50%);
 
@@ -457,7 +481,7 @@ export default {
 
 /**上の飾り */
 #chip {
-  z-index: 3;
+  z-index: 403;
   position: sticky;
   top: 0px;
   height: 4px;

@@ -1,7 +1,6 @@
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
-  target: 'static',
 
   loadingIndicator: {
     name: './assets/loadingIndicator.html',
@@ -46,6 +45,9 @@ export default {
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
     '@nuxtjs/firebase',
+    '@nuxtjs/axios',
+    'nuxt-leaflet',
+    ['nuxt-leaflet', {/* module options */}],
   ],
 
   firebase: {
@@ -77,9 +79,10 @@ export default {
   pwa: {
     manifest: {
       name: 'ファシノ',
-      short_name: 'Fasino',
+      short_name: 'Fascino',
       lang: 'ja',
       description: '地域創生を目的としたゲーム型SNSアプリです。あなたの地域の魅力を発信しましょう！',
+      start_url: '/',
       icons: [
         {
           src: '/icon/fascino_logo_512.png',
@@ -140,12 +143,12 @@ export default {
           text: '#001024',
           sub_text: '#315380',
           sub2_text: '#929292',
-          yellow: '#FDE24F',
+          yellow: '#D6C565',
           blue: '#315380',
           blue_lighten: '#B7C9E4',
           red: '#FF5470',
           red_lighten: '#FE8DA0',
-          green: '#20D0B5',
+          green: '#09B98F',
           green_lighten: '#93DED2',
           gray: '#929292',
           gray_lighten: '#DEDEDE',
