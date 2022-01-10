@@ -40,7 +40,7 @@ export const mutations = {
   },
   updateuserPostData (state, payload) {
     if (state.UserpostData != null) {
-      state.UserpostData = null
+      state.UserpostData = []
     }
     Object.keys(payload).forEach((val, key) => {
       payload[val].id = val
@@ -49,7 +49,7 @@ export const mutations = {
   },
   getimgCoordinatePostData (state, payload) {
     if (state.imgCoordinatePostData != null) {
-      state.imgCoordinatePostData = null
+      state.imgCoordinatePostData = []
     }
     Object.keys(payload).forEach((val, key) => {
       payload[val].id = val
