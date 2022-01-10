@@ -22,7 +22,7 @@
           color="green_lighten"
           icon="mdi-magnify"
           type="lg_sq"
-          @click.native="(active === true) ? findSpot() : active = !active"
+          @click.native="(active === true) ? findSpot() : active = true"
         />
         <l-marker
           v-if="active"
@@ -61,22 +61,22 @@ export default {
     return {
       active: false,
       map: {
-        center: [0, 0],
+        center: [38.9245985, 141.106909],
         zoom: 17,
         marker: {
-          latitude: 0,
-          longitude: 0,
+          latitude: 38.924598,
+          longitude: 141.106909,
         },
         options: {
           attributionControl: false,
           zoomControl: false,
-          zoomSnap: 0.2,
+          zoomSnap: 0.5,
         },
         tileLayer: {
           attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
         },
       },
-      imgCoordinatePostData: null,
+      imgCoordinatePostData: [],
       modal: false,
       icon: L.icon({
         iconUrl: iconImage,
@@ -97,13 +97,16 @@ export default {
   },
   mounted () {
     this.getLocation()
+    this.findSpot()
   },
   methods: {
     getLocation () {
       if (!navigator.geolocation) {
-        alert('現在地を取得できません')
+        this.$store.dispatch('snackbar/addAlertsItem', {
+          type: 'error',
+          msg: 'お使いのブラウザは対応していません',
+        })
       }
-      // eslint-disable-next-line no-console
       navigator.geolocation.getCurrentPosition((position) => {
         this.map.center = [
           position.coords.latitude,
@@ -111,16 +114,28 @@ export default {
         ]
         this.$store.dispatch('rtdb/getimgCoordinatePostData', { coords: this.map.center })
         this.imgCoordinatePostData = this.$store.getters['rtdb/imgCoordinatePostData']
-        // eslint-disable-next-line no-console
-        console.log('成功')
+        this.$store.dispatch('snackbar/addAlertsItem', {
+          type: 'success',
+          msg: '取得しました',
+        })
         this.map.marker.latitude = position.coords.latitude
         this.map.marker.longitude = position.coords.longitude
         this.map.zoom = 17
-      }, console.log('ERROR_get'), this.options)
+      }, this.errorSnackbar, this.options)
+    },
+    errorSnackbar () {
+      this.$store.dispatch('snackbar/addAlertsItem', {
+        type: 'error',
+        msg: '現在地取得に失敗しました',
+      })
     },
     findSpot () {
       this.$store.dispatch('rtdb/getimgCoordinatePostData', { coords: [this.map.marker.latitude, this.map.marker.longitude] })
       this.imgCoordinatePostData = this.$store.getters['rtdb/imgCoordinatePostData']
+      this.$store.dispatch('snackbar/addAlertsItem', {
+        type: 'success',
+        msg: 'スポットを検索します',
+      })
     },
     mapDrag ($event) {
       const center = $event.target.getCenter()
