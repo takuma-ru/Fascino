@@ -4,8 +4,6 @@ export const state = () => ({
   imgCoordinatePostData: [],
   postdataId: '',
   // 今のところ投稿データごとには出来ないだよねー
-  like: false,
-  went: false,
 })
 
 export const getters = {
@@ -50,27 +48,13 @@ export const mutations = {
     })
   },
   getimgCoordinatePostData (state, payload) {
-    if (state.imgCoordinatePostData.find(value => value.id !== payload.id)) {
-      console.log('good')
+    if (state.imgCoordinatePostData != null) {
+      state.imgCoordinatePostData = null
     }
     Object.keys(payload).forEach((val, key) => {
       payload[val].id = val
       state.imgCoordinatePostData.push(payload[val])
     })
-  },
-  likesum (state) {
-    if (state.like === false) {
-      state.like = true
-    } else if (state.like === true) {
-      state.like = false
-    }
-  },
-  wentsum (state) {
-    if (state.went === false) {
-      state.went = true
-    } else if (state.like === true) {
-      state.went = false
-    }
   },
 
 }
@@ -93,8 +77,8 @@ export const actions = {
         tags,
         imgCoordinate,
         imgName,
-        likesSum: 0,
-        wentSum: 0,
+        likesSum: [],
+        wentSum: [],
         date: new Date().getTime(),
       })
     } catch (e) {
@@ -102,39 +86,52 @@ export const actions = {
     }
   },
   // 修正後でしないとね
-  async likechange ({ state, commit }) {
+  async likeChange ({ rootGetters }, { PostDataId }) {
     // const likesumRef = this.$fire.datadase.ref('posts')
-    const likesumRef = this.$fire.database.ref('posts/' + state.postdataId + '/likesSum')
+    // const likesumRef = await this.$fire.database.ref('posts/' + PostDataId)
+    // const likesumRef = this.$fire.database.ref('posts/' + PostDataId + '/likesSum')
+    const uid = rootGetters['auth/googleUserData'].uid
     try {
-      commit('likesum')
-      if (state.like === false) {
-        await likesumRef.transaction((likesSum) => {
-          return likesSum + 1
-        })
-      } else if (state.like === true) {
-        await likesumRef.transaction((likesSum) => {
-          return likesSum - 1
-        })
-      }
-      // commit('likesum')
+      const likesumRef = await this.$fire.database.ref('posts/' + PostDataId)
+      await likesumRef.transaction((snapshot) => {
+        if (snapshot == null) {
+          return 0
+        }
+        console.log(snapshot)
+        if (snapshot.likesSum) {
+          if (snapshot.likesSum.includes(uid) === true) {
+            delete snapshot.likesSum[snapshot.likesSum.indexOf(uid)]
+          } else {
+            snapshot.likesSum.push(uid)
+          }
+        } else {
+          snapshot.likesSum = [uid]
+        }
+        return snapshot
+      })
     } catch (e) {
       alert(e)
     }
   },
-  async wentchange ({ state, commit }) {
-    const wentsumRef = this.$fire.database.ref('posts/' + state.postdataId + '/wentSum')
+  async wentChange ({ rootGetters }, { PostDataId }) {
+    const uid = rootGetters['auth/googleUserData'].uid
     try {
-      commit('wentsum')
-      if (state.like === false) {
-        await wentsumRef.transaction((wentSum) => {
-          return wentSum + 1
-        })
-      } else if (state.like === true) {
-        await wentsumRef.transaction((wentSum) => {
-          return wentSum - 1
-        })
-      }
-      // commit('likesum')
+      const wentsumRef = await this.$fire.database.ref('posts/' + PostDataId)
+      await wentsumRef.transaction((snapshot) => {
+        if (snapshot == null) {
+          return 0
+        }
+        if (snapshot.likesSum) {
+          if (snapshot.wentSum.includes(uid) === true) {
+            delete snapshot.wentSum[snapshot.wentSum.indexOf(uid)]
+          } else {
+            snapshot.wentSum.push(uid)
+          }
+        } else {
+          snapshot.likesSum = [uid]
+        }
+        return snapshot
+      })
     } catch (e) {
       alert(e)
     }
@@ -143,7 +140,7 @@ export const actions = {
     const removePostDataRef = this.$fire.database.ref('posts')
     try {
       await removePostDataRef.child(PostDataId).remove()
-      await removePostDataRef.orderByKey().endAt(state.postdataId).once('value', (snapshot) => {
+      await removePostDataRef.orderByKey().endAt(PostDataId).once('value', (snapshot) => {
         commit('removePostData', snapshot.val())
       })
     } catch (e) {
