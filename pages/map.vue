@@ -22,15 +22,14 @@
           color="green_lighten"
           icon="mdi-magnify"
           type="lg_sq"
-          @click.native="(active === true) ? findSpot() : active = true"
+          @click.native="findSpot()"
         />
         <l-marker
-          v-if="active"
+          :visible="false"
           :lat-lng="[map.marker.latitude, map.marker.longitude]"
           :icon="spotIcon"
         />
         <l-marker
-          v-else
           :lat-lng="map.center"
           :icon="icon"
         />
@@ -64,7 +63,7 @@ export default {
         center: [38.9245985, 141.106909],
         zoom: 17,
         marker: {
-          latitude: 38.924598,
+          latitude: 38.9245985,
           longitude: 141.106909,
         },
         options: {
@@ -95,9 +94,8 @@ export default {
       },
     }
   },
-  mounted () {
+  created () {
     this.getLocation()
-    this.findSpot()
   },
   methods: {
     getLocation () {
@@ -114,28 +112,15 @@ export default {
         ]
         this.$store.dispatch('rtdb/getimgCoordinatePostData', { coords: this.map.center })
         this.imgCoordinatePostData = this.$store.getters['rtdb/imgCoordinatePostData']
-        this.$store.dispatch('snackbar/addAlertsItem', {
-          type: 'success',
-          msg: '取得しました',
-        })
+        console.log('取得成功')
         this.map.marker.latitude = position.coords.latitude
         this.map.marker.longitude = position.coords.longitude
         this.map.zoom = 17
-      }, this.errorSnackbar, this.options)
-    },
-    errorSnackbar () {
-      this.$store.dispatch('snackbar/addAlertsItem', {
-        type: 'error',
-        msg: '現在地取得に失敗しました',
-      })
+      }, console.log('取得失敗'), this.options)
     },
     findSpot () {
       this.$store.dispatch('rtdb/getimgCoordinatePostData', { coords: [this.map.marker.latitude, this.map.marker.longitude] })
       this.imgCoordinatePostData = this.$store.getters['rtdb/imgCoordinatePostData']
-      this.$store.dispatch('snackbar/addAlertsItem', {
-        type: 'success',
-        msg: 'スポットを検索します',
-      })
     },
     mapDrag ($event) {
       const center = $event.target.getCenter()
