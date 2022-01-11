@@ -14,7 +14,7 @@
           color="green_lighten"
           icon="mdi-crosshairs-gps"
           type="lg_sq"
-          @click.native="getLocation(), active = false"
+          @click.native="getLocation()"
         />
         <Button
           id="spotFind"
@@ -22,15 +22,13 @@
           color="green_lighten"
           icon="mdi-magnify"
           type="lg_sq"
-          @click.native="(active === true) ? findSpot() : active = true"
+          @click.native="findSpot()"
         />
         <l-marker
-          v-if="active"
           :lat-lng="[map.marker.latitude, map.marker.longitude]"
-          :icon="spotIcon"
+          :visible="false"
         />
         <l-marker
-          v-else
           :lat-lng="map.center"
           :icon="icon"
         />
@@ -52,20 +50,19 @@
 <script>
 import L from 'leaflet'
 import iconImg from '../static/icon/target.svg'
-import iconImage from '../static/icon/fascino_logo_noback.svg'
+import spotImage from '../static/icon/fascino_logo_noback.svg'
 import SpotMarkerAndModal from '../components/SpotMarkerAndModal.vue'
 export default {
   name: 'Map',
   components: { SpotMarkerAndModal },
   data () {
     return {
-      active: false,
       map: {
-        center: [38.9245985, 141.106909],
+        center: [0, 0],
         zoom: 17,
         marker: {
-          latitude: 38.924598,
-          longitude: 141.106909,
+          latitude: 0,
+          longitude: 0,
         },
         options: {
           attributionControl: false,
@@ -79,7 +76,7 @@ export default {
       imgCoordinatePostData: [],
       modal: false,
       icon: L.icon({
-        iconUrl: iconImage,
+        iconUrl: spotImage,
         iconSize: [48, 48],
         iconAnchor: [24, 24],
       }),
@@ -90,14 +87,13 @@ export default {
       }),
       options: {
         enableHighAccuracy: true,
-        timeout: 1000,
+        timeout: 5000,
         maximumAge: 0,
       },
     }
   },
-  mounted () {
+  created () {
     this.getLocation()
-    this.findSpot()
   },
   methods: {
     getLocation () {
