@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div id="timeline">
+    <div
+      id="timeline"
+      @scroll="onScrollSomething"
+    >
       <PostCard
         v-for="data in PostData"
         :key="data.id"
@@ -35,6 +38,21 @@ export default {
 
   mounted () {
     this.$store.dispatch('rtdb/getPostData')
+  },
+
+  methods: {
+    onScrollSomething (event) {
+      console.log('asd')
+      if (this.isFullScrolled(event)) {
+        console.log('aaaaaaa')
+      }
+    },
+    // javascript版、vue.js（typescript）版と同じため略
+    isFullScrolled (event) {
+      const adjustmentValue = 60
+      const positionWithAdjustmentValue = event.target.clientHeight + event.target.scrollTop + adjustmentValue
+      return positionWithAdjustmentValue >= event.target.scrollHeight
+    },
   },
 }
 </script>
