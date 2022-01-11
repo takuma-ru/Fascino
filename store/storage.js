@@ -41,4 +41,14 @@ export const actions = {
       console.error(e.message)
     }
   },
+
+  // 画像を削除
+  async removeImgFile ({ commit }, imgName) {
+    const storageRef = this.$fire.storage.ref('postImages').child(`${imgName}`)
+    try {
+      await storageRef.delete()
+    } catch (e) {
+      console.error(e.message)
+    }
+  },
 }
