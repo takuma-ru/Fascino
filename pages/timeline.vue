@@ -4,8 +4,8 @@
       <div>
         <v-img
           :src="require(`../assets/fascino_title_logo${$vuetify.theme.dark ? '_dark' : ''}.svg`)"
-          class="mx-auto mt-2"
-          style="width: 40px; height: auto;"
+          class="mx-auto"
+          style="width: 40px; height: auto; margin-top: 8px"
         />
       </div>
       <div
