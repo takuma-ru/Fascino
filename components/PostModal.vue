@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 <template>
   <div class="postmodal">
     <swipemodal
@@ -254,9 +255,6 @@
                     :center="[map.marker.latitude, map.marker.longitude]"
                     :options="map.options"
                   >
-                    <l-control>
-                      {{ [map.marker.latitude, map.marker.longitude] }}
-                    </l-control>
                     <l-tile-layer
                       style="pointer-events: none;"
                       :url="map.tileLayer.url"
@@ -349,31 +347,25 @@
                       :lat-lng="[map.marker.latitude, map.marker.longitude]"
                       :icon="icon"
                     />
-                    <l-control position="topleft">
-                      {{ map.marker }}
-                      {{ map.zoom }}
-                    </l-control>
-                    <l-control position="bottomright">
-                      <Button
-                        id="nowPlace"
-                        flat
-                        icon="mdi-crosshairs-gps"
-                        type="lg_sq"
-                        color="blue"
-                        icon-color="text"
-                        @click.native="getLocation()"
-                      />
-                    </l-control>
-                    <l-control position="topright">
-                      <Button
-                        type="nml_sq"
-                        flat
-                        icon="mdi-close"
-                        :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_middle"
-                        class="mx-2 my-2"
-                        @click.native="mapDialog = false"
-                      />
-                    </l-control>
+
+                    <Button
+                      id="nowPlace"
+                      flat
+                      icon="mdi-crosshairs-gps"
+                      type="lg_sq"
+                      color="blue"
+                      icon-color="text"
+                      @click.native="getLocation()"
+                    />
+                    <Button
+                      id="close"
+                      type="lg_sq"
+                      flat
+                      icon="mdi-close"
+                      :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_middle"
+                      class="mx-2 my-2"
+                      @click.native="mapDialog = false"
+                    />
                   </l-map>
                 </v-dialog>
               </v-row>
@@ -425,15 +417,15 @@ export default {
   data () {
     return {
       map: {
-        center: [0, 0],
+        center: [38.9245985, 141.106909],
         zoom: 17,
         marker: {
-          latitude: 0,
-          longitude: 0,
+          latitude: 38.9245985,
+          longitude: 141.106909,
         },
         options: {
           zoomControl: false,
-          zoomSnap: 0.2,
+          zoomSnap: 0.5,
         },
         tileLayer: {
           attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -461,7 +453,7 @@ export default {
         iconAnchor: [32, 32],
       }),
       options: {
-        timeout: 1000,
+        timeout: 5000,
         maximumAge: 0,
         enableHighAccuracy: true,
       },
@@ -515,9 +507,6 @@ export default {
       if (new_modal) { this.el = 1 }
     },
   },
-  mounted () {
-    this.getLocation()
-  },
   methods: {
     clear () {
       this.Detail = ''
@@ -531,7 +520,28 @@ export default {
     },
     submit () {
       this.$v.$touch()
-      if (this.$v.$invalid === false) { this.$store.dispatch('rtdb/updataPostData', { detail: this.Detail, tags: this.Tag, imgCoordinate: [this.map.marker.latitude, this.map.marker.longitude], img: this.image }).then(alert('投稿しました！'), this.closeModal()).catch((e) => { return alert(e) }) }
+      if (this.$v.$invalid === false) {
+        this.$store
+          .dispatch('rtdb/updataPostData', {
+            detail: this.Detail,
+            tags: this.Tag,
+            imgCoordinate: [
+              this.map.marker.latitude,
+              this.map.marker.longitude,
+            ],
+            img: this.image,
+          })
+          .then(this.$store.dispatch('snackbar/addAlertsItem', {
+            type: 'success',
+            msg: '投稿しました！',
+          }), this.closeModal())
+          .catch((e) => {
+            return this.$store.dispatch('snackbar/addAlertsItem', {
+              type: 'error',
+              msg: e,
+            })
+          })
+      }
     },
     nextStep () {
       if (this.isActive) { this.imgErrMessage = '選択必須' } else { this.el = 2 }
@@ -545,20 +555,21 @@ export default {
     },
     getLocation () {
       if (!navigator.geolocation) {
-        alert('現在地を取得できません')
+        this.$store.dispatch('snackbar/addAlertsItem', {
+          type: 'error',
+          msg: 'お使いのブラウザは対応していません',
+        })
       }
-      // eslint-disable-next-line no-console
       navigator.geolocation.getCurrentPosition((position) => {
         this.map.center = [
           position.coords.latitude,
           position.coords.longitude,
         ]
-        // eslint-disable-next-line no-console
-        console.log('成功')
+        console.log('現在地取得成功')
         this.map.marker.latitude = position.coords.latitude
         this.map.marker.longitude = position.coords.longitude
         this.map.zoom = 17
-      }, console.log('ERROR_get'), this.options)
+      }, console.log('現在地取得失敗'), this.options)
     },
     mapDrag ($event) {
       const center = $event.target.getCenter()
@@ -601,18 +612,23 @@ export default {
   transform: translate(-50%);
 }
 #here {
-  position: absolute;
+  position: fixed;
   z-index: 500;
   left: 50%;
-  bottom: -4px;
-  transform: translate(-50%, -50%);
+  bottom: 24px;
+  transform: translate(-50%, 0);
 
 }
-#thisPlace {
-  position: absolute;
+#nowPlace {
+  position: fixed;
   z-index: 402;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  bottom: 24px;
+  right: 16px;
+}
+#close {
+  position: fixed;
+  z-index: 402;
+  top: 24px;
+  right: 16px;
 }
 </style>
