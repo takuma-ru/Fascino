@@ -32,11 +32,21 @@ export const actions = {
   },
 
   // storageに保存されている画像のURLを取得する
-  async getFileUrl ({ commit }, imgNmae) {
-    const storageRef = this.$fire.storage.ref('postImages').child(`${imgNmae}`)
+  async getFileUrl ({ commit }, imgName) {
+    const storageRef = this.$fire.storage.ref('postImages').child(`${imgName}`)
     try {
       const url = await storageRef.getDownloadURL()
       return url
+    } catch (e) {
+      console.error(e.message)
+    }
+  },
+
+  // 画像を削除
+  async removeImgFile ({ commit }, imgName) {
+    const storageRef = this.$fire.storage.ref('postImages').child(`${imgName}`)
+    try {
+      await storageRef.delete()
     } catch (e) {
       console.error(e.message)
     }
