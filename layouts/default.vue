@@ -5,8 +5,9 @@
     <v-main>
       <Nuxt />
       <BottomNaviBar
-        v-if="$route.path != '/'"
+        v-if="$route.path != '/' && $route.path != '/signin' && $route.path != '/signup'"
       />
+      <Snackbars />
     </v-main>
   </v-app>
 </template>
@@ -39,7 +40,7 @@ export default {
 <style lang="scss" scoped>
 @font-face {
   font-family: "SmartFontUI";
-  src: url('./assets/font/03SmartFontUI.ttf') format("truetype");
+  src: url('./assets/font/03SmartFontUI.woff') format("woff");
 }
 
 .v-application {
