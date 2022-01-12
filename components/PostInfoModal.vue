@@ -228,19 +228,14 @@ export default {
         // todo - listからPostDataID削除
       }
       setTimeout(this.init, 235)
+      document.documentElement.style.overflowY = 'auto'
     },
     async open () {
       // console.log('open')
       this.isModalAnim = true
-      await this.$store.dispatch('storage/getFileUrl', this.postData.imgName).then((res) => {
-        this.imgURL = res
-      })
-      await this.$store.dispatch('geolocation/getReverseGeo', {
-        lat: this.postData.imgCoordinate[0],
-        lng: this.postData.imgCoordinate[1],
-      }).then((res) => {
-        this.location = res
-      })
+      document.documentElement.style.overflowY = 'hidden'
+      document.body.classList.add('modal-open')
+      this.$emit('change-modal', true)
       const list = [] // todo - ログインしているユーザーがいいねを押した情報listを取得
       this.isLikeInList = list.includes(this.postData.id) // listにこのPostDataIDがあるか
       this.$nextTick(() => {
@@ -248,8 +243,15 @@ export default {
         const rect = modal.offsetHeight
         this.modalHeight = rect
       })
-      document.body.classList.add('modal-open')
-      this.$emit('change-modal', true)
+      await this.$store.dispatch('geolocation/getReverseGeo', {
+        lat: this.postData.imgCoordinate[0],
+        lng: this.postData.imgCoordinate[1],
+      }).then((res) => {
+        this.location = res
+      })
+      await this.$store.dispatch('storage/getFileUrl', this.postData.imgName).then((res) => {
+        this.imgURL = res
+      })
     },
     handleScroll () {
       let rect = 0
