@@ -40,7 +40,7 @@ export const mutations = {
   },
   updateuserPostData (state, payload) {
     if (state.UserpostData != null) {
-      state.UserpostData = null
+      state.UserpostData = []
     }
     Object.keys(payload).forEach((val, key) => {
       payload[val].id = val
@@ -135,12 +135,13 @@ export const actions = {
       alert(e)
     }
   },
-  async removePostData ({ state, commit }, { PostDataId }) {
+  async removePostData ({ state, commit, dispatch }, { PostDataId, imgName }) {
     const removePostDataRef = this.$fire.database.ref('posts')
     try {
       await removePostDataRef.child(PostDataId).remove()
       await removePostDataRef.orderByKey().endAt(PostDataId).once('value', (snapshot) => {
         commit('removePostData', snapshot.val())
+        dispatch('storage/removeImgFile', imgName)
       })
     } catch (e) {
       alert(e)
