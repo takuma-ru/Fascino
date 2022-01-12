@@ -25,8 +25,8 @@
           @click.native="findSpot()"
         />
         <l-marker
-          :lat-lng="[map.marker.latitude, map.marker.longitude]"
           :visible="false"
+          :lat-lng="[map.marker.latitude, map.marker.longitude]"
         />
         <l-marker
           :lat-lng="map.center"
@@ -61,8 +61,8 @@ export default {
         center: [0, 0],
         zoom: 17,
         marker: {
-          latitude: 0,
-          longitude: 0,
+          latitude: 38.9245985,
+          longitude: 141.106909,
         },
         options: {
           attributionControl: false,
@@ -110,28 +110,15 @@ export default {
         ]
         this.$store.dispatch('rtdb/getimgCoordinatePostData', { coords: this.map.center })
         this.imgCoordinatePostData = this.$store.getters['rtdb/imgCoordinatePostData']
-        this.$store.dispatch('snackbar/addAlertsItem', {
-          type: 'success',
-          msg: '取得しました',
-        })
+        console.log('取得成功')
         this.map.marker.latitude = position.coords.latitude
         this.map.marker.longitude = position.coords.longitude
         this.map.zoom = 17
-      }, this.errorSnackbar, this.options)
-    },
-    errorSnackbar () {
-      this.$store.dispatch('snackbar/addAlertsItem', {
-        type: 'error',
-        msg: '現在地取得に失敗しました',
-      })
+      }, console.log('取得失敗'), this.options)
     },
     findSpot () {
       this.$store.dispatch('rtdb/getimgCoordinatePostData', { coords: [this.map.marker.latitude, this.map.marker.longitude] })
       this.imgCoordinatePostData = this.$store.getters['rtdb/imgCoordinatePostData']
-      this.$store.dispatch('snackbar/addAlertsItem', {
-        type: 'success',
-        msg: 'スポットを検索します',
-      })
     },
     mapDrag ($event) {
       const center = $event.target.getCenter()
