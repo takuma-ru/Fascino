@@ -56,6 +56,7 @@ export const mutations = {
       state.imgCoordinatePostData.push(payload[val])
     })
   },
+
 }
 
 export const actions = {
