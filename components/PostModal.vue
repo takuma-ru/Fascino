@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 <template>
   <div class="postmodal">
     <swipemodal
@@ -115,7 +114,6 @@
                   prepend-icon=""
                 >
                   <template #append-outer>
-                    <!-- 画像を再選択しなかった場合のエラー処理；； -->
                     <Button
                       flat
                       style="margin: auto;
