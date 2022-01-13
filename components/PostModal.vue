@@ -109,7 +109,7 @@
                   ref="refImage"
                   v-model="image"
                   class="fileInput2"
-                  accept="image/png, image/jpeg, image/jpg"
+                  accept=".png, .jpeg, .jpg"
                   hide-input
                   prepend-icon=""
                 >
@@ -131,9 +131,7 @@
                   </template>
                 </v-file-input>
               </v-row>
-              <v-row
-                style="color: #FF5470; position: absolute; left: 42%; font-size: 24px; text-decoration:underline; text-decoration-color:#FF5470;"
-              >
+              <v-row id="selectMessage">
                 {{ imgErrMessage }}
               </v-row>
             </v-container>
@@ -253,23 +251,21 @@
                 <v-col
                   v-else
                 >
-                  <!-- なぜかマーカーが表示されない；； -->
                   <l-map
                     class="rounded-xl"
                     style="height: 30vh; pointer-events: none;"
                     :zoom="zoom"
-                    :center="NowPlace"
+                    :center="postPlace"
                     :options="{zoomControl: false}"
                   >
                     <l-tile-layer
                       :url="mapUrl"
                       :attribution="attribution"
-                    >
-                      <l-marker
-                        :lat-lng="NowPlace"
-                        :icon="icon"
-                      />
-                    </l-tile-layer>
+                    />
+                    <l-marker
+                      :lat-lng="postPlace"
+                      :icon="icon"
+                    />
                   </l-map>
                   <Button
                     flat
@@ -293,7 +289,7 @@
                   <l-map
                     id="selectMap"
                     :zoom.sync="zoom"
-                    :center="NowPlace"
+                    :center="postPlace"
                     :options="{zoomControl: false}"
                   >
                     <l-tile-layer
@@ -433,10 +429,9 @@ export default {
       image: null,
       imgErrMessage: '',
       zoom: 17,
-      mapUrl: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-      NowPlace: [0, 0],
-      postPlace: new Array(2), // 投稿位置
+      mapUrl: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
+      attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
+      postPlace: [0, 0], // 投稿位置
       icon: L.icon({
         iconUrl: iconImg,
         iconSize: [64, 64],
@@ -503,7 +498,7 @@ export default {
     },
   },
   mounted () {
-    this.watchLocation()
+    this.getLocation()
   },
   methods: {
     clear () {
@@ -540,25 +535,19 @@ export default {
     getLocation () {
       this.zoom = 17
       if (!navigator.geolocation) {
-        alert('ERROR')
+        // eslint-disable-next-line no-console
+        console.error('ERROR getLocation')
       }
-
       navigator.geolocation.getCurrentPosition(this.success, this.error, this.options)
-    },
-    watchLocation () {
-      if (!navigator.geolocation) {
-        alert('ERROR_watchLocation')
-      }
-      this.ID = navigator.geolocation.watchPosition(this.success, this.error, this.options)
     },
     success (position) {
       const coords = position.coords
-      this.NowPlace = [coords.latitude, coords.longitude]
       this.postPlace = [coords.latitude, coords.longitude]
     },
 
     error () {
-      alert('ERROR')
+      // eslint-disable-next-line no-console
+      console.error('ERROR')
     },
   },
 }
@@ -571,6 +560,17 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+#selectMessage {
+  color: #FF5470;
+  position: absolute;
+  font-size: 24px;
+  text-decoration:underline;
+  text-decoration-color:#FF5470;
+  z-index: 402;
+  left: 50%;
+  bottom: 0%;
+  transform: translate(-34%, -24%);
+}
 .selectImg {
   color: #F0F0F0;
   font-size: 24px;
@@ -579,11 +579,6 @@ export default {
   left: calc(50% + 5px);
   transform: translate(-50%);
 }
-// #spotImg {
-//   position: absolute;
-//   left: 50%;
-//   transform: translate(-50%, -50%);
-// }
 #selectMap {
   position: absolute;
   z-index: 0;
