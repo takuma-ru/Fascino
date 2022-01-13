@@ -58,7 +58,7 @@ export default {
   data () {
     return {
       map: {
-        center: [0, 0],
+        center: [38.9245985, 141.106909],
         zoom: 17,
         marker: {
           latitude: 38.9245985,
