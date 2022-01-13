@@ -77,7 +77,7 @@
                   accept=".png, .jpeg, .jpg"
                   hide-input
                   prepend-icon=""
-                  @change="active"
+                  @change="isActive = !isActive"
                 >
                   <template #append-outer>
                     <v-btn
@@ -109,12 +109,11 @@
                   ref="refImage"
                   v-model="image"
                   class="fileInput2"
-                  accept="image/png, image/jpeg, image/jpg"
+                  accept=".png, .jpeg, .jpg"
                   hide-input
                   prepend-icon=""
                 >
                   <template #append-outer>
-                    <!-- 画像を再選択しなかった場合のエラー処理；； -->
                     <Button
                       flat
                       style="margin: auto;
@@ -131,9 +130,7 @@
                   </template>
                 </v-file-input>
               </v-row>
-              <v-row
-                style="color: #FF5470; position: absolute; left: 42%; font-size: 24px; text-decoration:underline; text-decoration-color:#FF5470;"
-              >
+              <v-row id="selectMessage">
                 {{ imgErrMessage }}
               </v-row>
             </v-container>
@@ -163,7 +160,6 @@
                 >
                   <Button
                     flat
-                    disabled
                     type="sml"
                     color="green"
                     @click.native="submit()"
@@ -233,15 +229,12 @@
                   <v-text-field
                     persistent-hint
                     hint="タップして地図から選択してください！"
-                    auto-grow
                     clearable
                     :error-messages="postPlaceError"
                     readonly
                     color="green"
                     outlined
-                    @click="mapDialog=true, getLocation()"
-                    @input="$v.postPlace.$touch()"
-                    @blur="$v.postPlace.$touch()"
+                    @click="openModal($event), getLocation()"
                   >
                     <template #label>
                       <p style="font-size: 20px;">
@@ -253,23 +246,23 @@
                 <v-col
                   v-else
                 >
-                  <!-- なぜかマーカーが表示されない；； -->
                   <l-map
                     class="rounded-xl"
                     style="height: 30vh; pointer-events: none;"
-                    :zoom="zoom"
-                    :center="NowPlace"
-                    :options="{zoomControl: false}"
+                    :zoom="map.zoom"
+                    :center="[map.marker.latitude, map.marker.longitude]"
+                    :options="map.options"
                   >
                     <l-tile-layer
-                      :url="mapUrl"
-                      :attribution="attribution"
-                    >
-                      <l-marker
-                        :lat-lng="NowPlace"
-                        :icon="icon"
-                      />
-                    </l-tile-layer>
+                      style="pointer-events: none;"
+                      :url="map.tileLayer.url"
+                      :attribution="map.tileLayer.attribution"
+                    />
+                    <l-marker
+                      style="pointer-events: none;"
+                      :lat-lng="[map.marker.latitude, map.marker.longitude]"
+                      :icon="icon"
+                    />
                   </l-map>
                   <Button
                     flat
@@ -277,7 +270,7 @@
                     class="mt-2"
                     color="green"
                     text-color="text"
-                    @click.native="mapDialog=true, getLocation(), active2()"
+                    @click.native="openModal($event), getLocation(), isActive2 = !isActive2"
                   >
                     選びなおす
                   </Button>
@@ -291,21 +284,16 @@
                   transition="dialog-top-transition"
                 >
                   <l-map
-                    id="selectMap"
-                    :zoom.sync="zoom"
-                    :center="NowPlace"
-                    :options="{zoomControl: false}"
+                    ref="lmap"
+                    :zoom.sync="map.zoom"
+                    :center="map.center"
+                    :options="map.options"
+                    @drag="mapDrag($event)"
                   >
                     <l-tile-layer
-                      :url="mapUrl"
-                      :attribution="attribution"
+                      :url="map.tileLayer.url"
+                      :attribution="map.tileLayer.attribution"
                     />
-                    <v-icon
-                      id="thisPlace"
-                      size="64px"
-                    >
-                      mdi-target
-                    </v-icon>
                     <Button
                       id="here"
                       type="lg_sq"
@@ -346,35 +334,36 @@
                             type="nml"
                             color="green"
                             text-color="text"
-                            @click.native="mapDialog=false, active2()"
+                            @click.native="mapDialog=false, isActive2 = !isActive2"
                           >
                             &nbsp;はい&nbsp;
                           </Button>
                         </v-card-actions>
                       </v-card>
                     </v-dialog>
+                    <l-marker
+                      :lat-lng="[map.marker.latitude, map.marker.longitude]"
+                      :icon="icon"
+                    />
 
-                    <l-control position="bottomright">
-                      <Button
-                        id="nowPlace"
-                        flat
-                        icon="mdi-crosshairs-gps"
-                        type="lg_sq"
-                        color="blue"
-                        icon-color="text"
-                        @click.native="getLocation"
-                      />
-                    </l-control>
-                    <l-control>
-                      <Button
-                        type="nml_sq"
-                        flat
-                        icon="mdi-close"
-                        :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_middle"
-                        class="mx-2 my-2"
-                        @click.native="mapDialog = false"
-                      />
-                    </l-control>
+                    <Button
+                      id="nowPlace"
+                      flat
+                      icon="mdi-crosshairs-gps"
+                      type="lg_sq"
+                      color="blue"
+                      icon-color="text"
+                      @click.native="getLocation()"
+                    />
+                    <Button
+                      id="close"
+                      type="lg_sq"
+                      flat
+                      icon="mdi-close"
+                      :color="$vuetify.theme.themes[$vuetify.theme.dark ? 'dark' : 'light'].background_middle"
+                      class="mx-2 my-2"
+                      @click.native="mapDialog = false"
+                    />
                   </l-map>
                 </v-dialog>
               </v-row>
@@ -395,6 +384,9 @@ import iconImg from '../static/icon/target.svg'
 import spoticonImg from '../static/icon/map-marker-star.svg'
 import 'nekoo_vue_swipemodal/dist/swipemodal.css'
 
+const spotValidators = (value) => {
+  return value === false
+}
 export default {
   name: 'PostModal',
 
@@ -407,7 +399,7 @@ export default {
   validations: {
     Detail: { required, maxLength: maxLength(140) },
     Tag: { required },
-    postPlace: { required },
+    isActive2: { spotValidators },
     image: { required },
   },
   model: {
@@ -422,6 +414,22 @@ export default {
   },
   data () {
     return {
+      map: {
+        center: [38.9245985, 141.106909],
+        zoom: 17,
+        marker: {
+          latitude: 38.9245985,
+          longitude: 141.106909,
+        },
+        options: {
+          zoomControl: false,
+          zoomSnap: 0.5,
+        },
+        tileLayer: {
+          attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
+          url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        },
+      },
       Detail: '', // 投稿文
       thisPlace: false,
       mapDialog: false,
@@ -432,11 +440,6 @@ export default {
       el: 1,
       image: null,
       imgErrMessage: '',
-      zoom: 17,
-      mapUrl: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-      NowPlace: [0, 0],
-      postPlace: new Array(2), // 投稿位置
       icon: L.icon({
         iconUrl: iconImg,
         iconSize: [64, 64],
@@ -448,9 +451,9 @@ export default {
         iconAnchor: [32, 32],
       }),
       options: {
-        enableHighAccuracy: false,
-        timeout: 20000,
+        timeout: 5000,
         maximumAge: 0,
+        enableHighAccuracy: true,
       },
     }
   },
@@ -482,8 +485,8 @@ export default {
     },
     postPlaceError () {
       const errors = []
-      if (!this.$v.postPlace.$dirty) { return errors }
-      !this.$v.postPlace.required && errors.push('選択必須')
+      if (!this.$v.isActive2.$dirty) { return errors }
+      !this.$v.isActive2.required && errors.push('選択必須')
       return errors
     },
   },
@@ -502,14 +505,11 @@ export default {
       if (new_modal) { this.el = 1 }
     },
   },
-  mounted () {
-    this.watchLocation()
-  },
   methods: {
     clear () {
       this.Detail = ''
       this.Tag = []
-      this.postPlace = []
+      this.center = []
       this.image = null
       this.$v.$reset()
       this.isActive = true
@@ -518,8 +518,28 @@ export default {
     },
     submit () {
       this.$v.$touch()
-      this.$store.dispatch('rtdb/updataPostData', { detail: this.Detail, tags: this.Tag, imgCoordinate: this.postPlace, img: this.image })
-      if (!this.$v.$invalid) { this.closeModal() }
+      if (this.$v.$invalid === false) {
+        this.$store
+          .dispatch('rtdb/updataPostData', {
+            detail: this.Detail,
+            tags: this.Tag,
+            imgCoordinate: [
+              this.map.marker.latitude,
+              this.map.marker.longitude,
+            ],
+            img: this.image,
+          })
+          .then(this.$store.dispatch('snackbar/addAlertsItem', {
+            type: 'success',
+            msg: '投稿しました！',
+          }), this.closeModal())
+          .catch((e) => {
+            return this.$store.dispatch('snackbar/addAlertsItem', {
+              type: 'error',
+              msg: e,
+            })
+          })
+      }
     },
     nextStep () {
       if (this.isActive) { this.imgErrMessage = '選択必須' } else { this.el = 2 }
@@ -531,34 +551,33 @@ export default {
     imgInput () {
       this.$refs.refImage.$el.querySelector('input').click()
     },
-    active () {
-      this.isActive = !this.isActive
-    },
-    active2 () {
-      this.isActive2 = !this.isActive2
-    },
     getLocation () {
-      this.zoom = 17
       if (!navigator.geolocation) {
-        alert('ERROR')
+        this.$store.dispatch('snackbar/addAlertsItem', {
+          type: 'error',
+          msg: 'お使いのブラウザは対応していません',
+        })
       }
-
-      navigator.geolocation.getCurrentPosition(this.success, this.error, this.options)
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.map.center = [
+          position.coords.latitude,
+          position.coords.longitude,
+        ]
+        console.log('現在地取得成功')
+        this.map.marker.latitude = position.coords.latitude
+        this.map.marker.longitude = position.coords.longitude
+        this.map.zoom = 17
+      }, console.log('現在地取得失敗'), this.options)
     },
-    watchLocation () {
-      if (!navigator.geolocation) {
-        alert('ERROR_watchLocation')
-      }
-      this.ID = navigator.geolocation.watchPosition(this.success, this.error, this.options)
+    mapDrag ($event) {
+      const center = $event.target.getCenter()
+      this.map.marker.latitude = center.lat
+      this.map.marker.longitude = center.lng
     },
-    success (position) {
-      const coords = position.coords
-      this.NowPlace = [coords.latitude, coords.longitude]
-      this.postPlace = [coords.latitude, coords.longitude]
-    },
-
-    error () {
-      alert('ERROR')
+    async openModal () {
+      this.mapDialog = true
+      await this.$nextTick()
+      this.$refs.lmap.mapObject.invalidateSize()
     },
   },
 }
@@ -571,6 +590,17 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+#selectMessage {
+  color: #FF5470;
+  position: absolute;
+  font-size: 24px;
+  text-decoration:underline;
+  text-decoration-color:#FF5470;
+  z-index: 402;
+  left: 50%;
+  bottom: 0%;
+  transform: translate(-34%, -24%);
+}
 .selectImg {
   color: #F0F0F0;
   font-size: 24px;
@@ -579,28 +609,24 @@ export default {
   left: calc(50% + 5px);
   transform: translate(-50%);
 }
-// #spotImg {
-//   position: absolute;
-//   left: 50%;
-//   transform: translate(-50%, -50%);
-// }
-#selectMap {
-  position: absolute;
-  z-index: 0;
-}
 #here {
-  position: absolute;
+  position: fixed;
   z-index: 500;
   left: 50%;
-  bottom: -4px;
-  transform: translate(-50%, -50%);
+  bottom: 24px;
+  transform: translate(-50%, 0);
 
 }
-#thisPlace {
-  position: absolute;
+#nowPlace {
+  position: fixed;
   z-index: 402;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  bottom: 24px;
+  right: 16px;
+}
+#close {
+  position: fixed;
+  z-index: 402;
+  top: 24px;
+  right: 16px;
 }
 </style>
