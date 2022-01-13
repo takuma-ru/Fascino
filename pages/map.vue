@@ -110,10 +110,12 @@ export default {
         ]
         this.$store.dispatch('rtdb/getimgCoordinatePostData', { coords: this.map.center })
         this.imgCoordinatePostData = this.$store.getters['rtdb/imgCoordinatePostData']
+        // eslint-disable-next-line no-console
         console.log('取得成功')
         this.map.marker.latitude = position.coords.latitude
         this.map.marker.longitude = position.coords.longitude
         this.map.zoom = 17
+      // eslint-disable-next-line no-console
       }, console.log('取得失敗'), this.options)
     },
     findSpot () {
