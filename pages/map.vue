@@ -160,6 +160,5 @@ export default {
   left: 50%;
   bottom: calc(4% + 8px);
   transform: translate(-50%, -50%);
-
 }
 </style>
