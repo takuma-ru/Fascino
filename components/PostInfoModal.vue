@@ -257,11 +257,13 @@ export default {
       document.body.classList.remove('modal-open')
       this.$emit('change-modal', false)
     },
+
     close () {
       this.isModalAnim = false
       setTimeout(this.init, 235)
       document.documentElement.style.overflowY = 'auto'
     },
+
     async open () {
       this.isModalAnim = true
       document.documentElement.style.overflowY = 'hidden'
@@ -285,6 +287,7 @@ export default {
         this.imgURL = res
       })
     },
+
     handleScroll () {
       let rect = 0
       this.$nextTick(() => {
@@ -306,6 +309,7 @@ export default {
     touchStart (e) {
       this.startY = e.touches[0].pageY
     },
+
     touchMove (e) {
       if (this.isTop) {
         this.bottomMove = -1 * (e.touches[0].pageY - this.startY)
@@ -317,6 +321,7 @@ export default {
         // console.log('move:' + this.bottomMoveS + '  height:' + window.outerHeight)
       }
     },
+
     touchEnd (e) {
       if (this.bottomMove < -1 * window.outerHeight / 8) {
         this.close()
@@ -332,6 +337,7 @@ export default {
       this.isMouseDown = true
       // console.log('mouseDown')
     },
+
     mouseMove (e) {
       if (this.isMouseDown) {
         this.bottomMove = -1 * (e.pageY - this.startY)
@@ -342,6 +348,7 @@ export default {
         }
       }
     },
+
     mouseUp (e) {
       if (this.bottomMove < -1 * window.outerHeight / 8) {
         this.close()
