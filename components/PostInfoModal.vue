@@ -243,7 +243,6 @@ export default {
 
     // common
     init () {
-      this.isModalAnim = false
       this.isMouseDown = false
       this.topY = null
       this.modal_height = 0
@@ -255,6 +254,7 @@ export default {
       this.$emit('change-modal', false)
     },
     close () {
+      this.isModalAnim = false
       setTimeout(this.init, 235)
       document.documentElement.style.overflowY = 'auto'
     },
