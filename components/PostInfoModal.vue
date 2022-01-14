@@ -1,6 +1,9 @@
 <template>
   <section
-    style="font-family: 'SmartFontUI';"
+    style="
+      font-family: 'SmartFontUI';
+      cursor: default;
+    "
     @mousemove="mouseMove"
   >
     <div
@@ -45,25 +48,25 @@
         <div id="button">
           <Button
             type="nml_sq"
-            :flat="isLike"
-            :outlined="!isLike"
+            :flat="isLikeInList"
+            :outlined="!isLikeInList"
             icon="mdi-heart"
             color="red"
             class="mx-2 my-2"
-            @click.native="isLike = !isLike"
+            @click.native="pushLike() "
           >
-            &nbsp;{{ postData.likesSum }}
+            &nbsp;{{ likeList ? likeList.length : 0 }}
           </Button>
           <Button
             type="nml_sq"
-            :flat="isWent"
-            :outlined="!isWent"
+            :flat="isWentInList"
+            :outlined="!isWentInList"
             icon="mdi-hail"
             color="green"
             class="mx-2 my-2"
-            @click.native="isWent = !isWent"
+            @click.native="pushWent()"
           >
-            &nbsp;行きたい！ {{ postData.wentSum }}
+            &nbsp;行きたい！ {{ wentList ? wentList.length : 0 }}
           </Button>
         </div>
         <div
@@ -80,11 +83,12 @@
             <v-list rounded color="transparent">
               <v-list-item
                 class="grow px-0"
+                style="cursor: pointer;"
               >
                 <v-list-item-avatar
                   color="grey darken-3"
                   size="32"
-                  @click="$router.push('/account/' + postedUserData.uid)"
+                  @click="$router.push('/account/' + postData.uid)"
                 >
                   <v-img
                     alt=""
@@ -95,7 +99,7 @@
                 <v-list-item-content>
                   <v-list-item-title
                     style="font-size: 24px;"
-                    @click="$router.push('/account/' + postedUserData.uid)"
+                    @click="$router.push('/account/' + postData.uid)"
                   >
                     {{ postedUserData.name }}
                   </v-list-item-title>
@@ -152,11 +156,13 @@ export default {
 
   data () {
     return {
+      likeList: [],
+      wentList: [],
       isLike: false,
       isWent: false,
       isLikeInList: false,
       isWentInList: false,
-
+      uid: '',
       location: '',
 
       isTop: true,
@@ -207,6 +213,38 @@ export default {
   },
 
   methods: {
+    async getThispostData () {
+      const dbRef = this.$fire.database.ref('posts')
+      await dbRef.child(this.postData.id).get().then((snapshot) => {
+        if (snapshot.exists()) {
+          this.likeList = snapshot.val().likesSum ? snapshot.val().likesSum : []
+          this.wentList = snapshot.val().wentSum ? snapshot.val().wentSum : []
+          this.isLikeInList = this.likeList.includes(this.uid) === undefined ? false : this.likeList?.includes(this.uid)
+          this.isWentInList = this.wentList.includes(this.uid) === undefined ? false : this.wentList?.includes(this.uid)
+        }
+      }).catch((error) => {
+        console.error(error)
+      })
+    },
+
+    checkLikeInList () {
+      this.getThispostData()
+    },
+
+    checkWentInList () {
+      this.getThispostData()
+    },
+
+    async pushLike () {
+      await this.$store.dispatch('rtdb/likeChange', { PostDataId: this.postData.id })
+      this.checkLikeInList()
+    },
+
+    async pushWent () {
+      await this.$store.dispatch('rtdb/wentChange', { PostDataId: this.postData.id })
+      this.checkWentInList()
+    },
+
     // common
     init () {
       this.isMouseDown = false
@@ -218,26 +256,22 @@ export default {
       this.bottomMoveS = 0
       document.body.classList.remove('modal-open')
       this.$emit('change-modal', false)
-      // console.log('close')
     },
+
     close () {
       this.isModalAnim = false
-      if (this.isLike && !this.isLikeInList) { // 新たにいいねした場合
-        // todo - listにPostDataID追加
-      } else if (!this.isLike && this.isLikeInList) { // いいねを取り消した場合
-        // todo - listからPostDataID削除
-      }
       setTimeout(this.init, 235)
       document.documentElement.style.overflowY = 'auto'
     },
+
     async open () {
-      // console.log('open')
       this.isModalAnim = true
       document.documentElement.style.overflowY = 'hidden'
       document.body.classList.add('modal-open')
       this.$emit('change-modal', true)
-      const list = [] // todo - ログインしているユーザーがいいねを押した情報listを取得
-      this.isLikeInList = list.includes(this.postData.id) // listにこのPostDataIDがあるか
+      this.uid = this.$store.getters['auth/googleUserData'].uid
+      this.checkLikeInList()
+      this.checkWentInList()
       this.$nextTick(() => {
         const modal = document.querySelector('#modal')
         const rect = modal.offsetHeight
@@ -253,6 +287,7 @@ export default {
         this.imgURL = res
       })
     },
+
     handleScroll () {
       let rect = 0
       this.$nextTick(() => {
@@ -274,6 +309,7 @@ export default {
     touchStart (e) {
       this.startY = e.touches[0].pageY
     },
+
     touchMove (e) {
       if (this.isTop) {
         this.bottomMove = -1 * (e.touches[0].pageY - this.startY)
@@ -285,6 +321,7 @@ export default {
         // console.log('move:' + this.bottomMoveS + '  height:' + window.outerHeight)
       }
     },
+
     touchEnd (e) {
       if (this.bottomMove < -1 * window.outerHeight / 8) {
         this.close()
@@ -300,6 +337,7 @@ export default {
       this.isMouseDown = true
       // console.log('mouseDown')
     },
+
     mouseMove (e) {
       if (this.isMouseDown) {
         this.bottomMove = -1 * (e.pageY - this.startY)
@@ -310,6 +348,7 @@ export default {
         }
       }
     },
+
     mouseUp (e) {
       if (this.bottomMove < -1 * window.outerHeight / 8) {
         this.close()
