@@ -1,6 +1,9 @@
 <template>
   <section
-    style="font-family: 'SmartFontUI';"
+    style="
+      font-family: 'SmartFontUI';
+      cursor: default;
+    "
     @mousemove="mouseMove"
   >
     <div
@@ -80,11 +83,12 @@
             <v-list rounded color="transparent">
               <v-list-item
                 class="grow px-0"
+                style="cursor: pointer;"
               >
                 <v-list-item-avatar
                   color="grey darken-3"
                   size="32"
-                  @click="$router.push('/account/' + postedUserData.uid)"
+                  @click="$router.push('/account/' + postData.uid)"
                 >
                   <v-img
                     alt=""
@@ -95,7 +99,7 @@
                 <v-list-item-content>
                   <v-list-item-title
                     style="font-size: 24px;"
-                    @click="$router.push('/account/' + postedUserData.uid)"
+                    @click="$router.push('/account/' + postData.uid)"
                   >
                     {{ postedUserData.name }}
                   </v-list-item-title>
