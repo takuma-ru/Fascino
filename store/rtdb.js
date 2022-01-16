@@ -38,8 +38,8 @@ export const mutations = {
     }
   },
   getUserPostData (state, payload) {
-    if (state.UserpostData != null) {
-      state.UserpostData = []
+    if (state.UserPostData != null) {
+      state.UserPostData = []
     }
     Object.keys(payload).forEach((val, key) => {
       payload[val].id = val
