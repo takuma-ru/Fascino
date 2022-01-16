@@ -3,7 +3,6 @@ export const state = () => ({
   UserPostData: [],
   imgCoordinatePostData: [],
   postdataId: '',
-  // 今のところ投稿データごとには出来ないだよねー
 })
 
 export const getters = {
@@ -166,13 +165,13 @@ export const actions = {
       alert(e)
     }
   },
-  async getuserPostData ({ commit }, { uid }) {
+  async getUserPostData ({ commit }, { uid }) {
     console.log(uid)
     const userpostRef = this.$fire.database.ref('posts')
     try {
       await userpostRef.orderByChild('uid').startAt(uid).endAt(uid).once('value', (snapshot) => {
         console.log(snapshot.val())
-        commit('getuserPostData', snapshot.val())
+        commit('getUserPostData', snapshot.val())
         // EqualTo()で出来るくね？
       })
     } catch (e) {
