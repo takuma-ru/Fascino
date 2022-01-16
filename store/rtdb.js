@@ -10,7 +10,7 @@ export const getters = {
     return state.PostData
   },
   UserPostData (state) {
-    return state.Userpost
+    return state.UserPostData
   },
   imgCoordinatePostData (state) {
     return state.imgCoordinatePostData
