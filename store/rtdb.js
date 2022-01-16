@@ -38,7 +38,7 @@ export const mutations = {
       })
     }
   },
-  getuserPostData (state, payload) {
+  getUserPostData (state, payload) {
     if (state.UserpostData != null) {
       state.UserpostData = []
     }
