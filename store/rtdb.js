@@ -128,7 +128,7 @@ export const actions = {
             snapshot.wentSum.push(uid)
           }
         } else {
-          snapshot.wentsum = [uid]
+          snapshot.wentSum = [uid]
         }
         return snapshot
       })
