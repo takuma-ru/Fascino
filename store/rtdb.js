@@ -3,7 +3,6 @@ export const state = () => ({
   UserPostData: [],
   imgCoordinatePostData: [],
   postdataId: '',
-  // 今のところ投稿データごとには出来ないだよねー
 })
 
 export const getters = {
@@ -38,7 +37,7 @@ export const mutations = {
       })
     }
   },
-  updateuserPostData (state, payload) {
+  getUserPostData (state, payload) {
     if (state.UserpostData != null) {
       state.UserpostData = []
     }
@@ -121,14 +120,14 @@ export const actions = {
         if (snapshot == null) {
           return 0
         }
-        if (snapshot.likesSum) {
+        if (snapshot.wentSum) {
           if (snapshot.wentSum.includes(uid) === true) {
             delete snapshot.wentSum[snapshot.wentSum.indexOf(uid)]
           } else {
             snapshot.wentSum.push(uid)
           }
         } else {
-          snapshot.likesSum = [uid]
+          snapshot.wentSum = [uid]
         }
         return snapshot
       })
@@ -166,13 +165,13 @@ export const actions = {
       alert(e)
     }
   },
-  async updateuserPostData ({ commit }, { uid }) {
+  async getUserPostData ({ commit }, { uid }) {
     console.log(uid)
     const userpostRef = this.$fire.database.ref('posts')
     try {
       await userpostRef.orderByChild('uid').startAt(uid).endAt(uid).once('value', (snapshot) => {
         console.log(snapshot.val())
-        commit('userget', snapshot.val())
+        commit('getUserPostData', snapshot.val())
         // EqualTo()で出来るくね？
       })
     } catch (e) {
