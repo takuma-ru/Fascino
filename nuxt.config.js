@@ -16,6 +16,7 @@ export default {
       { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'telephone=no' },
       { name: 'google-site-verification', content: 'iUZdpKqaFKB1nsiz5mR0KHODO9mT-WbzzWwZbCDl9Sg' },
+      { rel: 'apple-touch-icon', href: '/icon/fascino_logo_192.png', sizes: '192x192' },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: 'icon/fascino_logo_noback.svg' },
@@ -73,6 +74,12 @@ export default {
       database: true,
       storage: true,
     },
+  },
+
+  workbox: {
+    importScripts: [
+      'custom-sw.js',
+    ],
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa

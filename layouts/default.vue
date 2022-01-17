@@ -32,7 +32,26 @@ export default {
     this.$store.dispatch('darkMode/setUpIsDarkMode')
   },
 
+  mounted () {
+    this.checkUpdate()
+  },
+
   methods: {
+    async checkUpdate () {
+      const workbox = await window.$workbox
+      if (workbox) {
+        workbox.addEventListener('installed', (event) => {
+          // If we don't do this we'll be displaying the notification after the initial installation, which isn't perferred.
+          if (event.isUpdate) {
+            console.warn('最新版があります。')
+            this.$store.dispatch('snackbar/addAlertsItem', {
+              type: 'warn',
+              msg: '最新版がリリースされました！アプリを開きなおすことで更新が完了します。',
+            })
+          }
+        })
+      }
+    },
   },
 }
 </script>
