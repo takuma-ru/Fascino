@@ -1,6 +1,12 @@
+import imageCompression from 'browser-image-compression'
+
 export const actions = {
   // storageにファイルをアップロード
   async putImgFile ({ commit }, { img, postDataIDKey }) {
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 800,
+    }
     let fileType = null
     switch (img.type) {
       case 'image/png':
@@ -20,9 +26,18 @@ export const actions = {
       cacheControl: 'public,max-age=2592000',
       contentType: 'image/' + fileType,
     }
+
     const storageRef = this.$fire.storage.ref('postImages').child(postDataIDKey + '.' + fileType)
     try {
-      await storageRef.put(img)
+      let resizeImg = null
+      try {
+        // 圧縮画像の生成
+        resizeImg = await imageCompression(img, options)
+      } catch (error) {
+        console.error('getCompressImageFileAsync is error', error)
+        throw error
+      }
+      await storageRef.put(resizeImg)
       await storageRef.updateMetadata(metaData)
       return (postDataIDKey + '.' + fileType)
     } catch (e) {
@@ -52,3 +67,5 @@ export const actions = {
     }
   },
 }
+
+// リサイズ参考URL：https://qiita.com/nobu17/items/64f51d43827424db4b6a
