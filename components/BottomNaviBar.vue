@@ -120,7 +120,7 @@
               <v-divider class="my-4" />
 
               <v-subheader style="height: auto">
-                v0.0.2
+                v0.0.0
               </v-subheader>
             </v-list>
           </v-card>

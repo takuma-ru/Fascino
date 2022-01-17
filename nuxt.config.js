@@ -76,12 +76,6 @@ export default {
     },
   },
 
-  workbox: {
-    importScripts: [
-      'custom-sw.js',
-    ],
-  },
-
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     manifest: {
