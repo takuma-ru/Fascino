@@ -94,6 +94,7 @@ export default {
   },
   created () {
     this.getLocation()
+    this.findSpot()
   },
   methods: {
     getLocation () {
