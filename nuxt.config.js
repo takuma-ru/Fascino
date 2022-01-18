@@ -17,6 +17,7 @@ export default {
       { name: 'format-detection', content: 'telephone=no' },
       { name: 'google-site-verification', content: 'iUZdpKqaFKB1nsiz5mR0KHODO9mT-WbzzWwZbCDl9Sg' },
       { rel: 'apple-touch-icon', href: '/icon/fascino_logo_192.png', sizes: '192x192' },
+      { rel: 'apple-touch-icon', href: '/icon/fascino_logo_64.png', sizes: '64x64' },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: 'icon/fascino_logo_noback.svg' },
