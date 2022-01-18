@@ -70,41 +70,6 @@ export default {
 .v-application {
   font-family: "SmartFontUI";
 }
-
-.snackbar {
-  & {
-    position: relative;
-    width: min(calc(100vw - 32px), 960px);
-    min-height: 40px;
-    margin-top: 8px;
-
-    border-radius: 16px;
-    box-shadow: 0px 0px 6px 3px #00214D28;
-  }
-
-  $element: #{&};
-
-  &_warn {
-    @extend #{$element};
-    background-color: #D6C565;
-  }
-
-  .contents {
-    position: relative;
-    display: grid;
-    height: max-content;
-    padding: 8px 16px 8px 16px ;
-
-    grid-template-columns: 24px 1fr 24px;
-  }
-
-  .msg {
-    grid-column: 2;
-    margin: 0px;
-    color: #001024;
-    white-space: pre-wrap;
-  }
-}
 </style>
 
 <style>
