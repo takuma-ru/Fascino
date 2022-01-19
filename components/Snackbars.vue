@@ -11,7 +11,7 @@
         </v-icon>
         <p
           class="px-2 msg"
-          v-text="item.msg"
+          v-html="item.msg"
         />
         <v-btn
           icon
