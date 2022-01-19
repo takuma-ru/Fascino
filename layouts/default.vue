@@ -27,15 +27,17 @@ export default {
       ],
     }
   },
+
+  created () {
+    this.$store.dispatch('darkMode/setUpIsDarkMode')
+  },
+
   mounted () {
     this.checkUpdate()
     this.$store.dispatch('snackbar/addAlertsItem', {
       type: 'success',
       msg: '<a href="https://forms.gle/WEdU2fk4w9qctbmc7" target="_blank" style="color: #1a0dab; text-decoration: none;"><span>ここを押して\nアンケートにご協力ください</span></a>',
     })
-  },
-  created () {
-    this.$store.dispatch('darkMode/setUpIsDarkMode')
   },
 
   methods: {
